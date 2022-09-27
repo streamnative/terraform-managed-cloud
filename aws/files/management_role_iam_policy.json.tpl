@@ -24,6 +24,60 @@
       "Resource": "*"
     },
     {
+      "Sid": "AsgTags",
+      "Effect": "Allow",
+      "Action": [
+        "autoscaling:Describe*"
+      ],
+      "Resource": [ "*" ],
+      "Condition": {
+        "StringLike": {
+          "autoscaling:ResourceTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "EC2Tags",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:Describe*",
+        "ec2:Get*"
+      ],
+      "Resource": [ "*" ],
+      "Condition": {
+        "StringLike": {
+          "ec2:ResourceTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "ELBTags",
+      "Effect": "Allow",
+      "Action": [
+        "elasticloadbalancing:Describe*"
+      ],
+      "Resource": [ "*" ],
+      "Condition": {
+        "StringLike": {
+          "elasticloadbalancing:ResourceTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "EKSTags",
+      "Effect": "Allow",
+      "Action": [
+        "eks:Describe*",
+        "eks:List*"
+      ],
+      "Resource": [ "*" ],
+      "Condition": {
+        "StringLike": {
+          "eks:ResourceTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
       "Sid": "AllowedIAMReadActions",
       "Effect": "Allow",
       "Action": [
@@ -99,20 +153,14 @@
         "acm:DescribeCertificate",
         "acm:GetCertificate",
         "autoscaling:CancelInstanceRefresh",
-        "autoscaling:Describe*",
         "autoscaling:PutScalingPolicy",
         "autoscaling:ResumeProcesses",
         "autoscaling:SetDesiredCapacity",
         "autoscaling:StartInstanceRefresh",
         "autoscaling:SuspendProcesses",
         "autoscaling:UpdateAutoScalingGroup",
-        "ec2:Describe*",
-        "ec2:Get*",
-        "eks:Describe*",
-        "eks:List*",
         "eks:UpdateNodegroupConfig",
-        "eks:UpdateNodegroupVersion",
-        "elasticloadbalancing:Describe*"
+        "eks:UpdateNodegroupVersion"
       ],
       "Resource": [
         "*"

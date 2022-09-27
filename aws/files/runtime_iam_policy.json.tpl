@@ -9,7 +9,6 @@
                 "route53:ListTagsForResource",
                 "route53:ListResourceRecordSets",
                 "route53:ListHostedZones*",
-                "route53:ListHostedZones",
                 "route53:GetChange",
                 "ec2:DescribeVolumesModifications",
                 "ec2:DescribeVolumes",

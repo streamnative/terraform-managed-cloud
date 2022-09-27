@@ -13,7 +13,8 @@
         "route53:CreateHostedZone",
         "route53:ChangeTagsForResource",
         "support:*",
-        "servicequotas:*"
+        "servicequotas:List*",
+        "servicequotas:Get*"
       ],
       "Resource": "*"
     },
