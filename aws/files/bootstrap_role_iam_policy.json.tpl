@@ -102,10 +102,54 @@
       ]
     },
     {
-      "Sid": "AllowTag",
+      "Sid": "AsgTags",
       "Effect": "Allow",
       "Action": [
         "autoscaling:*Tags",
+        "autoscaling:Delete*"
+      ],
+      "Resource": [ "*" ],
+      "Condition": {
+        "StringLike": {
+          "autoscaling:ResourceTag/cluster-name": "${cluster_pattern}"
+        }
+      }
+    },
+    {
+      "Sid": "EC2Tags",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:Associate*",
+        "ec2:Delete*",
+        "ec2:Disassociate*",
+        "ec2:Modify*",
+        "ec2:*TransitGateway*"
+      ],
+      "Resource": [ "*" ],
+      "Condition": {
+        "StringLike": {
+          "ec2:ResourceTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "ELBTags",
+      "Effect": "Allow",
+      "Action": [
+        "elasticloadbalancing:De*",
+        "elasticloadbalancing:*LoadBalancer*"
+      ],
+      "Resource": [ "*" ],
+      "Condition": {
+        "StringLike": {
+          "elasticloadbalancing:ResourceTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "AllowTag",
+      "Effect": "Allow",
+      "Action": [
         "eks:TagResource",
         "eks:UntagResource"
       ],
@@ -155,14 +199,12 @@
         "acm:ResendValidationEmail",
         "autoscaling:AttachInstances",
         "autoscaling:CreateOrUpdateTags",
-        "autoscaling:Delete*",
         "autoscaling:Detach*",
         "autoscaling:Update*",
         "autoscaling:Resume*",
         "autoscaling:Suspend*",
         "autoscaling:SetDesired*",
         "ec2:AssignPrivateIpAddresses",
-        "ec2:Associate*",
         "ec2:AttachInternetGateway",
         "ec2:CreateLaunchTemplateVersion",
         "ec2:CreateNatGateway",
@@ -173,24 +215,17 @@
         "ec2:CreateSubnet",
         "ec2:CreateTags",
         "ec2:CreateVpcEndpoint",
-        "ec2:Delete*",
         "ec2:Detach*",
-        "ec2:Disassociate*",
-        "ec2:Modify*",
         "ec2:Release*",
         "ec2:Revoke*",
         "ec2:TerminateInstances",
-        "ec2:*TransitGateway*",
         "ec2:Update*",
         "eks:DeleteAddon",
         "eks:DeleteCluster",
         "eks:DeleteFargateProfile",
         "eks:DeregisterCluster",
-        "eks:DisassociateIdentityProviderConfig",
         "eks:U*",
-        "elasticloadbalancing:De*",
         "elasticloadbalancing:*Listener",
-        "elasticloadbalancing:*LoadBalancer*",
         "elasticloadbalancing:*Rule",
         "elasticloadbalancing:*TargetGroup",
         "elasticloadbalancing:Set*",
@@ -223,8 +258,7 @@
         "s3:PutEncryptionConfiguration"
        ],
        "Resource": [
-          "arn:${partition}:s3:::${bucket_pattern}",
-          "arn:${partition}:s3:::${bucket_pattern}/*"
+          "arn:${partition}:s3:::${bucket_pattern}"
        ]
     },
     {
