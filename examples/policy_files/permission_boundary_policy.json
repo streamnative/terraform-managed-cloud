@@ -72,13 +72,13 @@
       ],
       "Resource": [
         "arn:aws:iam::aws:policy/*",
-        "arn:aws:iam::598203581484:role/aws-service-role/*",
-        "arn:aws:iam::598203581484:role/*snc*",
-        "arn:aws:iam::598203581484:role/StreamNative/*",
-        "arn:aws:iam::598203581484:policy/StreamNative/*",
-        "arn:aws:iam::598203581484:oidc-provider/*",
-        "arn:aws:iam::598203581484:instance-profile/*",
-        "arn:aws:iam::598203581484:server-certificate/*"
+        "arn:aws:iam::1234567890123:role/aws-service-role/*",
+        "arn:aws:iam::1234567890123:role/*snc*",
+        "arn:aws:iam::1234567890123:role/StreamNative/*",
+        "arn:aws:iam::1234567890123:policy/StreamNative/*",
+        "arn:aws:iam::1234567890123:oidc-provider/*",
+        "arn:aws:iam::1234567890123:instance-profile/*",
+        "arn:aws:iam::1234567890123:server-certificate/*"
       ]
     },
     {
@@ -87,7 +87,7 @@
       "Action": [
         "iam:PassRole"
       ],
-      "Resource": "arn:aws:iam::598203581484:role/*snc*",
+      "Resource": "arn:aws:iam::1234567890123:role/*snc*",
       "Condition": {
         "StringEquals": {
           "iam:PassedToService": "eks.amazonaws.com"
@@ -100,10 +100,10 @@
       "Action": [
         "iam:AttachRolePolicy"
       ],
-      "Resource": "arn:aws:iam::598203581484:role/StreamNative/*",
+      "Resource": "arn:aws:iam::1234567890123:role/StreamNative/*",
       "Condition": {
         "ForAnyValue:ArnLike": {
-          "iam:PolicyARN": [ "arn:aws:iam::598203581484:policy/StreamNative/*", "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy", "arn:aws:iam::aws:policy/AmazonEKSServicePolicy", "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController", "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy", "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy", "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly", "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy" ]
+          "iam:PolicyARN": [ "arn:aws:iam::1234567890123:policy/StreamNative/*", "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy", "arn:aws:iam::aws:policy/AmazonEKSServicePolicy", "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController", "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy", "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy", "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly", "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy" ]
         }
       }
     },
@@ -113,7 +113,7 @@
       "Action": [
         "iam:CreateRole"
       ],
-      "Resource": "arn:aws:iam::598203581484:role/StreamNative/*",
+      "Resource": "arn:aws:iam::1234567890123:role/StreamNative/*",
       "Condition": {
         "StringEqualsIgnoreCase": {
           "aws:ResourceTag/Vendor": "StreamNative",
@@ -139,8 +139,8 @@
         "arn:aws:iam:::policy/StreamNative/StreamNativeCloudManagementPolicy",
         "arn:aws:iam:::policy/StreamNative/StreamNativeCloudPermissionBoundary",
         "arn:aws:iam:::policy/StreamNative/StreamNativeCloudRuntimePolicy",
-        "arn:aws:iam::598203581484:role/StreamNative/StreamNativeBootstrapRole",
-        "arn:aws:iam::598203581484:role/StreamNative/StreamNativeManagementRole"
+        "arn:aws:iam::1234567890123:role/StreamNative/StreamNativeBootstrapRole",
+        "arn:aws:iam::1234567890123:role/StreamNative/StreamNativeManagementRole"
       ]
     }
   ]

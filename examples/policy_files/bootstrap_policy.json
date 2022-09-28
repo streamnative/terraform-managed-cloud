@@ -55,7 +55,7 @@
       "Sid": "ResRlPol",
       "Effect": "Allow",
       "Action": "iam:AttachRolePolicy",
-      "Resource": "arn:aws:iam::598203581484:role/StreamNative/*"
+      "Resource": "arn:aws:iam::1234567890123:role/StreamNative/*"
     },
     {
       "Sid": "SecGrpVPC",
@@ -80,7 +80,7 @@
       "Resource": "*",
       "Condition": {
         "ArnLikeIfExists": {
-          "ec2:Vpc": ["arn:aws:ec2:*:598203581484:vpc/*"]
+          "ec2:Vpc": ["arn:aws:ec2:*:1234567890123:vpc/*"]
         }
       }
     },
@@ -99,7 +99,7 @@
         "eks:DeleteNodeGroup"
       ],
       "Resource": [
-        "arn:aws:eks:*:598203581484:nodegroup/*/*snc*/*"
+        "arn:aws:eks:*:1234567890123:nodegroup/*/*snc*/*"
       ]
     },
     {
@@ -289,9 +289,9 @@
         "iam:DeletePolicyVersion"
       ],
       "Resource": [
-        "arn:aws:iam::598203581484:role/StreamNative/*",
-        "arn:aws:iam::598203581484:policy/StreamNative/*",
-        "arn:aws:iam::598203581484:oidc-provider/*"
+        "arn:aws:iam::1234567890123:role/StreamNative/*",
+        "arn:aws:iam::1234567890123:policy/StreamNative/*",
+        "arn:aws:iam::1234567890123:oidc-provider/*"
       ],
       "Condition": {
         "StringEquals": {
@@ -303,7 +303,7 @@
       "Sid": "SvcLnkRl",
       "Effect": "Allow",
       "Action": "iam:CreateServiceLinkedRole",
-      "Resource": "arn:aws:iam::598203581484:role/aws-service-role/*"
+      "Resource": "arn:aws:iam::1234567890123:role/aws-service-role/*"
     },
     {
       "Sid": "ResPsRlEKS",
@@ -312,7 +312,7 @@
         "iam:PassRole"
       ],
       "Resource": [
-        "arn:aws:iam::598203581484:role/*snc*"
+        "arn:aws:iam::1234567890123:role/*snc*"
       ],
       "Condition": {
         "StringEquals": {
@@ -326,7 +326,7 @@
       "Action": [
         "iam:CreateRole"
       ],
-      "Resource": "arn:aws:iam::598203581484:role/StreamNative/*",
+      "Resource": "arn:aws:iam::1234567890123:role/StreamNative/*",
       "Condition": {
         "StringEqualsIgnoreCase": {
           "iam:PermissionsBoundary": "arn:aws:iam:::policy/StreamNative/StreamNativeCloudPermissionBoundary"

@@ -87,8 +87,8 @@
         "iam:ListPolic*"
       ],
       "Resource": [
-        "arn:aws:iam::598203581484:role/StreamNative/*",
-        "arn:aws:iam::598203581484:policy/StreamNative/*",
+        "arn:aws:iam::1234567890123:role/StreamNative/*",
+        "arn:aws:iam::1234567890123:policy/StreamNative/*",
         "arn:aws:iam::aws:policy/*"
       ]
     },
@@ -100,7 +100,7 @@
         "iam:TagRole"
       ],
       "Resource": [
-        "arn:aws:iam::598203581484:role/StreamNative/*"
+        "arn:aws:iam::1234567890123:role/StreamNative/*"
       ],
       "Condition": {
         "StringEqualsIgnoreCase": {
@@ -114,11 +114,11 @@
       "Action": [
         "iam:AttachRolePolicy"
       ],
-      "Resource": "arn:aws:iam::598203581484:role/StreamNative/*",
+      "Resource": "arn:aws:iam::1234567890123:role/StreamNative/*",
       "Condition": {
         "ArnEquals": {
           "iam:PolicyARN": [
-            "arn:aws:iam::598203581484:policy/StreamNative/StreamNativeCloudManagementPolicy"
+            "arn:aws:iam::1234567890123:policy/StreamNative/StreamNativeCloudManagementPolicy"
           ]
         }
       }
@@ -136,8 +136,8 @@
         "iam:UpdateRoleDescription"
       ],
       "Resource": [
-        "arn:aws:iam::598203581484:role/StreamNative/*",
-        "arn:aws:iam::598203581484:policy/StreamNative/*"
+        "arn:aws:iam::1234567890123:role/StreamNative/*",
+        "arn:aws:iam::1234567890123:policy/StreamNative/*"
       ],
       "Condition": {
         "StringEqualsIgnoreCase": {
