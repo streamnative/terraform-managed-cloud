@@ -44,18 +44,18 @@ variable "ebs_kms_key_arns" {
 
 variable "eks_cluster_pattern" {
   default     = "*snc*"
-  description = "Defines the eks clsuter prefix for streamnative clusters"
+  description = "Defines the eks clsuter prefix for streamnative clusters. This should normally remain the default value."
   type        = string
 }
 
 variable "eks_nodepool_pattern" {
   default     = "*snc*"
-  description = "Defines the prefix that scopes which node pools are allowed to be used by StreamNative"
+  description = "Defines the prefix that scopes which node pools are allowed to be used by StreamNative. This should normally remain the default value."
   type        = string
 }
 
 variable "external_ids" {
-  description = "A list of external IDs that correspond to your StreamNative Organizationsm, used for all assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. \"[\"o-xhopj\"]\"."
+  description = "A list of external IDs that correspond to your Organizations within StreamNative Cloud, used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. \"[\"o-xhopj\"]\"."
   type        = list(string)
 }
 
@@ -78,7 +78,7 @@ variable "s3_bucket_pattern" {
 }
 
 variable "sn_policy_version" {
-  default     = "1.0.0"
+  default     = "3.0.0"
   description = "The value of SNVersion tag"
   type        = string
 }

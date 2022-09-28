@@ -126,6 +126,7 @@ resource "aws_iam_policy" "permission_boundary" {
     {
       account_id           = local.account_id
       allowed_iam_policies = local.allowed_iam_policies
+      cluster_pattern      = var.eks_cluster_pattern
       partition            = local.aws_partition
       region               = var.region
   })
@@ -213,8 +214,8 @@ resource "aws_iam_policy" "runtime_policy" {
   path        = "/StreamNative/"
   policy = templatefile("${path.module}/files/runtime_iam_policy.json.tpl",
     {
-      bucket_pattern  = tostring(var.s3_bucket_pattern)
-      cluster_pattern = tostring(var.eks_cluster_pattern)
+      bucket_pattern  = var.s3_bucket_pattern
+      cluster_pattern = var.eks_cluster_pattern
       kms_arns        = local.kms_key_arns
       r53_zone_arns   = local.r53_zone_arns
   })
@@ -291,6 +292,7 @@ resource "local_file" "permission_boundary_policy" {
     {
       account_id           = local.account_id
       allowed_iam_policies = local.allowed_iam_policies
+      cluster_pattern      = var.eks_cluster_pattern
       partition            = local.aws_partition
       region               = var.region
   })

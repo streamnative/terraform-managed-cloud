@@ -73,6 +73,7 @@
       "Resource": [
         "arn:${partition}:iam::aws:policy/*",
         "arn:${partition}:iam::${account_id}:role/aws-service-role/*",
+        "arn:${partition}:iam::${account_id}:role/${cluster_pattern}",
         "arn:${partition}:iam::${account_id}:role/StreamNative/*",
         "arn:${partition}:iam::${account_id}:policy/StreamNative/*",
         "arn:${partition}:iam::${account_id}:oidc-provider/*",
@@ -86,7 +87,7 @@
       "Action": [
         "iam:PassRole"
       ],
-      "Resource": "arn:${partition}:iam::${account_id}:role/StreamNative/*",
+      "Resource": "arn:${partition}:iam::${account_id}:role/${cluster_pattern}",
       "Condition": {
         "StringEquals": {
           "iam:PassedToService": "eks.amazonaws.com"

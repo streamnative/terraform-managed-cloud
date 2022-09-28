@@ -312,7 +312,7 @@
         "iam:PassRole"
       ],
       "Resource": [
-        "arn:${partition}:iam::${account_id}:role/StreamNative/*"
+        "arn:${partition}:iam::${account_id}:role/${cluster_pattern}"
       ],
       "Condition": {
         "StringEquals": {
