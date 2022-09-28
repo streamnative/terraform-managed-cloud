@@ -3,6 +3,8 @@ module "aws-managed-cloud" {
 
   external_ids = ["*"]
 
+  write_policy_files = true
+
 }
 
 provider "aws" {

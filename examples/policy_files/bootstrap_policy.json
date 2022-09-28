@@ -1,0 +1,337 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "UnResRW",
+      "Effect": "Allow",
+      "Action": [
+        "kms:CreateAlias",
+        "kms:DeleteAlias",
+        "kms:ScheduleKeyDeletion",
+        "logs:CreateLogGroup",
+        "logs:PutRetentionPolicy",
+        "route53:CreateHostedZone",
+        "route53:ChangeTagsForResource",
+        "support:*",
+        "servicequotas:List*",
+        "servicequotas:Get*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "RO",
+      "Effect": "Allow",
+      "Action": [
+        "acm:ImportCertificate",
+        "acm:ListCertificates",
+        "acm:ListTagsForCertificate",
+        "autoscaling:Describe*",
+        "ec2:Describe*",
+        "ec2:Get*",
+        "eks:Describe*",
+        "eks:List*",
+        "elasticloadbalancing:Describe*",
+        "iam:GetInstanceProfile",
+        "iam:GetOpenIDConnectProvider",
+        "iam:GetPolicy",
+        "iam:GetPolicyVersion",
+        "iam:GetRole",
+        "iam:List*",
+        "kms:DescribeKey",
+        "kms:GetKeyPolicy",
+        "kms:GetKeyRotationStatus",
+        "kms:ListAliases",
+        "kms:ListResourceTags",
+        "logs:Describe*",
+        "logs:List*",
+        "route53:Get*",
+        "route53:List*",
+        "s3:ListAllMyBuckets",
+        "s3:ListBucket"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "ResRlPol",
+      "Effect": "Allow",
+      "Action": "iam:AttachRolePolicy",
+      "Resource": "arn:aws:iam::598203581484:role/StreamNative/*"
+    },
+    {
+      "Sid": "SecGrpVPC",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:AuthorizeSecurityGroup*",
+        "ec2:RevokeSecurityGroup*"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "RunInst",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:RunInstances"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "ArnLikeIfExists": {
+          "ec2:Vpc": ["arn:aws:ec2:*:598203581484:vpc/*"]
+        }
+      }
+    },
+    {
+      "Sid": "ResR53Z",
+      "Effect": "Allow",
+      "Action": [
+        "route53:ChangeResourceRecordSets"
+      ],
+      "Resource": ["arn:aws:route53:::hostedzone/*"]
+    },
+    {
+      "Sid": "ResEKS",
+      "Effect": "Allow",
+      "Action": [
+        "eks:DeleteNodeGroup"
+      ],
+      "Resource": [
+        "arn:aws:eks:*:598203581484:nodegroup/*/*snc*/*"
+      ]
+    },
+    {
+      "Sid": "AsgTags",
+      "Effect": "Allow",
+      "Action": [
+        "autoscaling:*Tags",
+        "autoscaling:Delete*"
+      ],
+      "Resource": [ "*" ],
+      "Condition": {
+        "StringLike": {
+          "autoscaling:ResourceTag/cluster-name": "*snc*"
+        }
+      }
+    },
+    {
+      "Sid": "EC2Tags",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:Associate*",
+        "ec2:Delete*",
+        "ec2:Disassociate*",
+        "ec2:Modify*",
+        "ec2:*TransitGateway*"
+      ],
+      "Resource": [ "*" ],
+      "Condition": {
+        "StringLike": {
+          "ec2:ResourceTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "ELBTags",
+      "Effect": "Allow",
+      "Action": [
+        "elasticloadbalancing:De*",
+        "elasticloadbalancing:*LoadBalancer*"
+      ],
+      "Resource": [ "*" ],
+      "Condition": {
+        "StringLike": {
+          "elasticloadbalancing:ResourceTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "AllowTag",
+      "Effect": "Allow",
+      "Action": [
+        "eks:TagResource",
+        "eks:UntagResource"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringLike": {
+          "aws:ResourceTag/cluster-name": "*snc*"
+        }
+      }
+    },
+    {
+      "Sid": "ReqReqTag",
+      "Effect": "Allow",
+      "Action": [
+        "acm:AddTagsToCertificate",
+        "acm:ImportCertificate",
+        "acm:RemoveTagsFromCertificate",
+        "acm:RequestCertificate",
+        "autoscaling:Create*",
+        "ec2:*TransitGateway*",
+        "ec2:AllocateAddress",
+        "ec2:Create*",
+        "eks:Create*",
+        "eks:RegisterCluster",
+        "eks:TagResource",
+        "elasticloadbalancing:Add*",
+        "kms:CreateKey",
+        "kms:TagResource"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "ReqResrcTag",
+      "Effect": "Allow",
+      "Action": [
+        "acm:DeleteCertificate",
+        "acm:DescribeCertificate",
+        "acm:ExportCertificate",
+        "acm:GetCertificate",
+        "acm:ImportCertificate",
+        "acm:RemoveTagsFromCertificate",
+        "acm:ResendValidationEmail",
+        "autoscaling:AttachInstances",
+        "autoscaling:CreateOrUpdateTags",
+        "autoscaling:Detach*",
+        "autoscaling:Update*",
+        "autoscaling:Resume*",
+        "autoscaling:Suspend*",
+        "autoscaling:SetDesired*",
+        "ec2:AssignPrivateIpAddresses",
+        "ec2:AttachInternetGateway",
+        "ec2:CreateLaunchTemplateVersion",
+        "ec2:CreateNatGateway",
+        "ec2:CreateNetworkInterface",
+        "ec2:CreateRoute",
+        "ec2:CreateRouteTable",
+        "ec2:CreateSecurityGroup",
+        "ec2:CreateSubnet",
+        "ec2:CreateTags",
+        "ec2:CreateVpcEndpoint",
+        "ec2:Detach*",
+        "ec2:Release*",
+        "ec2:Revoke*",
+        "ec2:TerminateInstances",
+        "ec2:Update*",
+        "eks:DeleteAddon",
+        "eks:DeleteCluster",
+        "eks:DeleteFargateProfile",
+        "eks:DeregisterCluster",
+        "eks:U*",
+        "elasticloadbalancing:*Listener",
+        "elasticloadbalancing:*Rule",
+        "elasticloadbalancing:*TargetGroup",
+        "elasticloadbalancing:Set*",
+        "elasticloadbalancing:Re*",
+        "logs:DeleteLogGroup",
+        "logs:PutRetentionPolicy"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "ResS3",
+      "Effect": "Allow",
+      "Action":[
+        "s3:CreateBucket",
+        "s3:Delete*",
+        "s3:Get*",
+        "s3:List*",
+        "s3:PutBucket*",
+        "s3:PutObject*",
+        "s3:PutLifecycle*",
+        "s3:PutAccelerateConfiguration",
+        "s3:PutAccessPointPolicy",
+        "s3:PutAccountPublicAccessBlock",
+        "s3:PutAnalyticsConfiguration",
+        "s3:PutEncryptionConfiguration"
+       ],
+       "Resource": [
+          "arn:aws:s3:::*snc*"
+       ]
+    },
+    {
+      "Sid": "IAMReqTag",
+      "Effect": "Allow",
+      "Action": [
+        "iam:AddRoleToInstanceProfile",
+        "iam:DeleteInstanceProfile",
+        "iam:DeleteOpenIDConnectProvider",
+        "iam:DeleteRole",
+        "iam:DeleteServiceLinkedRole",
+        "iam:DetachRolePolicy",
+        "iam:PutRolePermissionsBoundary",
+        "iam:RemoveRoleFromInstanceProfile",
+        "iam:SetDefaultPolicyVersion",
+        "iam:UpdateAssumeRolePolicy",
+        "iam:UpdateOpenIDConnectProviderThumbprint",
+        "iam:UpdateRole",
+        "iam:UpdateRoleDescription",
+        "iam:Untag*",
+        "iam:CreateOpenIDConnectProvider",
+        "iam:TagPolicy",
+        "iam:TagRole",
+        "iam:TagInstanceProfile",
+        "iam:TagOpenIDConnectProvider",
+        "iam:DeletePolicy",
+        "iam:DeletePolicyVersion"
+      ],
+      "Resource": [
+        "arn:aws:iam::598203581484:role/StreamNative/*",
+        "arn:aws:iam::598203581484:policy/StreamNative/*",
+        "arn:aws:iam::598203581484:oidc-provider/*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "SvcLnkRl",
+      "Effect": "Allow",
+      "Action": "iam:CreateServiceLinkedRole",
+      "Resource": "arn:aws:iam::598203581484:role/aws-service-role/*"
+    },
+    {
+      "Sid": "ResPsRlEKS",
+      "Effect": "Allow",
+      "Action": [
+        "iam:PassRole"
+      ],
+      "Resource": [
+        "arn:aws:iam::598203581484:role/*snc*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "iam:PassedToService": "eks.amazonaws.com"
+        }
+      }
+    },
+    {
+      "Sid": "RqPBRls",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateRole"
+      ],
+      "Resource": "arn:aws:iam::598203581484:role/StreamNative/*",
+      "Condition": {
+        "StringEqualsIgnoreCase": {
+          "iam:PermissionsBoundary": "arn:aws:iam:::policy/StreamNative/StreamNativeCloudPermissionBoundary"
+        }
+      }
+    }
+  ]
+}
