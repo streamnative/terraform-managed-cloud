@@ -267,6 +267,7 @@
       "Effect": "Allow",
       "Action": [
         "iam:AddRoleToInstanceProfile",
+        "iam:CreateRole",
         "iam:DeleteInstanceProfile",
         "iam:DeleteOpenIDConnectProvider",
         "iam:DeleteRole",
@@ -312,24 +313,12 @@
         "iam:PassRole"
       ],
       "Resource": [
-        "arn:${partition}:iam::${account_id}:role/${cluster_pattern}"
+        "arn:${partition}:iam::${account_id}:role/StreamNative/*",
+        "arn:${partition}:iam::${account_id}:role/${cluster_pattern}" 
       ],
       "Condition": {
         "StringEquals": {
           "iam:PassedToService": "eks.amazonaws.com"
-        }
-      }
-    },
-    {
-      "Sid": "RqPBRls",
-      "Effect": "Allow",
-      "Action": [
-        "iam:CreateRole"
-      ],
-      "Resource": "arn:${partition}:iam::${account_id}:role/StreamNative/*",
-      "Condition": {
-        "StringEqualsIgnoreCase": {
-          "iam:PermissionsBoundary": "arn:${partition}:iam:::policy/StreamNative/StreamNativeCloudPermissionBoundary"
         }
       }
     }

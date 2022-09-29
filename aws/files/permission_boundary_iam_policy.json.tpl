@@ -47,7 +47,6 @@
       "Action": [
         "iam:AddRoleToInstanceProfile",
         "iam:CreateOpenIDConnectProvider",
-        "iam:CreateRole",
         "iam:CreateServiceLinkedRole",
         "iam:DeleteInstanceProfile",
         "iam:DeleteOpenIDConnectProvider",
@@ -56,7 +55,6 @@
         "iam:DeleteRole",
         "iam:DeleteServiceLinkedRole",
         "iam:DetachRolePolicy",
-        "iam:PassRole",
         "iam:PutRolePermissionsBoundary",
         "iam:RemoveRoleFromInstanceProfile",
         "iam:SetDefaultPolicyVersion",
@@ -73,7 +71,6 @@
       "Resource": [
         "arn:${partition}:iam::aws:policy/*",
         "arn:${partition}:iam::${account_id}:role/aws-service-role/*",
-        "arn:${partition}:iam::${account_id}:role/${cluster_pattern}",
         "arn:${partition}:iam::${account_id}:role/StreamNative/*",
         "arn:${partition}:iam::${account_id}:policy/StreamNative/*",
         "arn:${partition}:iam::${account_id}:oidc-provider/*",
@@ -115,9 +112,24 @@
       ],
       "Resource": "arn:${partition}:iam::${account_id}:role/StreamNative/*",
       "Condition": {
-        "StringEqualsIgnoreCase": {
-          "aws:ResourceTag/Vendor": "StreamNative",
-          "iam:PermissionsBoundary": "arn:${partition}:iam:::policy/StreamNative/StreamNativeCloudPermissionBoundary"
+        "StringEquals": {
+          "iam:PermissionsBoundary": "arn:${partition}:iam::${account_id}:policy/StreamNative/StreamNativeCloudPermissionBoundary"
+        }
+      }
+    },
+    {
+      "Sid": "ResPsRlEKS",
+      "Effect": "Allow",
+      "Action": [
+        "iam:PassRole"
+      ],
+      "Resource": [
+        "arn:${partition}:iam::${account_id}:role/${cluster_pattern}",
+        "arn:${partition}:iam::${account_id}:role/StreamNative/${cluster_pattern}"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "iam:PassedToService": "eks.amazonaws.com"
         }
       }
     },
