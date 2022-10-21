@@ -54,9 +54,9 @@ variable "eks_nodepool_pattern" {
   type        = string
 }
 
-variable "external_ids" {
-  description = "A list of external IDs that correspond to your Organizations within StreamNative Cloud, used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. \"[\"o-xhopj\"]\"."
-  type        = list(string)
+variable "external_id" {
+  description = "A external ID that correspond to your Organization within StreamNative Cloud, used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
+  type        = string
 }
 
 variable "hosted_zone_allowed_ids" {

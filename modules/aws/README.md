@@ -1,4 +1,4 @@
-# StreamNative Cloud - AWS Vendor Access
+# StreamNative Cloud - Managed AWS Vendor Access
 This Terraform module creates IAM resources within your AWS account. These resources give StreamNative access only for the provisioning and management of StreamNative's Managed Cloud offering.
 
 For more information about StreamNative and our managed offerings for Apache Pulsar, visit our [website](https://streamnative.io/streamnativecloud/).

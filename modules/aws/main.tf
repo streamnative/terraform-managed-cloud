@@ -43,19 +43,19 @@ data "aws_kms_key" "s3_default" {
 data "aws_partition" "current" {}
 
 locals {
-  s3_kms_key_arn             = length(var.s3_kms_key_arns) > 0 ? var.s3_kms_key_arns : [ data.aws_kms_key.s3_default.arn ] 
   account_id                 = data.aws_caller_identity.current.account_id
   additional_iam_policy_arns = distinct(compact(var.additional_iam_policy_arns))
   allowed_iam_policies       = join(", ", formatlist("\"%s\"", distinct(concat(local.additional_iam_policy_arns, local.default_allowed_iam_policies))))
   arn_like_vpcs              = formatlist("\"arn:%s:ec2:%s:%s:vpc/%s\"", local.aws_partition, var.region, local.account_id, var.vpc_allowed_ids)
   arn_like_vpcs_str          = format("[%s]", join(",", local.arn_like_vpcs))
-  assume_conditions          = concat(local.external_ids, local.source_identity)
+  assume_conditions          = concat(local.external_id, local.source_identity)
   aws_partition              = data.aws_partition.current.partition
-  build_r53_arns             = [ for i, v in var.hosted_zone_allowed_ids : format("\"arn:%s:route53:::hostedzone/%s\"", local.aws_partition, v) ]
-  ebs_kms_key_arn            = length(var.ebs_kms_key_arns) > 0 ? var.ebs_kms_key_arns : [ data.aws_kms_key.ebs_default.arn ]
-  external_ids               = (var.external_ids != "" ? [{ test : "StringLike", variable : "sts:ExternalId", values : var.external_ids }] : [])
+  build_r53_arns             = [for i, v in var.hosted_zone_allowed_ids : format("\"arn:%s:route53:::hostedzone/%s\"", local.aws_partition, v)]
+  ebs_kms_key_arn            = length(var.ebs_kms_key_arns) > 0 ? var.ebs_kms_key_arns : [data.aws_kms_key.ebs_default.arn]
+  external_id                = (var.external_id != "" ? [{ test : "StringEquals", variable : "sts:ExternalId", values : [var.external_id] }] : [])
   kms_key_arns               = join(", ", formatlist("\"%s\"", distinct(concat(local.ebs_kms_key_arn, local.s3_kms_key_arn))))
   r53_zone_arns              = format("[%s]", join(",", local.build_r53_arns))
+  s3_kms_key_arn             = length(var.s3_kms_key_arns) > 0 ? var.s3_kms_key_arns : [data.aws_kms_key.s3_default.arn]
   source_identity            = (length(var.source_identities) > 0 ? [{ test : var.source_identity_test, variable : "sts:SourceIdentity", values : var.source_identities }] : [])
   tag_set                    = merge({ Vendor = "StreamNative", SNVersion = var.sn_policy_version }, var.tags)
 
