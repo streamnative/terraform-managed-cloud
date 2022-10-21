@@ -1,5 +1,5 @@
 # StreamNative Managed Cloud
-This repository contains Terraform modules (and other configuration scripts, such as CloudFormation) for the management of StreamNative's vendor access into a Cloud Provider.
+This repository contains Terraform modules for the management of StreamNative's vendor access into a Cloud Provider.
 
 Previous verions of these modules can be found in the following locations:
 - [terraform-aws-cloud//modules/managed-cloud?ref=v2.5.0](https://github.com/streamnative/terraform-aws-cloud/tree/v2.5.0-alpha/modules/managed-cloud): This was the original location of the AWS vendor access module, which has been moved to this repository. The last version released to the Terraform Registry was `v2.5.0-alpha`.
@@ -10,6 +10,8 @@ The modules are organized by Cloud Provider. For example, the AWS modules are in
 
 ## Examples
 Examples of the modules can be found in the `examples` directory.
+
+Details on the modules themselves and their requirements can be found in their respective README files, contained in the `modules` directory.
 
 ## Upgrading an existing AWS module
 If you have used the previous version of the AWS vendor access module, your configuration should have looked something like this:

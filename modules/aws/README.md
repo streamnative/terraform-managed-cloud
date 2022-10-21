@@ -1462,8 +1462,6 @@ Apply complete! Resources: 9 added, 0 changed, 0 destroyed.
 ```
 </p></details>
 
-## CloudFormation (optional)
-If you do not want to use Terraform for deploying these resources, the [`cloudformation`](https://github.com/streamnative/terraform-managed-cloud/tree/main/modules/aws/managed-cloud/cloudformation) directory contains a stack template file you can use. It creates the same resources mentioned above. Upload the stack and provide the necessary `VendorSupportRoleArn` parameter.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
