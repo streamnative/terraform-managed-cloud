@@ -55,6 +55,7 @@ module "sn_managed_cloud" {
   source  = "streamnative/managed-cloud//modules/aws"
  
   region             = <YOUR_REGION>
+  hosted_zone_allowed_ids =
   external_ids       = [ "<YOUR_SNCLOUD_ORG_ID>" ]
 
 }

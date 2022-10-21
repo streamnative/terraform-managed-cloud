@@ -8,7 +8,10 @@ Previous verions of these modules can be found in the following locations:
 ## Modules
 The modules are organized by Cloud Provider. For example, the AWS modules are in the `modules/aws` directory and the GCP modules (WIP) modules are in the `modules/gcp`, and so on.
 
-## Upgrading An Existing AWS Module
+## Examples
+Examples of the modules can be found in the `examples` directory.
+
+## Upgrading an existing AWS module
 If you have used the previous version of the AWS vendor access module, your configuration should have looked something like this:
 
 ```hcl
@@ -36,7 +39,7 @@ module "sn_managed_cloud" {
   source = "github.com/streamnative/terraform-managed-cloud//modules/managed-cloud?ref=v2.5.0-alpha"
 
   external_id             = "o-kxb4r"
-  hosted_zone_allowed_ids = ["arn:aws:route53:::hostedzone/Z00048871IAX8IX9HGD0"]
+  hosted_zone_allowed_ids = ["Z00048871IAX8IX9HGD0"]
   region                  = "us-west-2"
 
 }
