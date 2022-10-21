@@ -48,15 +48,15 @@ Start by writing the following configuration to a new file `main.tf` containing 
 ```hcl
 
 provider "aws" {
-  region = <MY_AWS_REGION>
+  region = <YOUR_REGION>
 }
 
 module "sn_managed_cloud" {
-  source  = "streamnative/managed-cloud//modules/aws"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/aws?ref=v3.0.0"
  
-  region             = <YOUR_REGION>
-  hosted_zone_allowed_ids =
-  external_ids       = [ "<YOUR_SNCLOUD_ORG_ID>" ]
+  external_id             = "<YOUR_SNCLOUD_ORG_ID>"
+  hosted_zone_allowed_ids = [ "<YOUR_R3_HOSTED_ZONE_IDs>" ]
+  region                  = "<YOUR_REGION>"
 
 }
 ```
