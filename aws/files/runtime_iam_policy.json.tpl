@@ -5,15 +5,19 @@
             "Sid": "ro",
             "Effect": "Allow",
             "Action": [
+                "autoscaling:Describe*",
                 "secretsmanager:ListSecrets",
                 "route53:ListTagsForResource",
-                "route53:ListResourceRecordSets",
                 "route53:ListHostedZones*",
                 "route53:GetChange",
-                "ec2:DescribeVolumesModifications",
-                "ec2:DescribeVolumes",
+                "ec2:DescribeLaunchTemplateVersions",
+                "ec2:DescribeImages",
+                "ec2:DescribeInstanceTypes",
+                "ec2:DescribeVolumes*",
                 "ec2:DescribeTags",
                 "ec2:DescribeSnapshots",
+                "ec2:GetInstanceTypesFromInstanceRequirements",
+                "eks:DescribeNodegroup",
                 "autoscaling:Describe*"
             ],
             "Resource": ["*"]
@@ -21,7 +25,10 @@
         {
             "Sid": "r53sc",
             "Effect": "Allow",
-            "Action": "route53:ChangeResourceRecordSets",
+            "Action": [
+                "route53:ChangeResourceRecordSets",
+                "route53:ListResourceRecordSets" 
+            ],
             "Resource": ${r53_zone_arns}
         },
         {

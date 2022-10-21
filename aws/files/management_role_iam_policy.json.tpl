@@ -7,9 +7,15 @@
       "Action": [
         "acm:List*",
         "acm:ImportCertificate",
+        "autoscaling:Describe*",
         "cloudwatch:Describe*",
         "cloudwatch:List*",
         "cloudwatch:Get*",
+        "ec2:Describe*",
+        "ec2:Get*",
+        "eks:Describe*",
+        "eks:List*",
+        "elasticloadbalancing:Describe*",
         "logs:Describe*",
         "logs:List*",
         "logs:Filter*",
@@ -22,60 +28,6 @@
         "servicequotas:Get*"
       ],
       "Resource": "*"
-    },
-    {
-      "Sid": "AsgTags",
-      "Effect": "Allow",
-      "Action": [
-        "autoscaling:Describe*"
-      ],
-      "Resource": [ "*" ],
-      "Condition": {
-        "StringLike": {
-          "autoscaling:ResourceTag/Vendor": "StreamNative"
-        }
-      }
-    },
-    {
-      "Sid": "EC2Tags",
-      "Effect": "Allow",
-      "Action": [
-        "ec2:Describe*",
-        "ec2:Get*"
-      ],
-      "Resource": [ "*" ],
-      "Condition": {
-        "StringLike": {
-          "ec2:ResourceTag/Vendor": "StreamNative"
-        }
-      }
-    },
-    {
-      "Sid": "ELBTags",
-      "Effect": "Allow",
-      "Action": [
-        "elasticloadbalancing:Describe*"
-      ],
-      "Resource": [ "*" ],
-      "Condition": {
-        "StringLike": {
-          "elasticloadbalancing:ResourceTag/Vendor": "StreamNative"
-        }
-      }
-    },
-    {
-      "Sid": "EKSTags",
-      "Effect": "Allow",
-      "Action": [
-        "eks:Describe*",
-        "eks:List*"
-      ],
-      "Resource": [ "*" ],
-      "Condition": {
-        "StringLike": {
-          "eks:ResourceTag/Vendor": "StreamNative"
-        }
-      }
     },
     {
       "Sid": "AllowedIAMReadActions",
@@ -97,10 +49,12 @@
       "Effect": "Allow",
       "Action": [
         "iam:CreateRole",
+        "iam:TagPolicy",
         "iam:TagRole"
       ],
       "Resource": [
-        "arn:${partition}:iam::${account_id}:role/StreamNative/*"
+        "arn:${partition}:iam::${account_id}:role/StreamNative/*",
+        "arn:${partition}:iam::${account_id}:policy/StreamNative/*"
       ],
       "Condition": {
         "StringEqualsIgnoreCase": {
@@ -118,7 +72,7 @@
       "Condition": {
         "ArnEquals": {
           "iam:PolicyARN": [
-            "arn:${partition}:iam::${account_id}:policy/StreamNative/StreamNativeCloudManagementPolicy"
+            "arn:${partition}:iam::${account_id}:policy/StreamNative/StreamNativeCloudRuntimePolicy"
           ]
         }
       }

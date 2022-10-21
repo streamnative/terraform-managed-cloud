@@ -53,7 +53,7 @@ locals {
   aws_partition              = data.aws_partition.current.partition
   build_r53_arns             = [ for i, v in var.hosted_zone_allowed_ids : format("\"arn:%s:route53:::hostedzone/%s\"", local.aws_partition, v) ]
   ebs_kms_key_arn            = length(var.ebs_kms_key_arns) > 0 ? var.ebs_kms_key_arns : [ data.aws_kms_key.ebs_default.arn ]
-  external_ids               = (var.external_ids != "" ? [{ test : "StringEquals", variable : "sts:ExternalId", values : var.external_ids }] : [])
+  external_ids               = (var.external_ids != "" ? [{ test : "StringLike", variable : "sts:ExternalId", values : var.external_ids }] : [])
   kms_key_arns               = join(", ", formatlist("\"%s\"", distinct(concat(local.ebs_kms_key_arn, local.s3_kms_key_arn))))
   r53_zone_arns              = format("[%s]", join(",", local.build_r53_arns))
   source_identity            = (length(var.source_identities) > 0 ? [{ test : var.source_identity_test, variable : "sts:SourceIdentity", values : var.source_identities }] : [])
