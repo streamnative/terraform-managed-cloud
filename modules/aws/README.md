@@ -52,7 +52,7 @@ provider "aws" {
 }
 
 module "sn_managed_cloud" {
-  source  = "streamnative/managed-cloud//modules/aws"
+  source  = "github.com/streamnative/terraform-managed-cloud//modules/aws?ref=v3.0.0"
  
   region             = <YOUR_REGION>
   hosted_zone_allowed_ids =
