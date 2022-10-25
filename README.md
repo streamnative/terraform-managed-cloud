@@ -38,7 +38,7 @@ With these changes in mind, your configuration should now look like this:
 
 ```hcl
 module "sn_managed_cloud" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/managed-cloud?ref=v2.5.0-alpha"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/aws?ref=v3.0.0"
 
   external_id             = "o-kxb4r"
   hosted_zone_allowed_ids = ["Z00048871IAX8IX9HGD0"]
