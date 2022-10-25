@@ -52,7 +52,7 @@ provider "aws" {
 }
 
 module "sn_managed_cloud" {
-  source  = "streamnative/managed-cloud//modules/aws"
+  source  = "streamnative/managed-cloud/modules/aws"
  
   region             = <YOUR_REGION>
   hosted_zone_allowed_ids =
