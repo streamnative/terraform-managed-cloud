@@ -31,7 +31,7 @@ module "sn_managed_cloud" {
 Upgrading to this version of the module is quite simple, but does involve a few minor changes.
 
 - The `source` URL has changed to `github.com/streamnative/terraform--managed-cloud//modules/aws?ref=v3.0.0` (note the tag reference, which as of this writing is `v3.0.0`).
-- `use_runtime_poliy` has been removed, as it is now the default behavior.
+- `use_runtime_policy` has been removed, as it is now the default behavior.
 - `runtime_hosted_zone_allowed_ids` has been renamed to `hosted_zone_allowed_ids`, and it now properly accepts a list of IDs for your hosted zones, rather than the full ARNs.
 
 With these changes in mind, your configuration should now look like this:
