@@ -146,13 +146,13 @@
         "iam:Set*"
       ],
       "Resource": [
-        "arn:${partition}:iam:::policy/StreamNative/StreamNativeCloudBootstrapPolicy",
-        "arn:${partition}:iam:::policy/StreamNative/StreamNativeCloudLBPolicy",
-        "arn:${partition}:iam:::policy/StreamNative/StreamNativeCloudManagementPolicy",
-        "arn:${partition}:iam:::policy/StreamNative/StreamNativeCloudPermissionBoundary",
-        "arn:${partition}:iam:::policy/StreamNative/StreamNativeCloudRuntimePolicy",
-        "arn:${partition}:iam::${account_id}:role/StreamNative/StreamNativeBootstrapRole",
-        "arn:${partition}:iam::${account_id}:role/StreamNative/StreamNativeManagementRole"
+        "arn:${partition}:iam::${account_id}:policy/StreamNative/StreamNativeCloudBootstrapPolicy",
+        "arn:${partition}:iam::${account_id}:policy/StreamNative/StreamNativeCloudLBPolicy",
+        "arn:${partition}:iam::${account_id}:policy/StreamNative/StreamNativeCloudManagementPolicy",
+        "arn:${partition}:iam::${account_id}:policy/StreamNative/StreamNativeCloudPermissionBoundary",
+        "arn:${partition}:iam::${account_id}:policy/StreamNative/StreamNativeCloudRuntimePolicy",
+        "arn:${partition}:iam::${account_id}:role/StreamNative/StreamNativeCloudBootstrapRole",
+        "arn:${partition}:iam::${account_id}:role/StreamNative/StreamNativeCloudManagementRole"
       ]
     }
   ]
