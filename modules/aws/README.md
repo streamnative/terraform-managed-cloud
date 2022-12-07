@@ -1109,11 +1109,11 @@ Terraform will perform the following actions:
                         ]
                       + Effect   = "Deny"
                       + Resource = [
-                          + "arn:aws:iam:::policy/StreamNative/StreamNativeCloudBootstrapPolicy",
-                          + "arn:aws:iam:::policy/StreamNative/StreamNativeCloudLBPolicy",
-                          + "arn:aws:iam:::policy/StreamNative/StreamNativeCloudManagementPolicy",
-                          + "arn:aws:iam:::policy/StreamNative/StreamNativeCloudPermissionBoundary",
-                          + "arn:aws:iam:::policy/StreamNative/StreamNativeCloudRuntimePolicy",
+                          + "arn:aws:iam::123456789012:policy/StreamNative/StreamNativeCloudBootstrapPolicy",
+                          + "arn:aws:iam::123456789012:policy/StreamNative/StreamNativeCloudLBPolicy",
+                          + "arn:aws:iam::123456789012:policy/StreamNative/StreamNativeCloudManagementPolicy",
+                          + "arn:aws:iam::123456789012:policy/StreamNative/StreamNativeCloudPermissionBoundary",
+                          + "arn:aws:iam::123456789012:policy/StreamNative/StreamNativeCloudRuntimePolicy",
                           + "arn:aws:iam::123456789012:role/StreamNative/StreamNativeCloudBootstrapRole",
                           + "arn:aws:iam::123456789012:role/StreamNative/StreamNativeCloudManagementRole",
                         ]
