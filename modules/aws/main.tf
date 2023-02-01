@@ -61,13 +61,13 @@ locals {
 
   default_allowed_iam_policies = compact([
     "arn:${local.aws_partition}:iam::${local.account_id}:policy/StreamNative/*",
-    "arn:${local.aws_partition}:iam::${local.account_id}:policy/AmazonEKSClusterPolicy",
-    "arn:${local.aws_partition}:iam::${local.account_id}:policy/AmazonEKSServicePolicy",
-    "arn:${local.aws_partition}:iam::${local.account_id}:policy/AmazonEKSVPCResourceController",
-    "arn:${local.aws_partition}:iam::${local.account_id}:policy/AmazonEKSWorkerNodePolicy",
-    "arn:${local.aws_partition}:iam::${local.account_id}:policy/AmazonEKS_CNI_Policy",
-    "arn:${local.aws_partition}:iam::${local.account_id}:policy/AmazonEC2ContainerRegistryReadOnly",
-    "arn:${local.aws_partition}:iam::${local.account_id}:policy/service-role/AmazonEBSCSIDriverPolicy"
+    "arn:${local.aws_partition}:iam::aws:policy/AmazonEKSClusterPolicy",
+    "arn:${local.aws_partition}:iam::aws:policy/AmazonEKSServicePolicy",
+    "arn:${local.aws_partition}:iam::aws:policy/AmazonEKSVPCResourceController",
+    "arn:${local.aws_partition}:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+    "arn:${local.aws_partition}:iam::aws:policy/AmazonEKS_CNI_Policy",
+    "arn:${local.aws_partition}:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+    "arn:${local.aws_partition}:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
   ])
 }
 
