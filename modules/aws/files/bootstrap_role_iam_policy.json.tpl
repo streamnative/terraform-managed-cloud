@@ -96,7 +96,7 @@
       "Sid": "ResEKS",
       "Effect": "Allow",
       "Action": [
-        "eks:DeleteNodeGroup"
+        "eks:DeleteNode*"
       ],
       "Resource": [
         "arn:${partition}:eks:${region}:${account_id}:nodegroup/*/${nodepool_pattern}/*"
@@ -314,7 +314,7 @@
       ],
       "Resource": [
         "arn:${partition}:iam::${account_id}:role/StreamNative/*",
-        "arn:${partition}:iam::${account_id}:role/${cluster_pattern}" 
+        "arn:${partition}:iam::${account_id}:role/${cluster_pattern}"
       ],
       "Condition": {
         "StringEquals": {
