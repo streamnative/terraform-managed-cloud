@@ -69,7 +69,7 @@ provider "aws" {
 
 module "sn_managed_cloud" {
   source = "github.com/streamnative/terraform-managed-cloud//modules/aws?ref=v3.0.0"
- 
+
   external_id             = "<YOUR_SNCLOUD_ORG_ID>"
   hosted_zone_allowed_ids = [ "<YOUR_R3_HOSTED_ZONE_IDs>" ]
   region                  = "<YOUR_REGION>"
@@ -1531,7 +1531,6 @@ No modules.
 | <a name="input_create_bootstrap_role"></a> [create\_bootstrap\_role](#input\_create\_bootstrap\_role) | Whether or not to create the bootstrap role, which is used by StreamNative for the initial deployment of StreamNative Cloud | `string` | `true` | no |
 | <a name="input_ebs_kms_key_arns"></a> [ebs\_kms\_key\_arns](#input\_ebs\_kms\_key\_arns) | Sets the list of allowed KMS key ARNs, if not set, uses the default EBS KMS key | `list(any)` | `[]` | no |
 | <a name="input_eks_cluster_pattern"></a> [eks\_cluster\_pattern](#input\_eks\_cluster\_pattern) | Defines the EKS cluster prefix for streamnative clusters. This should normally remain the default value. | `string` | `"*snc*"` | no |
-| <a name="input_eks_nodepool_pattern"></a> [eks\_nodepool\_pattern](#input\_eks\_nodepool\_pattern) | Defines the prefix that scopes which node pools StreamNative is allowed to use. This should normally remain the default value. | `string` | `"*snc*"` | no |
 | <a name="input_external_ids"></a> [external\_ids](#input\_external\_ids) | A list of external IDs that correspond to your Organizations within StreamNative Cloud. Used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. "["o-xhopj"]". | `list(string)` | n/a | yes |
 | <a name="input_hosted_zone_allowed_ids"></a> [hosted\_zone\_allowed\_ids](#input\_hosted\_zone\_allowed\_ids) | Allows for further scoping down policy for allowed hosted zones. The IDs provided are constructed into ARNs | `list(any)` | <pre>[<br>  "*"<br>]</pre> | no |
 | <a name="input_region"></a> [region](#input\_region) | The AWS region where your instance of StreamNative Cloud is deployed. Defaults to all regions "*" | `string` | `"*"` | no |
