@@ -99,7 +99,7 @@
         "eks:DeleteNode*"
       ],
       "Resource": [
-        "arn:${partition}:eks:${region}:${account_id}:nodegroup/*/${nodepool_pattern}/*"
+        "arn:${partition}:eks:${region}:${account_id}:nodegroup/${cluster_pattern}/*/*"
       ]
     },
     {

@@ -45,12 +45,6 @@ variable "eks_cluster_pattern" {
   type        = string
 }
 
-variable "eks_nodepool_pattern" {
-  default     = "*snc*"
-  description = "Defines the prefix that scopes which node pools are allowed to be used by StreamNative. This should normally remain the default value."
-  type        = string
-}
-
 variable "external_id" {
   description = "A external ID that correspond to your Organization within StreamNative Cloud, used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
   type        = string

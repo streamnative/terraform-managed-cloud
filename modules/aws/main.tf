@@ -156,7 +156,6 @@ resource "aws_iam_policy" "bootstrap_policy" {
       region           = var.region
       vpc_ids          = local.arn_like_vpcs_str
       bucket_pattern   = var.s3_bucket_pattern
-      nodepool_pattern = var.eks_nodepool_pattern
       cluster_pattern  = var.eks_cluster_pattern
       partition        = local.aws_partition
       r53_zone_arns    = local.r53_zone_arns
@@ -252,7 +251,6 @@ resource "local_file" "bootstrap_policy" {
       region           = var.region
       vpc_ids          = local.arn_like_vpcs_str
       bucket_pattern   = var.s3_bucket_pattern
-      nodepool_pattern = var.eks_nodepool_pattern
       cluster_pattern  = var.eks_cluster_pattern
       partition        = local.aws_partition
       r53_zone_arns    = local.r53_zone_arns
