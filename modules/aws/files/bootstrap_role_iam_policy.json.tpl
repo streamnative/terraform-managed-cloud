@@ -221,6 +221,7 @@
         "ec2:Revoke*",
         "ec2:TerminateInstances",
         "ec2:Update*",
+        "eks:AccessKubernetesApi",
         "eks:DeleteAddon",
         "eks:DeleteCluster",
         "eks:DeleteFargateProfile",
@@ -231,8 +232,8 @@
         "elasticloadbalancing:*TargetGroup",
         "elasticloadbalancing:Set*",
         "elasticloadbalancing:Re*",
-        "logs:DeleteLogGroup",
-        "logs:PutRetentionPolicy"
+        "logs:*",
+        "ssm:StartSession"
       ],
       "Resource": "*",
       "Condition": {
@@ -240,6 +241,15 @@
           "aws:ResourceTag/Vendor": "StreamNative"
         }
       }
+    },
+    {
+      "Sid": "SSMStop",
+      "Effect": "Allow",
+      "Action": [
+        "ssm:TerminateSession",
+        "ssm:ResumeSession"
+      ],
+      "Resource": ["arn:aws:ssm:*:*:session/$${aws:username}-*"]
     },
     {
       "Sid": "ResS3",
