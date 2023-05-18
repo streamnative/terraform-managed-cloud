@@ -45,7 +45,6 @@
       "Sid": "IamRestrictions",
       "Effect": "Allow",
       "Action": [
-        "iam:CreatePolicy",
         "iam:AddRoleToInstanceProfile",
         "iam:CreateOpenIDConnectProvider",
         "iam:CreateServiceLinkedRole",
