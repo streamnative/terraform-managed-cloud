@@ -296,6 +296,7 @@
         "iam:TagRole",
         "iam:TagInstanceProfile",
         "iam:TagOpenIDConnectProvider",
+        "iam:CreatePolicy",
         "iam:DeletePolicy",
         "iam:DeletePolicyVersion"
       ],
