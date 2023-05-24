@@ -14,7 +14,8 @@
         "route53:ChangeTagsForResource",
         "support:*",
         "servicequotas:List*",
-        "servicequotas:Get*"
+        "servicequotas:Get*",
+        "sts:DecodeAuthorizationMessage"
       ],
       "Resource": "*"
     },
