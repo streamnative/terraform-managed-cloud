@@ -27,7 +27,7 @@
             "Effect": "Allow",
             "Action": [
                 "route53:ChangeResourceRecordSets",
-                "route53:ListResourceRecordSets" 
+                "route53:ListResourceRecordSets"
             ],
             "Resource": ${r53_zone_arns}
         },
@@ -54,7 +54,7 @@
                 "kms:ListGrants",
                 "kms:CreateGrant"
             ],
-            "Resource": [ ${kms_arns} ],  
+            "Resource": [ ${kms_arns} ],
             "Condition": {
                 "Bool": {
                     "kms:GrantIsForAWSResource": [
@@ -73,7 +73,7 @@
                 "kms:DescribeKey",
                 "kms:Decrypt"
             ],
-            "Resource": [ ${kms_arns} ]  
+            "Resource": [ ${kms_arns} ]
         },
         {
             "Sid": "s3b",
@@ -93,7 +93,7 @@
                 "s3:*Object",
                 "s3:*Multipart*"
             ],
-            "Resource": "arn:aws:s3:::${bucket_pattern}"  
+            "Resource": "arn:aws:s3:::${bucket_pattern}"
         },
         {
             "Sid": "vbc",
@@ -102,12 +102,20 @@
                 "ec2:CreateVolume",
                 "ec2:CreateSnapshot"
             ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "vbcd",
+            "Effect": "Deny",
+            "Action": [
+                "ec2:CreateVolume",
+                "ec2:CreateSnapshot"
+            ],
             "Resource": "*",
             "Condition": {
-                "StringLike": {
-                    "aws:RequestTag/kubernetes.io/cluster/${cluster_pattern}": [
-                        "owned"
-                    ]
+                "StringNotLike": {
+                    "aws:ResourceTag/Vendor": "StreamNative",
+                    "aws:Type": "snapshot"
                 }
             }
         },
@@ -135,8 +143,8 @@
             "Resource": "*",
             "Condition": {
                 "StringLike": {
-                    "aws:ResourceTag/kubernetes.io/cluster/${cluster_pattern}": [
-                        "owned"
+                    "aws:ResourceTag/Vendor": [
+                        "StreamNative"
                     ]
                 }
             }

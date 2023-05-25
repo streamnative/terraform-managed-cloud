@@ -25,7 +25,8 @@
         "route53:List*",
         "support:*",
         "servicequotas:List*",
-        "servicequotas:Get*"
+        "servicequotas:Get*",
+        "sts:DecodeAuthorizationMessage"
       ],
       "Resource": "*"
     },
