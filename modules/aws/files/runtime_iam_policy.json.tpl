@@ -108,7 +108,6 @@
             "Sid": "vbcd",
             "Effect": "Deny",
             "Action": [
-                "ec2:CreateVolume",
                 "ec2:CreateSnapshot"
             ],
             "Resource": "*",
