@@ -69,7 +69,7 @@ variable "s3_bucket_pattern" {
 }
 
 variable "sn_policy_version" {
-  default     = "3.1.0"
+  default     = "3.1.1"
   description = "The value of SNVersion tag"
   type        = string
 }
