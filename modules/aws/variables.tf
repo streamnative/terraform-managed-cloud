@@ -69,7 +69,7 @@ variable "s3_bucket_pattern" {
 }
 
 variable "sn_policy_version" {
-  default     = "3.1.1"
+  default     = "3.2.0"
   description = "The value of SNVersion tag"
   type        = string
 }
@@ -94,7 +94,19 @@ variable "streamnative_google_account_id" {
 
 variable "streamnative_vendor_access_role_arns" {
   default     = ["arn:aws:iam::311022431024:role/cloud-manager"]
-  description = "A list ARNs provided by StreamNative that enable us to work with the Vendor Access Roles created by this module (StreamNativeCloudBootstrapRole, StreamNativeCloudManagementRole). This is how StreamNative is granted access into your AWS account, and should typically be the default value unless directed otherwise."
+  description = "A list ARNs provided by StreamNative that enable us to work with the Vendor Access Roles created by this module (StreamNativeCloudBootstrapRole, StreamNativeCloudManagementRole). This is how StreamNative is granted access into your AWS account, and should typically be the default value unless directed otherwise. This arns are used *only* for automations."
+  type        = list(string)
+}
+
+variable "streamnative_support_access_role_arns" {
+  default     = ["arn:aws:iam::311022431024:role/cloud-support-general"]
+  description = "A list ARNs provided by StreamNative that enable streamnative support engineers access the StreamNativeCloudBootstrapRole. This is used only in some initial provisioning and in case of on-call support."
+  type        = list(string)
+}
+
+variable "streamnative_principal_ids" {
+  default     = []
+  description = "When set, this applies an additional check for certain StreamNative principals to futher restrict access to which services / users can access an account."
   type        = list(string)
 }
 
@@ -102,6 +114,12 @@ variable "tags" {
   default     = {}
   description = "Extra tags to apply to the resources created by this module."
   type        = map(string)
+}
+
+variable "test_suffix" {
+  default     = ""
+  description = "Used in testing to apply us to apply multiple versions of the role"
+  type        = string
 }
 
 variable "vpc_allowed_ids" {
