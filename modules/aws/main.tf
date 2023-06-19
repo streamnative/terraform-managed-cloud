@@ -16,18 +16,7 @@
 
 data "aws_caller_identity" "current" {}
 
-data "aws_iam_policy_document" "streamnative_vendor_access" {
-  statement {
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "AWS"
-      identifiers = var.streamnative_vendor_access_role_arns
-    }
-  }
-}
-
+data "aws_partition" "current" {}
 
 data "aws_kms_key" "ebs_default" {
   key_id = "alias/aws/ebs"
@@ -36,8 +25,6 @@ data "aws_kms_key" "ebs_default" {
 data "aws_kms_key" "s3_default" {
   key_id = "alias/aws/s3"
 }
-
-data "aws_partition" "current" {}
 
 locals {
   account_id                 = data.aws_caller_identity.current.account_id
@@ -70,45 +57,6 @@ locals {
 ######
 #-- Trust Relationship for StreamNative Vendor Access Roles
 ######
-data "aws_iam_policy_document" "streamnative_control_plane_access" {
-  statement {
-    sid     = "AllowStreamNativeVendorAccess"
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "AWS"
-      identifiers = var.streamnative_vendor_access_role_arns
-    }
-    dynamic "condition" {
-      for_each = local.assume_conditions
-      content {
-        test     = condition.value["test"]
-        values   = condition.value["values"]
-        variable = condition.value["variable"]
-      }
-    }
-  }
-
-  statement {
-    sid     = "AllowStreamNativeControlPlaneAccess"
-    effect  = "Allow"
-    actions = ["sts:AssumeRoleWithWebIdentity"]
-
-    principals {
-      type = "Federated"
-      identifiers = [
-        "accounts.google.com"
-      ]
-    }
-    condition {
-      test     = "StringEquals"
-      values   = [var.streamnative_google_account_id]
-      variable = "accounts.google.com:aud"
-    }
-  }
-}
-
 data "aws_iam_policy_document" "streamnative_bootstrap_access" {
   statement {
     sid     = "AllowStreamNativeVendorAccess"
@@ -140,6 +88,45 @@ data "aws_iam_policy_document" "streamnative_bootstrap_access" {
     }
     dynamic "condition" {
       for_each = local.support_assume_conditions
+      content {
+        test     = condition.value["test"]
+        values   = condition.value["values"]
+        variable = condition.value["variable"]
+      }
+    }
+  }
+
+  statement {
+    sid     = "AllowStreamNativeControlPlaneAccess"
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    principals {
+      type = "Federated"
+      identifiers = [
+        "accounts.google.com"
+      ]
+    }
+    condition {
+      test     = "StringEquals"
+      values   = [var.streamnative_google_account_id]
+      variable = "accounts.google.com:aud"
+    }
+  }
+}
+
+data "aws_iam_policy_document" "streamnative_management_access" {
+  statement {
+    sid     = "AllowStreamNativeVendorAccess"
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "AWS"
+      identifiers = var.streamnative_vendor_access_role_arns
+    }
+    dynamic "condition" {
+      for_each = local.assume_conditions
       content {
         test     = condition.value["test"]
         values   = condition.value["values"]
@@ -247,7 +234,7 @@ resource "aws_iam_policy" "management_role" {
 resource "aws_iam_role" "management_role" {
   name                 = "StreamNativeCloudManagementRole${var.test_suffix}"
   description          = "This role is used by StreamNative for the day to day management of the StreamNative Cloud deployment."
-  assume_role_policy   = data.aws_iam_policy_document.streamnative_control_plane_access.json
+  assume_role_policy   = data.aws_iam_policy_document.streamnative_management_access.json
   path                 = "/StreamNative/"
   permissions_boundary = aws_iam_policy.permission_boundary.arn
   tags                 = local.tag_set
