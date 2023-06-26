@@ -208,6 +208,7 @@
         "autoscaling:SetDesired*",
         "ec2:AssignPrivateIpAddresses",
         "ec2:AttachInternetGateway",
+        "ec2:AttachVolume",
         "ec2:CreateLaunchTemplateVersion",
         "ec2:CreateNatGateway",
         "ec2:CreateNetworkInterface",
