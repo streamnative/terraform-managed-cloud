@@ -45,7 +45,6 @@ jobs:
         run: for module in modules/aws/; do cd "${GITHUB_WORKSPACE}/${module}" && terraform init -backend=false && AWS_REGION=us-east-1 terraform validate -no-color ; done
      
       - name: Terraform GCP Validate Modules
-        id: validate-modules
         run: for module in modules/gcp/; do cd "${GITHUB_WORKSPACE}/${module}" && terraform init -backend=false && CLOUDSDK_COMPUTE_REGION=us-central1 terraform validate -no-color ; done
         
       - name: Terraform Validate Examples
