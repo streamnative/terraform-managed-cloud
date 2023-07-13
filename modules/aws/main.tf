@@ -58,10 +58,11 @@ locals {
 #-- Trust Relationship for StreamNative Vendor Access Roles
 ######
 data "aws_iam_policy_document" "streamnative_bootstrap_access" {
-  statement {
-    sid     = "AllowStreamNativeVendorAccess"
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
+  dynamic "statement" {
+    for_each = length(var.streamnative_vendor_access_role_arns) > 0 ? [1] : []
+    sid      = "AllowStreamNativeVendorAccess"
+    effect   = "Allow"
+    actions  = ["sts:AssumeRole"]
 
     principals {
       type        = "AWS"
@@ -116,7 +117,9 @@ data "aws_iam_policy_document" "streamnative_bootstrap_access" {
 }
 
 data "aws_iam_policy_document" "streamnative_management_access" {
-  statement {
+  dyanmic "statement" {
+    for_each = length(var.streamnative_vendor_access_role_arns) > 0 ? [1] : []
+
     sid     = "AllowStreamNativeVendorAccess"
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
