@@ -60,20 +60,22 @@ locals {
 data "aws_iam_policy_document" "streamnative_bootstrap_access" {
   dynamic "statement" {
     for_each = length(var.streamnative_vendor_access_role_arns) > 0 ? [1] : []
-    sid      = "AllowStreamNativeVendorAccess"
-    effect   = "Allow"
-    actions  = ["sts:AssumeRole"]
+    content {
+      sid      = "AllowStreamNativeVendorAccess"
+      effect   = "Allow"
+      actions  = ["sts:AssumeRole"]
 
-    principals {
-      type        = "AWS"
-      identifiers = var.streamnative_vendor_access_role_arns
-    }
-    dynamic "condition" {
-      for_each = local.assume_conditions
-      content {
-        test     = condition.value["test"]
-        values   = condition.value["values"]
-        variable = condition.value["variable"]
+      principals {
+        type        = "AWS"
+        identifiers = var.streamnative_vendor_access_role_arns
+      }
+      dynamic "condition" {
+        for_each = local.assume_conditions
+        content {
+          test     = condition.value["test"]
+          values   = condition.value["values"]
+          variable = condition.value["variable"]
+        }
       }
     }
   }
@@ -117,23 +119,24 @@ data "aws_iam_policy_document" "streamnative_bootstrap_access" {
 }
 
 data "aws_iam_policy_document" "streamnative_management_access" {
-  dyanmic "statement" {
+  dynamic "statement" {
     for_each = length(var.streamnative_vendor_access_role_arns) > 0 ? [1] : []
+    content {
+      sid     = "AllowStreamNativeVendorAccess"
+      effect  = "Allow"
+      actions = ["sts:AssumeRole"]
 
-    sid     = "AllowStreamNativeVendorAccess"
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "AWS"
-      identifiers = var.streamnative_vendor_access_role_arns
-    }
-    dynamic "condition" {
-      for_each = local.assume_conditions
-      content {
-        test     = condition.value["test"]
-        values   = condition.value["values"]
-        variable = condition.value["variable"]
+      principals {
+        type        = "AWS"
+        identifiers = var.streamnative_vendor_access_role_arns
+      }
+      dynamic "condition" {
+        for_each = local.assume_conditions
+        content {
+          test     = condition.value["test"]
+          values   = condition.value["values"]
+          variable = condition.value["variable"]
+        }
       }
     }
   }
