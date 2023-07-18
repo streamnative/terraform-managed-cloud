@@ -134,8 +134,8 @@ variable "write_policy_files" {
   type        = bool
 }
 
-variable "allow_vendor_federation" {
+variable "enforce_vendor_federation" {
   default     = false
-  description = "Restrict access for the streamnative_vendor_access_role_arns to only federated Google accounts. Intended to be true by default in the future."
+  description = "Do not enable this unless explicitly told to do so by StreamNative. Restrict access for the streamnative_vendor_access_role_arns to only federated Google accounts. Intended to be true by default in the future."
   type        = bool
 }
