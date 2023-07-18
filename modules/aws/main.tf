@@ -43,7 +43,7 @@ locals {
   s3_kms_key_arn             = length(var.s3_kms_key_arns) > 0 ? var.s3_kms_key_arns : [data.aws_kms_key.s3_default.arn]
   source_identity            = (length(var.source_identities) > 0 ? [{ test : var.source_identity_test, variable : "sts:SourceIdentity", values : var.source_identities }] : [])
   principal_check            = (length(var.streamnative_principal_ids) > 0 ? [{ test : "StringLike", variable : "aws:PrincipalArn", values : var.streamnative_principal_ids }] : [])
-  vendor_federation          = (var.vendor_federation ? [{ test : "StringLike", variable : "aws:FederatedProvider", values : ["accounts.google.com"] }] : [])
+  vendor_federation          = (var.allow_vendor_federation ? [{ test : "StringLike", variable : "aws:FederatedProvider", values : ["accounts.google.com"] }] : [])
   tag_set                    = merge({ Vendor = "StreamNative", SNVersion = var.sn_policy_version }, var.tags)
 
   default_allowed_iam_policies = compact([
