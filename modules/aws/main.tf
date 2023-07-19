@@ -32,7 +32,7 @@ locals {
   allowed_iam_policies       = join(", ", formatlist("\"%s\"", distinct(concat(local.additional_iam_policy_arns, local.default_allowed_iam_policies))))
   arn_like_vpcs              = formatlist("\"arn:%s:ec2:%s:%s:vpc/%s\"", local.aws_partition, var.region, local.account_id, var.vpc_allowed_ids)
   arn_like_vpcs_str          = format("[%s]", join(",", local.arn_like_vpcs))
-  assume_conditions          = concat(local.external_id, local.source_identity, local.principal_check)
+  assume_conditions          = concat(local.external_id, local.source_identity, local.principal_check, local.vendor_federation)
   support_assume_conditions  = concat(local.external_id, local.source_identity)
   aws_partition              = data.aws_partition.current.partition
   build_r53_arns             = [for i, v in var.hosted_zone_allowed_ids : format("\"arn:%s:route53:::hostedzone/%s\"", local.aws_partition, v)]
@@ -43,6 +43,7 @@ locals {
   s3_kms_key_arn             = length(var.s3_kms_key_arns) > 0 ? var.s3_kms_key_arns : [data.aws_kms_key.s3_default.arn]
   source_identity            = (length(var.source_identities) > 0 ? [{ test : var.source_identity_test, variable : "sts:SourceIdentity", values : var.source_identities }] : [])
   principal_check            = (length(var.streamnative_principal_ids) > 0 ? [{ test : "StringLike", variable : "aws:PrincipalArn", values : var.streamnative_principal_ids }] : [])
+  vendor_federation          = (var.enforce_vendor_federation ? [{ test : "StringLike", variable : "aws:FederatedProvider", values : ["accounts.google.com"] }] : [])
   tag_set                    = merge({ Vendor = "StreamNative", SNVersion = var.sn_policy_version }, var.tags)
 
   default_allowed_iam_policies = compact([
@@ -58,24 +59,21 @@ locals {
 #-- Trust Relationship for StreamNative Vendor Access Roles
 ######
 data "aws_iam_policy_document" "streamnative_bootstrap_access" {
-  dynamic "statement" {
-    for_each = length(var.streamnative_vendor_access_role_arns) > 0 ? [1] : []
-    content {
-      sid      = "AllowStreamNativeVendorAccess"
-      effect   = "Allow"
-      actions  = ["sts:AssumeRole"]
+  statement {
+    sid     = "AllowStreamNativeVendorAccess"
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
 
-      principals {
-        type        = "AWS"
-        identifiers = var.streamnative_vendor_access_role_arns
-      }
-      dynamic "condition" {
-        for_each = local.assume_conditions
-        content {
-          test     = condition.value["test"]
-          values   = condition.value["values"]
-          variable = condition.value["variable"]
-        }
+    principals {
+      type        = "AWS"
+      identifiers = var.streamnative_vendor_access_role_arns
+    }
+    dynamic "condition" {
+      for_each = local.assume_conditions
+      content {
+        test     = condition.value["test"]
+        values   = condition.value["values"]
+        variable = condition.value["variable"]
       }
     }
   }
@@ -119,24 +117,21 @@ data "aws_iam_policy_document" "streamnative_bootstrap_access" {
 }
 
 data "aws_iam_policy_document" "streamnative_management_access" {
-  dynamic "statement" {
-    for_each = length(var.streamnative_vendor_access_role_arns) > 0 ? [1] : []
-    content {
-      sid     = "AllowStreamNativeVendorAccess"
-      effect  = "Allow"
-      actions = ["sts:AssumeRole"]
+  statement {
+    sid     = "AllowStreamNativeVendorAccess"
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
 
-      principals {
-        type        = "AWS"
-        identifiers = var.streamnative_vendor_access_role_arns
-      }
-      dynamic "condition" {
-        for_each = local.assume_conditions
-        content {
-          test     = condition.value["test"]
-          values   = condition.value["values"]
-          variable = condition.value["variable"]
-        }
+    principals {
+      type        = "AWS"
+      identifiers = var.streamnative_vendor_access_role_arns
+    }
+    dynamic "condition" {
+      for_each = local.assume_conditions
+      content {
+        test     = condition.value["test"]
+        values   = condition.value["values"]
+        variable = condition.value["variable"]
       }
     }
   }

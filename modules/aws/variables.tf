@@ -69,7 +69,7 @@ variable "s3_bucket_pattern" {
 }
 
 variable "sn_policy_version" {
-  default     = "3.3.0"
+  default     = "3.4.0"
   description = "The value of SNVersion tag"
   type        = string
 }
@@ -131,5 +131,11 @@ variable "vpc_allowed_ids" {
 variable "write_policy_files" {
   default     = false
   description = "Write the policy files locally to disk for debugging and validation"
+  type        = bool
+}
+
+variable "enforce_vendor_federation" {
+  default     = false
+  description = "Do not enable this unless explicitly told to do so by StreamNative. Restrict access for the streamnative_vendor_access_role_arns to only federated Google accounts. Intended to be true by default in the future."
   type        = bool
 }
