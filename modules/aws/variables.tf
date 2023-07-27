@@ -14,6 +14,12 @@
 # under the License.
 #
 
+variable "sn_policy_version" {
+  description = "The value of SNVersion tag"
+  default     = "3.4.0"    # x-release-please-version
+  type        = string
+}
+
 variable "s3_kms_key_arns" {
   default     = []
   description = "List of KMS key ARNs to use for S3 buckets"
@@ -65,12 +71,6 @@ variable "region" {
 variable "s3_bucket_pattern" {
   default     = "*snc*"
   description = "Defines the bucket prefix for streamnative managed buckets (backup and offload). Typically defaults to \"snc-*\", but should match the bucket created using the tiered-storage-resources module"
-  type        = string
-}
-
-variable "sn_policy_version" {
-  default     = "3.4.0"
-  description = "The value of SNVersion tag"
   type        = string
 }
 
