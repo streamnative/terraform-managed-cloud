@@ -12,7 +12,7 @@ provider "google" {
 
 # Expose Private Pulsar Service to all regions in network default
 module "gcp-private-service-core" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/gcp/private-service?ref=v3.3.1"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/gcp/private-service?ref=v3.5.0"
 
   region              = local.region
   project             = local.project_id
@@ -27,7 +27,7 @@ module "gcp-private-service-core" {
 
 # Expose Private Pulsar Service to region us-east1 in network svc2
 module "gcp-private-service-svc2" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/gcp/private-service?ref=v3.4.1"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/gcp/private-service?ref=v3.5.0"
 
   region              = local.region
   project             = local.project_id
@@ -42,7 +42,7 @@ module "gcp-private-service-svc2" {
 
 # Expose Private Pulsar Service to shared VPC shared in project <your-network-project-name>
 module "gcp-private-service-shared" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/gcp/private-service?ref=v3.4.1"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/gcp/private-service?ref=v3.5.0"
 
   region              = local.region
   project             = local.project_id
