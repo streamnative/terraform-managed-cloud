@@ -3,6 +3,17 @@ variable "region" {
   description = "The GCP region where the private service connection will be configured."
 }
 
+variable "project" {
+  type = string
+  description = "The GCP project where the private service connection will be configured."
+}
+
+variable "network_project" {
+  type = string
+  description = "The GCP project where the shared VPC located in."
+  default = ""
+}
+
 variable "network_name" {
   type = string
   description = "The GCP network where the private service connection will be available."
