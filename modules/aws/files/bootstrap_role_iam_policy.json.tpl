@@ -218,6 +218,9 @@
         "ec2:CreateSubnet",
         "ec2:CreateTags",
         "ec2:CreateVpcEndpoint",
+        "ec2:DescribeVpcPeeringConnections",
+        "ec2:CreateVpcPeeringConnection",
+        "ec2:DeleteVpcPeeringConnection",
         "ec2:Detach*",
         "ec2:Release*",
         "ec2:Revoke*",
@@ -243,6 +246,14 @@
           "aws:ResourceTag/Vendor": "StreamNative"
         }
       }
+    },
+    {
+      "Sid": "AcceptVpcPeering",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:AcceptVpcPeeringConnection"
+      ],
+      "Resource": "*"
     },
     {
       "Sid": "SSMStop",
