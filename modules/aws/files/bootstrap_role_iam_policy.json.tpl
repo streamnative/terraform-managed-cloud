@@ -256,6 +256,14 @@
       "Resource": "*"
     },
     {
+      "Sid": "EndpointConnectionAccess",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:*VpcEndpointConnections"
+      ],
+      "Resource": "*"
+    }
+    {
       "Sid": "SSMStop",
       "Effect": "Allow",
       "Action": [
