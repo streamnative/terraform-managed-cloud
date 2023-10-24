@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.7.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.6.1...v3.7.0) (2023-10-24)
+
+
+### Features
+
+* Add GCP BYOC vendor access module ([#42](https://github.com/streamnative/terraform-managed-cloud/issues/42)) ([98b0dd9](https://github.com/streamnative/terraform-managed-cloud/commit/98b0dd9fd287e79d6952171f9b262376b79b2361))
+
 ## [3.6.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.6.0...v3.6.1) (2023-10-09)
 
 
