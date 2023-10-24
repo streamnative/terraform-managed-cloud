@@ -491,3 +491,45 @@ After [authenticating to your GCP account](https://registry.terraform.io/provide
    ```
 
    </p></details>
+
+## Terraform Docs
+### Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=1.2.0 |
+| <a name="requirement_google"></a> [google](#requirement\_google) | >= 4.60.0 |
+
+### Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_google"></a> [google](#provider\_google) | >= 4.60.0 |
+
+### Modules
+
+No modules.
+
+### Resources
+
+| Name | Type |
+|------|------|
+| [google_project_iam_member.sn_access](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_service.gcp_apis](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_service) | resource |
+
+### Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_extra_google_services"></a> [extra\_google\_services](#input\_extra\_google\_services) | Extra google API services need to be enabled. | `list(string)` | `[]` | no |
+| <a name="input_project"></a> [project](#input\_project) | The project id of the target project | `string` | n/a | yes |
+| <a name="input_roles"></a> [roles](#input\_roles) | The role list will be associated with StreamNative GSA. | `list(string)` | <pre>[<br>  "roles/editor",<br>  "roles/compute.admin",<br>  "roles/compute.loadBalancerAdmin",<br>  "roles/compute.networkAdmin",<br>  "roles/container.admin",<br>  "roles/dns.admin",<br>  "roles/storage.admin",<br>  "roles/iam.serviceAccountAdmin",<br>  "roles/iam.workloadIdentityPoolAdmin",<br>  "roles/resourcemanager.projectIamAdmin"<br>]</pre> | no |
+| <a name="input_streamnative_support_access_gsa"></a> [streamnative\_support\_access\_gsa](#input\_streamnative\_support\_access\_gsa) | The GSA will be used by StreamnNative support team. | `list(string)` | <pre>[<br>  "cloud-support-general@sncloud-production.iam.gserviceaccount.com"<br>]</pre> | no |
+| <a name="input_streamnative_vendor_access_gsa"></a> [streamnative\_vendor\_access\_gsa](#input\_streamnative\_vendor\_access\_gsa) | The GSA will be used by StreamnNative cloud. | `list(string)` | <pre>[<br>  "cloud-manager@sncloud-production.iam.gserviceaccount.com",<br>  "pool-automation@sncloud-production.iam.gserviceaccount.com"<br>]</pre> | no |
+
+### Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_google_services"></a> [google\_services](#output\_google\_services) | Enabled google services. |
+| <a name="output_iam_bindings"></a> [iam\_bindings](#output\_iam\_bindings) | Configured iam policies. |
