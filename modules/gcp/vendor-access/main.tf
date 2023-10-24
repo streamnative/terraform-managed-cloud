@@ -44,8 +44,10 @@ resource "google_project_iam_member" "sn_access" {
 
 output "google_services" {
   value = local.google_services
+  description = "Enabled google services."
 }
 
 output "iam_bindings" {
   value = local.iam_bindings
+  description = "Configured iam policies."
 }
