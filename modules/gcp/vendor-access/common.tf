@@ -1,6 +1,18 @@
 variable "project" {
   type        = string
-  description = "The project id of the target project"
+  description = "The project id of the target project."
+}
+
+variable "project_num" {
+  type = string
+  default = ""
+  description = "The project number of the target project, required when configuring network project."
+}
+
+variable "network_project" {
+  type = string
+  default = ""
+  description = "The project id of the network host project."
 }
 
 variable "roles" {
