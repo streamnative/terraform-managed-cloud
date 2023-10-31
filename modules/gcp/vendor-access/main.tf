@@ -43,15 +43,29 @@ resource "google_project_iam_member" "sn_access" {
 }
 
 locals {
-  comput_network_user_gsa           = var.network_project != "" ? concat(local.streamnative_gsa, [format("serviceAccount:%s@cloudservices.gserviceaccount.com", var.project_num)]) : []
-  container_host_service_agent_user = var.network_project != "" ? concat(local.streamnative_gsa, [format("serviceAccount:service-%s@container-engine-robot.iam.gserviceaccount.com", var.project_num)]) : []
+  comput_network_user_gsa = var.network_project != "" ? concat(local.streamnative_gsa, [format("serviceAccount:%s@cloudservices.gserviceaccount.com", var.project_num)]) : []
+  comput_network_user_iam_binding = flatten([
+    for subnet in var.shared_vpc_subnets : [
+      for gsa in local.comput_network_user_gsa : {
+        region : subnet.region,
+        subnet : subnet.name,
+        member : gsa,
+      }
+    ]
+  ])
+  container_host_service_agent_user = var.network_project != "" ? [format("serviceAccount:service-%s@container-engine-robot.iam.gserviceaccount.com", var.project_num)] : []
 }
 
-resource "google_project_iam_member" "network_user" {
-  count      = length(local.comput_network_user_gsa)
+resource "google_compute_subnetwork_iam_member" "network_user" {
+  for_each = {
+    for index, binding in local.comput_network_user_iam_binding :
+    index => binding
+  }
   project    = var.network_project
+  region     = each.value.region
+  subnetwork = each.value.subnet
   role       = "roles/compute.networkUser"
-  member     = local.comput_network_user_gsa[count.index]
+  member     = each.value.member
   depends_on = [google_project_service.gcp_apis]
 }
 

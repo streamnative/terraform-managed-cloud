@@ -4,15 +4,24 @@ variable "project" {
 }
 
 variable "project_num" {
-  type = string
-  default = ""
+  type        = string
+  default     = ""
   description = "The project number of the target project, required when configuring network project."
 }
 
 variable "network_project" {
-  type = string
-  default = ""
+  type        = string
+  default     = ""
   description = "The project id of the network host project."
+}
+
+variable "shared_vpc_subnets" {
+  type = list(object({
+    region = string
+    name   = string
+  }))
+  default     = []
+  description = "The subnet list shared by network host project."
 }
 
 variable "roles" {
