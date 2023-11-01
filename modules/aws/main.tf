@@ -214,6 +214,12 @@ resource "aws_iam_role_policy_attachment" "bootstrap_policy" {
   role       = aws_iam_role.bootstrap_role[0].name
 }
 
+resource "aws_iam_role_policy_attachment" "bootstrap_readonly" {
+  count      = var.create_bootstrap_role ? 1 : 0
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  role       = aws_iam_role.bootstrap_role[0].name
+}
+
 ######
 #-- Create the IAM role for the management of the StreamNative Cloud
 #-- This role is used by StreamNative for management and troubleshooting
@@ -243,6 +249,11 @@ resource "aws_iam_role" "management_role" {
 
 resource "aws_iam_role_policy_attachment" "management_role" {
   policy_arn = aws_iam_policy.management_role.arn
+  role       = aws_iam_role.management_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "management_readonly" {
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
   role       = aws_iam_role.management_role.name
 }
 
