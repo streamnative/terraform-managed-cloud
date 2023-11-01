@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.8.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.7.0...v3.8.0) (2023-11-01)
+
+
+### Features
+
+* add ReadOnlyAccess policy for bootstrap and management role ([#47](https://github.com/streamnative/terraform-managed-cloud/issues/47)) ([5e26b08](https://github.com/streamnative/terraform-managed-cloud/commit/5e26b08b5c576daece0818a03642648fe53b6a27))
+
+
+### Bug Fixes
+
+* Add provider version requirement for private service ([#48](https://github.com/streamnative/terraform-managed-cloud/issues/48)) ([ca4efe3](https://github.com/streamnative/terraform-managed-cloud/commit/ca4efe32b820eefc6e4aa394f24c41201292da12))
+
 ## [3.7.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.6.1...v3.7.0) (2023-10-24)
 
 
