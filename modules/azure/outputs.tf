@@ -1,39 +1,43 @@
-output "management_resource_group_name" {
-  value       = azurerm_resource_group.sn_access.name
-  description = "The name of the resource group where the management resources will be created"
+# Copyright 2023 StreamNative, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+output "sn_automation_client_id" {
+  value       = azuread_service_principal.sn_automation.client_id
+  description = "The client ID of the sn automation service principal for StreamNative Cloud automation"
 }
 
-output "management_resource_group_location" {
-  value       = azurerm_resource_group.sn_access.location
-  description = "The location of the resource group where the management resources will be created"
+output "sn_automation_object_id" {
+  value       = azuread_service_principal.sn_automation.object_id
+  description = "The object ID of the sn automation service principal for StreamNative Cloud automation"
 }
 
-output "management_managed_identity_name" {
-  value       = azurerm_user_assigned_identity.sn_access.name
-  description = "The name of the managed identity to create for the management resources"
+output "sn_support_client_id" {
+  value       = azuread_service_principal.sn_support.client_id
+  description = "The client ID of the sn support service principal for StreamNative Cloud support access"
 }
 
-output "sn_access_client_id" {
-  value       = azurerm_user_assigned_identity.sn_access.client_id
-  description = "The client ID of the managed identity to create for the management resources"
+output "sn_support_object_id" {
+  value       = azuread_service_principal.sn_support.object_id
+  description = "The object ID of the sn support service principal for StreamNative Cloud support access"
 }
 
-output "sn_access_principal_id" {
-  value       = azurerm_user_assigned_identity.sn_access.principal_id
-  description = "The principal ID of the managed identity to create for the management resources"
-}
-
-output "sn_access_tenant_id" {
-  value       = azurerm_user_assigned_identity.sn_access.tenant_id
-  description = "The tenant ID of the managed identity to create for the management resources"
-}
-
-output "streamnative_external_id" {
+output "external_id" {
   value       = var.streamnative_external_id
   description = "An external ID that correspond to your Organization within StreamNative Cloud, used for all managed identities created by the module. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
 }
 
-output "aks_resource_group_name" {
+output "resource_group_name" {
   value       = azurerm_resource_group.aks.name
   description = "The name of the resource group where the AKS cluster will be created"
 }

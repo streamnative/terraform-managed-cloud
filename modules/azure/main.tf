@@ -1,59 +1,39 @@
+# Copyright 2023 StreamNative, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 data "azurerm_subscription" "current" {
 }
 
 locals {
-  streamnative_gsa = merge(var.streamnative_vendor_access_gsa_ids, var.streamnative_support_access_gsa_ids)
   tags = merge({
     "Vendor"  = "StreamNative"
     "Service" = "StreamNative Cloud"
   }, var.additional_tags)
 }
 
-# Create a resource group for the management resources
-resource "azurerm_resource_group" "sn_access" {
-  name     = var.management_resource_group_name
-  location = var.management_resource_group_location
+# Create a resource group for the AKS cluster
+resource "azurerm_resource_group" "aks" {
+  name     = var.resource_group_name
+  location = var.resource_group_location
   tags     = local.tags
 }
 
-# Create a managed identity for the management resources
-resource "azurerm_user_assigned_identity" "sn_access" {
-  name                = var.management_managed_identity_name
-  resource_group_name = azurerm_resource_group.sn_access.name
-  location            = azurerm_resource_group.sn_access.location
-}
-
-# Create federated identity credentials for the user assigned identity with the list of streamnative GSAs
-# external ID is used to scope down the access to the specific organization
-resource "azurerm_federated_identity_credential" "sn_access" {
-  for_each            = local.streamnative_gsa
-  name                = each.key
-  resource_group_name = azurerm_resource_group.sn_access.name
-  audience            = [format("api://AzureADTokenExchange/%s", var.streamnative_external_id)]
-  issuer              = "https://accounts.google.com"
-  parent_id           = azurerm_user_assigned_identity.sn_access.id
-  subject             = each.value
-}
-
-# Grand the user assigned identity as Conrtibutor role to the management resource group
-resource "azurerm_role_assignment" "sn_access" {
-  scope                = azurerm_resource_group.sn_access.id
-  role_definition_name = "Contributor"
-  principal_id         = azurerm_user_assigned_identity.sn_access.principal_id
-}
-
-# Create the DNS zone for the management resources if provided
-resource "azurerm_dns_zone" "sn_access" {
-  count               = var.dns_zone_name != null ? 1 : 0
-  name                = var.dns_zone_name
-  resource_group_name = azurerm_resource_group.sn_access.name
-}
-
-# Create the Velero `VeleroBackupRole` for at the subscription level
+# Create the Velero `VeleroBackupRole` for at the resource group level
 resource "azurerm_role_definition" "velero_backup_role" {
   name        = "VeleroBackupRole"
   description = "The role grants the minimum required permissions needed by Velero to perform backups, restores, and deletions. Reference: https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure?tab=readme-ov-file#specify-role"
-  scope       = data.azurerm_subscription.current.subscription_id
+  scope       = azurerm_resource_group.aks.id
   permissions {
     actions = [
       "Microsoft.Compute/disks/read",
@@ -83,27 +63,32 @@ resource "azurerm_role_definition" "velero_backup_role" {
   }
 }
 
-####################
-
-# Create a resource group for the AKS cluster
-resource "azurerm_resource_group" "aks" {
-  name     = var.aks_resource_group_name
-  location = var.aks_resource_group_location
-  tags     = local.tags
-}
-
-# Grand the user assigned identity as Conrtibutor role to the AKS resource group
-resource "azurerm_role_assignment" "aks" {
+# Grand the sn automation service principal as the Contributor to the AKS resource group
+resource "azurerm_role_assignment" "sn_automation" {
   scope                = azurerm_resource_group.aks.id
   role_definition_name = "Contributor"
-  principal_id         = azurerm_user_assigned_identity.sn_access.principal_id
+  principal_id         = azuread_service_principal.sn_automation.id
 }
 
-# Grand the user assigned identity as the Constrain roles by User Access Administrator to the AKS resource group
-resource "azurerm_role_assignment" "aks_user_access_administrator" {
+# Grand the sn automation service principal as the Azure Kubernetes Service Cluster Admin Role to the AKS resource group
+resource "azurerm_role_assignment" "sn_automation_cluster_admin" {
+  scope                = azurerm_resource_group.aks.id
+  role_definition_name = "Azure Kubernetes Service Cluster Admin Role"
+  principal_id         = azuread_service_principal.sn_automation.id
+}
+
+# Grand the sn support service principal as the Azure Kubernetes Service Cluster User Role to the AKS resource group
+resource "azurerm_role_assignment" "sn_support" {
+  scope                = azurerm_resource_group.aks.id
+  role_definition_name = "Azure Kubernetes Service Cluster User Role"
+  principal_id         = azuread_service_principal.sn_support.id
+}
+
+# Grand the sn automation service principal as the Constrain roles by User Access Administrator to the AKS resource group
+resource "azurerm_role_assignment" "user_access_administrator" {
   scope                = azurerm_resource_group.aks.id
   role_definition_name = "User Access Administrator"
-  principal_id         = azurerm_user_assigned_identity.sn_access.principal_id
+  principal_id         = azuread_service_principal.sn_automation.id
   condition_version    = "2.0"
   condition            = <<-EOT
 (
