@@ -17,11 +17,11 @@
 data "azuread_client_config" "current" {}
 
 data "azuread_application" "sn_automation" {
-  display_name = format("sncloud-%s-automation", var.external_id)
+  display_name = format("sncloud-%s-automation", var.streamnative_org_id)
 }
 
 data "azuread_application" "sn_support" {
-  display_name = format("sncloud-%s-support", var.external_id)
+  display_name = format("sncloud-%s-support", var.streamnative_org_id)
 }
 
 data "azuread_service_principal" "sn_automation" {

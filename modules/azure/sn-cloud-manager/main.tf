@@ -17,7 +17,7 @@
 data "azuread_client_config" "current" {}
 
 resource "azuread_application_registration" "sn_automation" {
-  display_name = format("sncloud-%s-automation", var.external_id)
+  display_name = format("sncloud-%s-automation", var.streamnative_org_id)
   description  = "The application registration for the StreamNative Cloud automation"
 
   homepage_url          = "https://streamnative.io"
@@ -28,7 +28,7 @@ resource "azuread_application_registration" "sn_automation" {
 }
 
 resource "azuread_application_registration" "sn_support" {
-  display_name = format("sncloud-%s-support", var.external_id)
+  display_name = format("sncloud-%s-support", var.streamnative_org_id)
   description  = "The application registration for the StreamNative Cloud support access"
 
   homepage_url          = "https://streamnative.io"
@@ -56,7 +56,7 @@ resource "azuread_application_federated_identity_credential" "sn_automation" {
   for_each       = var.streamnative_automation_gsa_ids
   application_id = azuread_application_registration.sn_automation.id
   display_name   = each.key
-  audiences      = [format("api://AzureADTokenExchange/%s", var.external_id)]
+  audiences      = [format("api://AzureADTokenExchange/%s", var.streamnative_org_id)]
   issuer         = "https://accounts.google.com"
   subject        = each.value
 }
@@ -65,7 +65,7 @@ resource "azuread_application_federated_identity_credential" "sn_support" {
   for_each       = var.streamnative_support_access_gsa_ids
   application_id = azuread_application_registration.sn_support.id
   display_name   = each.key
-  audiences      = [format("api://AzureADTokenExchange/%s", var.external_id)]
+  audiences      = [format("api://AzureADTokenExchange/%s", var.streamnative_org_id)]
   issuer         = "https://accounts.google.com"
   subject        = each.value
 }

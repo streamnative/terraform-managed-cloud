@@ -32,8 +32,8 @@ output "sn_support_principal_id" {
   description = "The principal ID of the sn support service principal for StreamNative Cloud support access"
 }
 
-output "external_id" {
-  value       = var.external_id
+output "streamnative_org_id" {
+  value       = var.streamnative_org_id
   description = "An external ID that correspond to your Organization within StreamNative Cloud, used for all managed identities created by the module. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
 }
 

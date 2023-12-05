@@ -45,7 +45,7 @@ variable "streamnative_support_access_gsa_ids" {
   description = "The GSA will be used by StreamnNative support team."
 }
 
-variable "external_id" {
-  description = "An external ID that correspond to your Organization within StreamNative Cloud, used for all managed identities created by the module. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
+variable "streamnative_org_id" {
+  description = "Your Organization ID within StreamNative Cloud, used for all resources created by the module. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
   type        = string
 }
