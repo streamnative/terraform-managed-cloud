@@ -28,23 +28,6 @@ variable "resource_group_location" {
   description = "The location of the resource group where the AKS cluster will be created"
 }
 
-variable "streamnative_automation_gsa_ids" {
-  default = {
-    cloud_manager_sncloud_test_iam_gserviceaccount_com   = "103687585001802233900",
-    pool_automation_sncloud_test_iam_gserviceaccount_com = "101134291802756860252",
-  }
-  type        = map(string)
-  description = "The GSAs will be used to provisioning StreamnNative cloud."
-}
-
-variable "streamnative_support_access_gsa_ids" {
-  default = {
-    cloud_support_general_sncloud_test_iam_gserviceaccount_com = "103182365501883681520",
-  }
-  type        = map(string)
-  description = "The GSA will be used by StreamnNative support team."
-}
-
 variable "streamnative_org_id" {
   description = "Your Organization ID within StreamNative Cloud, used for all resources created by the module. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
   type        = string
