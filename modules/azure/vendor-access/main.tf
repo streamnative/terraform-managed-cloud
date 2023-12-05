@@ -31,7 +31,7 @@ resource "azurerm_resource_group" "aks" {
 
 # Create the Velero `VeleroBackupRole` for at the resource group level
 resource "azurerm_role_definition" "velero_backup_role" {
-  name        = "VeleroBackupRole"
+  name        = format("%s-VeleroBackupRole", var.resource_group_name)
   description = "The role grants the minimum required permissions needed by Velero to perform backups, restores, and deletions. Reference: https://github.com/vmware-tanzu/velero-plugin-for-microsoft-azure?tab=readme-ov-file#specify-role"
   scope       = azurerm_resource_group.aks.id
   permissions {
@@ -67,53 +67,28 @@ resource "azurerm_role_definition" "velero_backup_role" {
 resource "azurerm_role_assignment" "sn_automation" {
   scope                = azurerm_resource_group.aks.id
   role_definition_name = "Contributor"
-  principal_id         = azuread_service_principal.sn_automation.id
+  principal_id         = data.azuread_service_principal.sn_automation.id
 }
 
 # Grand the sn automation service principal as the Azure Kubernetes Service Cluster Admin Role to the AKS resource group
 resource "azurerm_role_assignment" "sn_automation_cluster_admin" {
   scope                = azurerm_resource_group.aks.id
   role_definition_name = "Azure Kubernetes Service Cluster Admin Role"
-  principal_id         = azuread_service_principal.sn_automation.id
+  principal_id         = data.azuread_service_principal.sn_automation.id
 }
 
 # Grand the sn support service principal as the Azure Kubernetes Service Cluster User Role to the AKS resource group
 resource "azurerm_role_assignment" "sn_support" {
   scope                = azurerm_resource_group.aks.id
   role_definition_name = "Azure Kubernetes Service Cluster User Role"
-  principal_id         = azuread_service_principal.sn_support.id
+  principal_id         = data.azuread_service_principal.sn_support.id
 }
 
 # Grand the sn automation service principal as the Constrain roles by User Access Administrator to the AKS resource group
 resource "azurerm_role_assignment" "user_access_administrator" {
   scope                = azurerm_resource_group.aks.id
   role_definition_name = "User Access Administrator"
-  principal_id         = azuread_service_principal.sn_automation.id
+  principal_id         = data.azuread_service_principal.sn_automation.id
   condition_version    = "2.0"
-  condition            = <<-EOT
-(
- (
-  !(ActionMatches{'Microsoft.Authorization/roleAssignments/write'})
- )
- OR 
- (
-  @Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {e5e2a7ff-d759-4cd2-bb51-3152d37e2eb1, 4d97b98b-1d4f-4787-a291-c67834d212e7, befefa01-2a29-4197-83a8-272ff33ce314, acdd72a7-3385-48ef-bd42-f606fba81ae7, ba92f5b4-2d11-453d-a403-e96b0029c9fe, $(resource.azurerm_role_definition.velero_backup_role.role_definition_id)}
-  AND
-  @Request[Microsoft.Authorization/roleAssignments:PrincipalType] ForAnyOfAnyValues:StringEqualsIgnoreCase {'ServicePrincipal'}
- )
-)
-AND
-(
- (
-  !(ActionMatches{'Microsoft.Authorization/roleAssignments/delete'})
- )
- OR 
- (
-  @Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {e5e2a7ff-d759-4cd2-bb51-3152d37e2eb1, 4d97b98b-1d4f-4787-a291-c67834d212e7, befefa01-2a29-4197-83a8-272ff33ce314, acdd72a7-3385-48ef-bd42-f606fba81ae7, ba92f5b4-2d11-453d-a403-e96b0029c9fe, $(resource.azurerm_role_definition.velero_backup_role.role_definition_id)}
-  AND
-  @Resource[Microsoft.Authorization/roleAssignments:PrincipalType] ForAnyOfAnyValues:StringEqualsIgnoreCase {'ServicePrincipal'}
- )
-)
-EOT
+  condition            = templatefile("${path.module}/role-assignment-condition.tpl", { role_definition_id = azurerm_role_definition.velero_backup_role.role_definition_id })
 }
-

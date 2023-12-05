@@ -12,17 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "additional_tags" {
-  default     = {}
-  description = "Additional tags to be added to the resources created by this module."
-  type        = map(any)
-}
-
-variable "resource_group_name" {
-  type        = string
-  description = "The name of the resource group where the AKS cluster will be created"
-}
-
 variable "resource_group_location" {
   type        = string
   description = "The location of the resource group where the AKS cluster will be created"
@@ -45,7 +34,7 @@ variable "streamnative_support_access_gsa_ids" {
   description = "The GSA will be used by StreamnNative support team."
 }
 
-variable "streamnative_external_id" {
+variable "external_id" {
   description = "An external ID that correspond to your Organization within StreamNative Cloud, used for all managed identities created by the module. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
   type        = string
 }

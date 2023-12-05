@@ -12,31 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-provider "azurerm" {
-  features {
+# Manage Azure Entra Applications and Service Principals
 
-  }
+data "azuread_client_config" "current" {}
+
+data "azuread_application" "sn_automation" {
+  display_name = format("sncloud-%s-automation", var.external_id)
 }
 
-provider "azuread" {
-
+data "azuread_application" "sn_support" {
+  display_name = format("sncloud-%s-support", var.external_id)
 }
 
-module "azure-sn-cloud-manager" {
-  source = "../../modules/azure/sn-cloud-manager"
-
-  resource_group_location = "westus2"
-  external_id             = "streamnative"
+data "azuread_service_principal" "sn_automation" {
+  client_id = data.azuread_application.sn_automation.client_id
 }
 
-
-module "azure-managed-cloud" {
-  source = "../../modules/azure/vendor-access"
-
-  resource_group_name     = "azure-westus2-aks-test"
-  resource_group_location = "westus2"
-
-  external_id = "streamnative"
-
-  depends_on = [ module.azure-sn-cloud-manager ]
+data "azuread_service_principal" "sn_support" {
+  client_id = data.azuread_application.sn_support.client_id
 }

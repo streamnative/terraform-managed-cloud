@@ -12,31 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-provider "azurerm" {
-  features {
+terraform {
+  required_version = ">=1.3.0"
 
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "< 4.0"
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "< 3.0"
+    }
   }
-}
-
-provider "azuread" {
-
-}
-
-module "azure-sn-cloud-manager" {
-  source = "../../modules/azure/sn-cloud-manager"
-
-  resource_group_location = "westus2"
-  external_id             = "streamnative"
-}
-
-
-module "azure-managed-cloud" {
-  source = "../../modules/azure/vendor-access"
-
-  resource_group_name     = "azure-westus2-aks-test"
-  resource_group_location = "westus2"
-
-  external_id = "streamnative"
-
-  depends_on = [ module.azure-sn-cloud-manager ]
 }
