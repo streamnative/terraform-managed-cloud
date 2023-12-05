@@ -49,3 +49,9 @@ variable "streamnative_org_id" {
   description = "Your Organization ID within StreamNative Cloud, used for all resources created by the module. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
   type        = string
 }
+
+variable "dns_zone_ids" {
+  type        = list(string)
+  description = "The DNS zone IDs for the DNS zones that will be used for the AKS cluster"
+  default     = []
+}

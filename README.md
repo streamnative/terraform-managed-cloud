@@ -22,7 +22,7 @@ Previous versions of these modules can be found in the following locations:
 - [https://github.com/streamnative/terraform-aws-managed-cloud](https://github.com/streamnative/terraform-aws-managed-cloud): This repository contains an older AWS vendor access module, which has been deprecated and is no longer in use.
 
 ## Modules
-The modules are organized by Cloud Provider. For example, the AWS modules are in the `modules/aws` directory and the GCP modules (WIP) modules are in the `modules/gcp`, and so on.
+The modules are organized by Cloud Provider. For example, the AWS modules are in the `modules/aws` directory and the GCP modules (WIP) modules are in the `modules/gcp`, and for Azure the modules are in the `modules/azure` directory, and so on.
 
 ## Quickstart
 

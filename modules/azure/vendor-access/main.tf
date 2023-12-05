@@ -92,3 +92,11 @@ resource "azurerm_role_assignment" "user_access_administrator" {
   condition_version    = "2.0"
   condition            = templatefile("${path.module}/role-assignment-condition.tpl", { role_definition_id = azurerm_role_definition.velero_backup_role.role_definition_id })
 }
+
+# Grand the sn automation service principal as the DNS Zone Contributor to the given DNS Zone
+resource "azurerm_role_assignment" "dns_zone_contributor" {
+  for_each             = toset(var.dns_zone_ids)
+  scope                = each.value
+  role_definition_name = "DNS Zone Contributor"
+  principal_id         = data.azuread_service_principal.sn_automation.id
+}
