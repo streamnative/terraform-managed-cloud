@@ -26,7 +26,7 @@ module "azure-sn-cloud-manager" {
   source = "../../modules/azure/sn-cloud-manager"
 
   resource_group_location = "westus2"
-  streamnative_org_id             = "streamnative"
+  streamnative_org_id     = "streamnative"
 }
 
 
@@ -38,5 +38,5 @@ module "azure-managed-cloud" {
 
   streamnative_org_id = "streamnative"
 
-  depends_on = [ module.azure-sn-cloud-manager ]
+  depends_on = [module.azure-sn-cloud-manager]
 }
