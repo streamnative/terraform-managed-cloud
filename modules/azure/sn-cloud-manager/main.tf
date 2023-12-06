@@ -15,6 +15,7 @@
 # Manage Azure Entra Applications and Service Principals
 
 data "azuread_client_config" "current" {}
+data "azurerm_subscription" "current" {}
 
 resource "azuread_application_registration" "sn_automation" {
   display_name = format("sncloud-%s-automation", var.streamnative_org_id)
@@ -68,4 +69,15 @@ resource "azuread_application_federated_identity_credential" "sn_support" {
   audiences      = [format("api://AzureADTokenExchange/%s", var.streamnative_org_id)]
   issuer         = "https://accounts.google.com"
   subject        = each.value
+}
+
+resource "azurerm_role_assignment" "subscription_rbac_admin" {
+  scope                = data.azurerm_subscription.current.subscription_id
+  role_definition_name = "Role Based Access Control Administrator"
+  principal_id         = each.value.name
+
+  skip_service_principal_aad_check = true
+
+  condition_version = "2.0"
+  condition         = templatefile("${path.module}/role-assignment-condition.tpl")
 }

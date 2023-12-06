@@ -84,10 +84,10 @@ resource "azurerm_role_assignment" "sn_support" {
   principal_id         = data.azuread_service_principal.sn_support.id
 }
 
-# Grand the sn automation service principal as the Constrain roles by User Access Administrator to the AKS resource group
+# Grand the sn automation service principal as the Constrain roles by Role Based Access Control Administrator to the AKS resource group
 resource "azurerm_role_assignment" "user_access_administrator" {
   scope                = azurerm_resource_group.aks.id
-  role_definition_name = "User Access Administrator"
+  role_definition_name = "Role Based Access Control Administrator"
   principal_id         = data.azuread_service_principal.sn_automation.id
   condition_version    = "2.0"
   condition            = templatefile("${path.module}/role-assignment-condition.tpl", { role_definition_id = azurerm_role_definition.velero_backup_role.role_definition_id })
