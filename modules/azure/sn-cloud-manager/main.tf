@@ -72,12 +72,12 @@ resource "azuread_application_federated_identity_credential" "sn_support" {
 }
 
 resource "azurerm_role_assignment" "subscription_rbac_admin" {
-  scope                = data.azurerm_subscription.current.subscription_id
+  scope                = data.azurerm_subscription.current.id
   role_definition_name = "Role Based Access Control Administrator"
-  principal_id         = each.value.name
+  principal_id         = azuread_service_principal.sn_automation.id
 
   skip_service_principal_aad_check = true
 
   condition_version = "2.0"
-  condition         = templatefile("${path.module}/role-assignment-condition.tpl")
+  condition         = templatefile("${path.module}/role-assignment-condition.tpl", {})
 }
