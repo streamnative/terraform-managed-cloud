@@ -89,7 +89,8 @@
       "Sid": "ResR53Z",
       "Effect": "Allow",
       "Action": [
-        "route53:ChangeResourceRecordSets"
+        "route53:ChangeResourceRecordSets",
+        "route53:DeleteHostedZone"
       ],
       "Resource": ${r53_zone_arns}
     },
@@ -318,7 +319,8 @@
         "iam:TagInstanceProfile",
         "iam:TagOpenIDConnectProvider",
         "iam:DeletePolicy",
-        "iam:DeletePolicyVersion"
+        "iam:DeletePolicyVersion",
+        "iam:PutRolePolicy"
       ],
       "Resource": [
         "arn:${partition}:iam::${account_id}:role/StreamNative/*",
