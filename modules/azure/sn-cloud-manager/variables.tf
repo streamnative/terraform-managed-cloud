@@ -12,15 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+variable "additional_tags" {
+  default     = {}
+  description = "Additional tags to be added to the resources created by this module."
+  type        = map(any)
+}
+
+variable "resource_group_name" {
+  type        = string
+  description = "The name of the resource group where the cloud manager IAMs will be created"
+  default     = ""
+}
+
 variable "resource_group_location" {
   type        = string
-  description = "The location of the resource group where the AKS cluster will be created"
+  description = "The location of the resource group where the cloud manager IAMs will be created"
 }
 
 variable "streamnative_automation_gsa_ids" {
   default = {
-    cloud_manager_sncloud_test_iam_gserviceaccount_com   = "103687585001802233900",
-    pool_automation_sncloud_test_iam_gserviceaccount_com = "101134291802756860252",
+    cloud_manager_sncloud_test_iam_gserviceaccount_com         = "103687585001802233900",
+    pool_automation_sncloud_test_iam_gserviceaccount_com       = "101134291802756860252",
+    cloud_support_general_sncloud_test_iam_gserviceaccount_com = "103182365501883681520",
   }
   type        = map(string)
   description = "The GSAs will be used to provisioning StreamnNative cloud."

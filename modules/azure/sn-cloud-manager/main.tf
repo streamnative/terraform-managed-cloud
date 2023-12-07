@@ -12,72 +12,160 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Manage Azure Entra Applications and Service Principals
-
-data "azuread_client_config" "current" {}
 data "azurerm_subscription" "current" {}
 
-resource "azuread_application_registration" "sn_automation" {
-  display_name = format("sncloud-%s-automation", var.streamnative_org_id)
-  description  = "The application registration for the StreamNative Cloud automation"
+locals {
+  tags = merge({
+    "Vendor"                 = "StreamNative"
+    "Service"                = "StreamNative Cloud"
+    "StreamNativeCloudOrgID" = var.streamnative_org_id
+  }, var.additional_tags)
 
-  homepage_url          = "https://streamnative.io"
-  marketing_url         = "https://streamnative.io/streamnativecloud/"
-  privacy_statement_url = "https://streamnative.io/privacy"
-  terms_of_service_url  = "https://streamnative.io/terms"
-  support_url           = "https://support.streamnative.io/hc/en-us"
+  resource_group_name = var.resource_group_name != "" ? var.resource_group_name : format("sncloud-%s-manager-rg", var.streamnative_org_id)
 }
 
-resource "azuread_application_registration" "sn_support" {
-  display_name = format("sncloud-%s-support", var.streamnative_org_id)
-  description  = "The application registration for the StreamNative Cloud support access"
-
-  homepage_url          = "https://streamnative.io"
-  marketing_url         = "https://streamnative.io/streamnativecloud/"
-  privacy_statement_url = "https://streamnative.io/privacy"
-  terms_of_service_url  = "https://streamnative.io/terms"
-  support_url           = "https://support.streamnative.io/hc/en-us"
+# Create a resource group for the SN Cloud manager
+resource "azurerm_resource_group" "manager" {
+  name     = local.resource_group_name
+  location = var.resource_group_location
+  tags     = local.tags
 }
 
-resource "azuread_service_principal" "sn_automation" {
-  client_id                    = azuread_application_registration.sn_automation.client_id
-  app_role_assignment_required = false
-  use_existing                 = true
-  description                  = "The service principal for the StreamNative Cloud automation"
+# Create the user-assigned managed identity for the SN Cloud automation access
+resource "azurerm_user_assigned_identity" "sn_automation" {
+  name                = format("sncloud-%s-automation", var.streamnative_org_id)
+  resource_group_name = azurerm_resource_group.manager.name
+  location            = azurerm_resource_group.manager.location
+  tags                = local.tags
 }
 
-resource "azuread_service_principal" "sn_support" {
-  client_id                    = azuread_application_registration.sn_support.client_id
-  app_role_assignment_required = false
-  use_existing                 = true
-  description                  = "The service principal for the StreamNative Cloud support access"
+# Create the user-assigned managed identity for the SN Cloud support access
+resource "azurerm_user_assigned_identity" "sn_support" {
+  name                = format("sncloud-%s-support", var.streamnative_org_id)
+  resource_group_name = azurerm_resource_group.manager.name
+  location            = azurerm_resource_group.manager.location
+  tags                = local.tags
 }
 
-resource "azuread_application_federated_identity_credential" "sn_automation" {
-  for_each       = var.streamnative_automation_gsa_ids
-  application_id = azuread_application_registration.sn_automation.id
-  display_name   = each.key
-  audiences      = [format("api://AzureADTokenExchange/%s", var.streamnative_org_id)]
-  issuer         = "https://accounts.google.com"
-  subject        = each.value
+# Create federated identity credentials for the SN Cloud automation access
+resource "azurerm_federated_identity_credential" "sn_automation" {
+  for_each            = var.streamnative_automation_gsa_ids
+  resource_group_name = azurerm_resource_group.manager.name
+  name                = each.key
+  parent_id           = azurerm_user_assigned_identity.sn_automation.id
+  audience            = [format("api://AzureADTokenExchange/%s", var.streamnative_org_id)]
+  issuer              = "https://accounts.google.com"
+  subject             = each.value
 }
 
-resource "azuread_application_federated_identity_credential" "sn_support" {
-  for_each       = var.streamnative_support_access_gsa_ids
-  application_id = azuread_application_registration.sn_support.id
-  display_name   = each.key
-  audiences      = [format("api://AzureADTokenExchange/%s", var.streamnative_org_id)]
-  issuer         = "https://accounts.google.com"
-  subject        = each.value
+# Create federated identity credentials for the SN Cloud support access
+resource "azurerm_federated_identity_credential" "sn_support" {
+  for_each            = var.streamnative_support_access_gsa_ids
+  resource_group_name = azurerm_resource_group.manager.name
+  name                = each.key
+  parent_id           = azurerm_user_assigned_identity.sn_support.id
+  audience            = [format("api://AzureADTokenExchange/%s", var.streamnative_org_id)]
+  issuer              = "https://accounts.google.com"
+  subject             = each.value
 }
 
 resource "azurerm_role_assignment" "subscription_rbac_admin" {
   scope                = data.azurerm_subscription.current.id
   role_definition_name = "Role Based Access Control Administrator"
-  principal_id         = azuread_service_principal.sn_automation.id
+  principal_id         = azurerm_user_assigned_identity.sn_automation.principal_id
 
   skip_service_principal_aad_check = true
 
   condition_version = "2.0"
   condition         = templatefile("${path.module}/role-assignment-condition.tpl", {})
+}
+
+# resource "azuread_application_registration" "sn_automation" {
+#   display_name = format("sncloud-%s-automation", var.streamnative_org_id)
+#   description  = "The application registration for the StreamNative Cloud automation"
+
+#   homepage_url          = "https://streamnative.io"
+#   marketing_url         = "https://streamnative.io/streamnativecloud/"
+#   privacy_statement_url = "https://streamnative.io/privacy"
+#   terms_of_service_url  = "https://streamnative.io/terms"
+#   support_url           = "https://support.streamnative.io/hc/en-us"
+# }
+
+# resource "azuread_application_registration" "sn_support" {
+#   display_name = format("sncloud-%s-support", var.streamnative_org_id)
+#   description  = "The application registration for the StreamNative Cloud support access"
+
+#   homepage_url          = "https://streamnative.io"
+#   marketing_url         = "https://streamnative.io/streamnativecloud/"
+#   privacy_statement_url = "https://streamnative.io/privacy"
+#   terms_of_service_url  = "https://streamnative.io/terms"
+#   support_url           = "https://support.streamnative.io/hc/en-us"
+# }
+
+# resource "azuread_service_principal" "sn_automation" {
+#   client_id                    = azuread_application_registration.sn_automation.client_id
+#   app_role_assignment_required = false
+#   use_existing                 = true
+#   description                  = "The service principal for the StreamNative Cloud automation"
+# }
+
+# resource "azuread_service_principal" "sn_support" {
+#   client_id                    = azuread_application_registration.sn_support.client_id
+#   app_role_assignment_required = false
+#   use_existing                 = true
+#   description                  = "The service principal for the StreamNative Cloud support access"
+# }
+
+# resource "azuread_application_federated_identity_credential" "sn_automation" {
+#   for_each       = var.streamnative_automation_gsa_ids
+#   application_id = azuread_application_registration.sn_automation.id
+#   display_name   = each.key
+#   audiences      = [format("api://AzureADTokenExchange/%s", var.streamnative_org_id)]
+#   issuer         = "https://accounts.google.com"
+#   subject        = each.value
+# }
+
+# resource "azuread_application_federated_identity_credential" "sn_support" {
+#   for_each       = var.streamnative_support_access_gsa_ids
+#   application_id = azuread_application_registration.sn_support.id
+#   display_name   = each.key
+#   audiences      = [format("api://AzureADTokenExchange/%s", var.streamnative_org_id)]
+#   issuer         = "https://accounts.google.com"
+#   subject        = each.value
+# }
+
+# resource "azurerm_role_assignment" "subscription_rbac_admin" {
+#   scope                = data.azurerm_subscription.current.id
+#   role_definition_name = "Role Based Access Control Administrator"
+#   principal_id         = azuread_service_principal.sn_automation.id
+
+#   skip_service_principal_aad_check = true
+
+#   condition_version = "2.0"
+#   condition         = templatefile("${path.module}/role-assignment-condition.tpl", {})
+# }
+
+output "resource_group_name" {
+  value       = azurerm_resource_group.manager.name
+  description = "The name of the resource group where the cloud manager IAMs will be created"
+}
+
+output "sn_support_client_id" {
+  value       = azurerm_user_assigned_identity.sn_support.client_id
+  description = "The client ID of the sn support service principal for StreamNative Cloud support access"
+}
+
+output "sn_support_principal_id" {
+  value       = azurerm_user_assigned_identity.sn_support.principal_id
+  description = "The principal ID of the sn support service principal for StreamNative Cloud support access"
+}
+
+output "sn_automation_client_id" {
+  value       = azurerm_user_assigned_identity.sn_automation.client_id
+  description = "The client ID of the sn automation service principal for StreamNative Cloud automation"
+}
+
+output "sn_automation_principal_id" {
+  value       = azurerm_user_assigned_identity.sn_automation.principal_id
+  description = "The principal ID of the sn automation service principal for StreamNative Cloud automation"
 }

@@ -33,8 +33,22 @@ variable "streamnative_org_id" {
   type        = string
 }
 
-variable "dns_zone_ids" {
-  type        = list(string)
-  description = "The DNS zone IDs for the DNS zones that will be used for the AKS cluster"
-  default     = []
+variable "sn_automation_principal_id" {
+  type        = string
+  description = "The principal ID of the sn automation service principal for StreamNative Cloud automation"
+}
+
+variable "sn_support_principal_id" {
+  type        = string
+  description = "The principal ID of the sn support service principal for StreamNative Cloud support access"
+}
+
+variable "sn_automation_client_id" {
+  type        = string
+  description = "The client ID of the sn automation service principal for StreamNative Cloud automation"
+}
+
+variable "sn_support_client_id" {
+  type        = string
+  description = "The client ID of the sn support service principal for StreamNative Cloud support access"
 }

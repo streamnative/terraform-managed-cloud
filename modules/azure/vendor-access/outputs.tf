@@ -13,22 +13,22 @@
 # limitations under the License.
 
 output "sn_automation_client_id" {
-  value       = data.azuread_application.sn_automation.client_id
+  value       = var.sn_automation_client_id
   description = "The client ID of the sn automation service principal for StreamNative Cloud automation"
 }
 
 output "sn_automation_principal_id" {
-  value       = data.azuread_service_principal.sn_automation.id
+  value       = var.sn_automation_principal_id
   description = "The principal ID of the sn automation service principal for StreamNative Cloud automation"
 }
 
 output "sn_support_client_id" {
-  value       = data.azuread_application.sn_support.client_id
+  value       = var.sn_support_client_id
   description = "The client ID of the sn support service principal for StreamNative Cloud support access"
 }
 
 output "sn_support_principal_id" {
-  value       = data.azuread_service_principal.sn_support.id
+  value       = var.sn_support_principal_id
   description = "The principal ID of the sn support service principal for StreamNative Cloud support access"
 }
 

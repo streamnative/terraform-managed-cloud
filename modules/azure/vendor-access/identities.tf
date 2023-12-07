@@ -12,22 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Manage Azure Entra Applications and Service Principals
+# data "azuread_client_config" "current" {}
 
-data "azuread_client_config" "current" {}
+# data "azuread_application" "sn_automation" {
+#   display_name = format("sncloud-%s-automation", var.streamnative_org_id)
+# }
 
-data "azuread_application" "sn_automation" {
-  display_name = format("sncloud-%s-automation", var.streamnative_org_id)
-}
+# data "azuread_application" "sn_support" {
+#   display_name = format("sncloud-%s-support", var.streamnative_org_id)
+# }
 
-data "azuread_application" "sn_support" {
-  display_name = format("sncloud-%s-support", var.streamnative_org_id)
-}
+# data "azuread_service_principal" "sn_automation" {
+#   client_id = data.azuread_application.sn_automation.client_id
+# }
 
-data "azuread_service_principal" "sn_automation" {
-  client_id = data.azuread_application.sn_automation.client_id
-}
-
-data "azuread_service_principal" "sn_support" {
-  client_id = data.azuread_application.sn_support.client_id
-}
+# data "azuread_service_principal" "sn_support" {
+#   client_id = data.azuread_application.sn_support.client_id
+# }
