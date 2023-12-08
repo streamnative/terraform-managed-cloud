@@ -47,7 +47,7 @@ To use this module you must have [Terraform installed](https://learn.hashicorp.c
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 2.46.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.83.0 |
 
 ## Modules
 
@@ -57,23 +57,31 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [azuread_application_federated_identity_credential.sn_automation](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_federated_identity_credential) | resource |
-| [azuread_application_federated_identity_credential.sn_support](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_federated_identity_credential) | resource |
-| [azuread_application_registration.sn_automation](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_registration) | resource |
-| [azuread_application_registration.sn_support](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_registration) | resource |
-| [azuread_service_principal.sn_automation](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/service_principal) | resource |
-| [azuread_service_principal.sn_support](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/service_principal) | resource |
-| [azuread_client_config.current](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/client_config) | data source |
+| [azurerm_federated_identity_credential.sn_automation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/federated_identity_credential) | resource |
+| [azurerm_federated_identity_credential.sn_support](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/federated_identity_credential) | resource |
+| [azurerm_resource_group.manager](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
+| [azurerm_role_assignment.subscription_rbac_admin](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
+| [azurerm_user_assigned_identity.sn_automation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity) | resource |
+| [azurerm_user_assigned_identity.sn_support](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity) | resource |
+| [azurerm_subscription.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subscription) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_resource_group_location"></a> [resource\_group\_location](#input\_resource\_group\_location) | The location of the resource group where the AKS cluster will be created | `string` | n/a | yes |
-| <a name="input_streamnative_automation_gsa_ids"></a> [streamnative\_automation\_gsa\_ids](#input\_streamnative\_automation\_gsa\_ids) | The GSAs will be used to provisioning StreamnNative cloud. | `map(string)` | <pre>{<br>  "cloud_manager_sncloud_test_iam_gserviceaccount_com": "103687585001802233900",<br>  "pool_automation_sncloud_test_iam_gserviceaccount_com": "101134291802756860252"<br>}</pre> | no |
+| <a name="input_additional_tags"></a> [additional\_tags](#input\_additional\_tags) | Additional tags to be added to the resources created by this module. | `map(any)` | `{}` | no |
+| <a name="input_resource_group_location"></a> [resource\_group\_location](#input\_resource\_group\_location) | The location of the resource group where the cloud manager IAMs will be created | `string` | n/a | yes |
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of the resource group where the cloud manager IAMs will be created | `string` | `""` | no |
+| <a name="input_streamnative_automation_gsa_ids"></a> [streamnative\_automation\_gsa\_ids](#input\_streamnative\_automation\_gsa\_ids) | The GSAs will be used to provisioning StreamnNative cloud. | `map(string)` | <pre>{<br>  "cloud_manager_sncloud_test_iam_gserviceaccount_com": "103687585001802233900",<br>  "cloud_support_general_sncloud_test_iam_gserviceaccount_com": "103182365501883681520",<br>  "pool_automation_sncloud_test_iam_gserviceaccount_com": "101134291802756860252"<br>}</pre> | no |
 | <a name="input_streamnative_org_id"></a> [streamnative\_org\_id](#input\_streamnative\_org\_id) | Your Organization ID within StreamNative Cloud, used for all resources created by the module. This will be the organization ID in the StreamNative console, e.g. "o-xhopj". | `string` | n/a | yes |
 | <a name="input_streamnative_support_access_gsa_ids"></a> [streamnative\_support\_access\_gsa\_ids](#input\_streamnative\_support\_access\_gsa\_ids) | The GSA will be used by StreamnNative support team. | `map(string)` | <pre>{<br>  "cloud_support_general_sncloud_test_iam_gserviceaccount_com": "103182365501883681520"<br>}</pre> | no |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_resource_group_name"></a> [resource\_group\_name](#output\_resource\_group\_name) | The name of the resource group where the cloud manager IAMs will be created |
+| <a name="output_sn_automation_client_id"></a> [sn\_automation\_client\_id](#output\_sn\_automation\_client\_id) | The client ID of the sn automation service principal for StreamNative Cloud automation |
+| <a name="output_sn_automation_principal_id"></a> [sn\_automation\_principal\_id](#output\_sn\_automation\_principal\_id) | The principal ID of the sn automation service principal for StreamNative Cloud automation |
+| <a name="output_sn_support_client_id"></a> [sn\_support\_client\_id](#output\_sn\_support\_client\_id) | The client ID of the sn support service principal for StreamNative Cloud support access |
+| <a name="output_sn_support_principal_id"></a> [sn\_support\_principal\_id](#output\_sn\_support\_principal\_id) | The principal ID of the sn support service principal for StreamNative Cloud support access |
