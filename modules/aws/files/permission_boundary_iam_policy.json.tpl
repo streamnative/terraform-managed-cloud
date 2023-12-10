@@ -67,19 +67,6 @@
       ]
     },
     {
-      "Sid": "RestrictPassRoleToEKS",
-      "Effect": "Allow",
-      "Action": [
-        "iam:PassRole"
-      ],
-      "Resource": "arn:${partition}:iam::${account_id}:role/${cluster_pattern}",
-      "Condition": {
-        "StringEquals": {
-          "iam:PassedToService": "eks.amazonaws.com"
-        }
-      }
-    },
-    {
       "Sid": "AllowedIAMManagedPolicies",
       "Effect": "Allow",
       "Action": [
@@ -106,7 +93,7 @@
       }
     },
     {
-      "Sid": "ResPsRlEKS",
+      "Sid": "RestrictPassRoleToEKS",
       "Effect": "Allow",
       "Action": [
         "iam:PassRole"
