@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.9.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.8.0...v3.9.0) (2023-12-11)
+
+
+### Features
+
+* update permissions for bootstrap and boundary policy ([#52](https://github.com/streamnative/terraform-managed-cloud/issues/52)) ([711f06a](https://github.com/streamnative/terraform-managed-cloud/commit/711f06a03029ffe2d1eb2b1584f5818d1434abc1))
+
+
+### Bug Fixes
+
+* add pr check ci ([e5bf7e6](https://github.com/streamnative/terraform-managed-cloud/commit/e5bf7e6f13766587f8cfd426c2551ef4fdac4db9))
+* add pr check ci ([#53](https://github.com/streamnative/terraform-managed-cloud/issues/53)) ([e5bf7e6](https://github.com/streamnative/terraform-managed-cloud/commit/e5bf7e6f13766587f8cfd426c2551ef4fdac4db9))
+
 ## [3.8.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.7.0...v3.8.0) (2023-11-01)
 
 
