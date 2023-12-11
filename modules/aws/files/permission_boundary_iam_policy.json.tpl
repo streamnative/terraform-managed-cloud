@@ -13,21 +13,8 @@
           "ecr:*",
           "eks:*",
           "elasticloadbalancing:*",
-          "iam:GetInstanceProfile",
-          "iam:GetOpenIDConnectProvider",
-          "iam:GetPolicy",
-          "iam:GetPolicyVersion",
-          "iam:GetRole",
-          "iam:GetServerCertificate",
-          "iam:ListAttachedRolePolicies",
-          "iam:ListEntitiesForPolicy",
-          "iam:ListInstanceProfile*",
-          "iam:ListOpenIDConnectProvider*",
-          "iam:ListPolicies",
-          "iam:ListPolicyTags",
-          "iam:ListPolicyVersions",
-          "iam:ListRole*",
-          "iam:ListServerCertificates",
+          "iam:Get*",
+          "iam:List*",
           "kms:*",
           "logs:*",
           "route53:*",
@@ -55,6 +42,7 @@
         "iam:DeleteRole",
         "iam:DeleteServiceLinkedRole",
         "iam:DetachRolePolicy",
+        "iam:PutRolePolicy",
         "iam:PutRolePermissionsBoundary",
         "iam:RemoveRoleFromInstanceProfile",
         "iam:SetDefaultPolicyVersion",
@@ -77,19 +65,6 @@
         "arn:${partition}:iam::${account_id}:instance-profile/*",
         "arn:${partition}:iam::${account_id}:server-certificate/*"
       ]
-    },
-    {
-      "Sid": "RestrictPassRoleToEKS",
-      "Effect": "Allow",
-      "Action": [
-        "iam:PassRole"
-      ],
-      "Resource": "arn:${partition}:iam::${account_id}:role/${cluster_pattern}",
-      "Condition": {
-        "StringEquals": {
-          "iam:PassedToService": "eks.amazonaws.com"
-        }
-      }
     },
     {
       "Sid": "AllowedIAMManagedPolicies",
@@ -118,7 +93,7 @@
       }
     },
     {
-      "Sid": "ResPsRlEKS",
+      "Sid": "RestrictPassRoleToEKS",
       "Effect": "Allow",
       "Action": [
         "iam:PassRole"
