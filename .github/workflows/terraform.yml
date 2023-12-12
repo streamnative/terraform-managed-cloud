@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        terraform_version: [1.0.x]
+        terraform_version: [1.3.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -46,5 +46,8 @@ jobs:
       - name: Terraform GCP Validate Modules
         run: for module in modules/gcp/; do cd "${GITHUB_WORKSPACE}/${module}" && terraform init -backend=false && CLOUDSDK_COMPUTE_REGION=us-central1 terraform validate -no-color ; done
         
+      - name: Terraform Azure Validate Modules
+        run: for module in modules/azure/; do cd "${GITHUB_WORKSPACE}/${module}" && terraform init -backend=false && terraform validate -no-color ; done
+      
       - name: Terraform Validate Examples
         run: for example in examples/*/; do cd "${GITHUB_WORKSPACE}/${example}" && terraform init -backend=false && AWS_REGION=us-east-1 terraform validate -no-color ; done
