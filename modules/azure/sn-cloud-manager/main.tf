@@ -69,16 +69,16 @@ resource "azurerm_federated_identity_credential" "sn_support" {
   subject             = each.value
 }
 
-resource "azurerm_role_assignment" "subscription_rbac_admin" {
-  scope                = data.azurerm_subscription.current.id
-  role_definition_name = "Role Based Access Control Administrator"
-  principal_id         = azurerm_user_assigned_identity.sn_automation.principal_id
+# resource "azurerm_role_assignment" "subscription_rbac_admin" {
+#   scope                = data.azurerm_subscription.current.id
+#   role_definition_name = "Role Based Access Control Administrator"
+#   principal_id         = azurerm_user_assigned_identity.sn_automation.principal_id
 
-  skip_service_principal_aad_check = true
+#   skip_service_principal_aad_check = true
 
-  condition_version = "2.0"
-  condition         = templatefile("${path.module}/role-assignment-condition.tpl", {})
-}
+#   condition_version = "2.0"
+#   condition         = templatefile("${path.module}/role-assignment-condition.tpl", {})
+# }
 
 # resource "azuread_application_registration" "sn_automation" {
 #   display_name = format("sncloud-%s-automation", var.streamnative_org_id)
