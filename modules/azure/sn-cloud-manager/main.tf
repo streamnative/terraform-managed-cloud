@@ -22,6 +22,39 @@ locals {
   }, var.additional_tags)
 
   resource_group_name = var.resource_group_name != "" ? var.resource_group_name : format("sncloud-%s-manager-rg", var.streamnative_org_id)
+  default_automation_gsa_ids = {
+    "test" : {
+      cloud_manager_sncloud_test_iam_gserviceaccount_com         = "103687585001802233900",
+      pool_automation_sncloud_test_iam_gserviceaccount_com       = "101134291802756860252",
+      cloud_support_general_sncloud_test_iam_gserviceaccount_com = "103182365501883681520",
+    },
+    "staging" : {
+      cloud_manager   = "100475141292983344285",
+      pool_automation = "100556251728244561373",
+    },
+    "production" : {
+      cloud_manager   = "108050666045451143798",
+      pool_automation = "108029274547326196788",
+    }
+  }
+
+  default_support_access_gsa_ids = {
+    "test" : {
+      cloud_support_general_sncloud_test_iam_gserviceaccount_com = "103182365501883681520",
+    },
+    "staging" : {
+      cloud_support_general = "100434858314678442047",
+    },
+    "production" : {
+      cloud_support_general = "105547309919970817091",
+      cloud_support_china   = "118445804661219609076",
+      cloud_support_eu      = "106226564917594611181",
+      cloud_support_us      = "102988431238400117777",
+    }
+  }
+
+  streamnative_automation_gsa_ids     = var.streamnative_automation_gsa_ids != null ? var.streamnative_automation_gsa_ids : default_automation_gsa_ids[var.streamnative_cloud_env]
+  streamnative_support_access_gsa_ids = var.streamnative_support_access_gsa_ids != null ? var.streamnative_support_access_gsa_ids : default_support_access_gsa_ids[var.streamnative_cloud_env]
 }
 
 # Create a resource group for the SN Cloud manager
@@ -49,7 +82,7 @@ resource "azurerm_user_assigned_identity" "sn_support" {
 
 # Create federated identity credentials for the SN Cloud automation access
 resource "azurerm_federated_identity_credential" "sn_automation" {
-  for_each            = var.streamnative_automation_gsa_ids
+  for_each            = local.streamnative_automation_gsa_ids
   resource_group_name = azurerm_resource_group.manager.name
   name                = each.key
   parent_id           = azurerm_user_assigned_identity.sn_automation.id
@@ -60,7 +93,7 @@ resource "azurerm_federated_identity_credential" "sn_automation" {
 
 # Create federated identity credentials for the SN Cloud support access
 resource "azurerm_federated_identity_credential" "sn_support" {
-  for_each            = var.streamnative_support_access_gsa_ids
+  for_each            = local.streamnative_support_access_gsa_ids
   resource_group_name = azurerm_resource_group.manager.name
   name                = each.key
   parent_id           = azurerm_user_assigned_identity.sn_support.id
