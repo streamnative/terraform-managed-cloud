@@ -53,8 +53,8 @@ locals {
     }
   }
 
-  streamnative_automation_gsa_ids     = var.streamnative_automation_gsa_ids != null ? var.streamnative_automation_gsa_ids : default_automation_gsa_ids[var.streamnative_cloud_env]
-  streamnative_support_access_gsa_ids = var.streamnative_support_access_gsa_ids != null ? var.streamnative_support_access_gsa_ids : default_support_access_gsa_ids[var.streamnative_cloud_env]
+  streamnative_automation_gsa_ids     = var.streamnative_automation_gsa_ids != null ? var.streamnative_automation_gsa_ids : local.default_automation_gsa_ids[var.streamnative_cloud_env]
+  streamnative_support_access_gsa_ids = var.streamnative_support_access_gsa_ids != null ? var.streamnative_support_access_gsa_ids : local.default_support_access_gsa_ids[var.streamnative_cloud_env]
 }
 
 # Create a resource group for the SN Cloud manager
