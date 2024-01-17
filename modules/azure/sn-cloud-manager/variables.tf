@@ -29,20 +29,24 @@ variable "resource_group_location" {
   description = "The location of the resource group where the cloud manager IAMs will be created"
 }
 
-variable "streamnative_automation_gsa_ids" {
-  default = {
-    cloud_manager_sncloud_test_iam_gserviceaccount_com         = "103687585001802233900",
-    pool_automation_sncloud_test_iam_gserviceaccount_com       = "101134291802756860252",
-    cloud_support_general_sncloud_test_iam_gserviceaccount_com = "103182365501883681520",
+variable "streamnative_cloud_env" {
+  type        = string
+  default     = "production"
+  description = "The environment of StreamNative Cloud, used for all resources created by the module, e.g. \"production\", \"staging\", \"test\"."
+  validation {
+    condition     = contains(["production", "staging", "test"], var.streamnative_cloud_env)
+    error_message = "Allowed values for streamnative_cloud_env are \"production\", \"staging\", or \"test\"."
   }
+}
+
+variable "streamnative_automation_gsa_ids" {
+  default     = null
   type        = map(string)
   description = "The GSAs will be used to provisioning StreamnNative cloud."
 }
 
 variable "streamnative_support_access_gsa_ids" {
-  default = {
-    cloud_support_general_sncloud_test_iam_gserviceaccount_com = "103182365501883681520",
-  }
+  default     = null
   type        = map(string)
   description = "The GSA will be used by StreamnNative support team."
 }

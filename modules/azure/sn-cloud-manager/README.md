@@ -60,7 +60,6 @@ No modules.
 | [azurerm_federated_identity_credential.sn_automation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/federated_identity_credential) | resource |
 | [azurerm_federated_identity_credential.sn_support](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/federated_identity_credential) | resource |
 | [azurerm_resource_group.manager](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
-| [azurerm_role_assignment.subscription_rbac_admin](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_user_assigned_identity.sn_automation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity) | resource |
 | [azurerm_user_assigned_identity.sn_support](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity) | resource |
 | [azurerm_subscription.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subscription) | data source |
@@ -72,9 +71,10 @@ No modules.
 | <a name="input_additional_tags"></a> [additional\_tags](#input\_additional\_tags) | Additional tags to be added to the resources created by this module. | `map(any)` | `{}` | no |
 | <a name="input_resource_group_location"></a> [resource\_group\_location](#input\_resource\_group\_location) | The location of the resource group where the cloud manager IAMs will be created | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of the resource group where the cloud manager IAMs will be created | `string` | `""` | no |
-| <a name="input_streamnative_automation_gsa_ids"></a> [streamnative\_automation\_gsa\_ids](#input\_streamnative\_automation\_gsa\_ids) | The GSAs will be used to provisioning StreamnNative cloud. | `map(string)` | <pre>{<br>  "cloud_manager_sncloud_test_iam_gserviceaccount_com": "103687585001802233900",<br>  "cloud_support_general_sncloud_test_iam_gserviceaccount_com": "103182365501883681520",<br>  "pool_automation_sncloud_test_iam_gserviceaccount_com": "101134291802756860252"<br>}</pre> | no |
+| <a name="input_streamnative_automation_gsa_ids"></a> [streamnative\_automation\_gsa\_ids](#input\_streamnative\_automation\_gsa\_ids) | The GSAs will be used to provisioning StreamnNative cloud. | `map(string)` | `null` | no |
+| <a name="input_streamnative_cloud_env"></a> [streamnative\_cloud\_env](#input\_streamnative\_cloud\_env) | The environment of StreamNative Cloud, used for all resources created by the module, e.g. "production", "staging", "test". | `string` | `"production"` | no |
 | <a name="input_streamnative_org_id"></a> [streamnative\_org\_id](#input\_streamnative\_org\_id) | Your Organization ID within StreamNative Cloud, used for all resources created by the module. This will be the organization ID in the StreamNative console, e.g. "o-xhopj". | `string` | n/a | yes |
-| <a name="input_streamnative_support_access_gsa_ids"></a> [streamnative\_support\_access\_gsa\_ids](#input\_streamnative\_support\_access\_gsa\_ids) | The GSA will be used by StreamnNative support team. | `map(string)` | <pre>{<br>  "cloud_support_general_sncloud_test_iam_gserviceaccount_com": "103182365501883681520"<br>}</pre> | no |
+| <a name="input_streamnative_support_access_gsa_ids"></a> [streamnative\_support\_access\_gsa\_ids](#input\_streamnative\_support\_access\_gsa\_ids) | The GSA will be used by StreamnNative support team. | `map(string)` | `null` | no |
 
 ## Outputs
 
