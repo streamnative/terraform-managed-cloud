@@ -300,6 +300,8 @@
       "Action": [
         "iam:AddRoleToInstanceProfile",
         "iam:CreateRole",
+        "iam:CreatePolicy",
+        "iam:CreatePolicyVersion",
         "iam:DeleteInstanceProfile",
         "iam:DeleteOpenIDConnectProvider",
         "iam:DeleteRole",

@@ -71,9 +71,6 @@ module "sn_managed_cloud" {
   source = "github.com/streamnative/terraform-managed-cloud//modules/aws?ref=v3.0.0"
 
   external_id             = "<YOUR_SNCLOUD_ORG_ID>"
-  hosted_zone_allowed_ids = [ "<YOUR_R3_HOSTED_ZONE_IDs>" ]
-  region                  = "<YOUR_REGION>"
-
 }
 ```
 

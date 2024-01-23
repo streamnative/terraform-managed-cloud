@@ -35,6 +35,8 @@
         "iam:AddRoleToInstanceProfile",
         "iam:CreateOpenIDConnectProvider",
         "iam:CreateServiceLinkedRole",
+        "iam:CreatePolicy",
+        "iam:CreatePolicyVersion",
         "iam:DeleteInstanceProfile",
         "iam:DeleteOpenIDConnectProvider",
         "iam:DeletePolicy",
