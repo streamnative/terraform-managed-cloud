@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.11.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.11.0...v3.11.1) (2024-01-24)
+
+
+### Bug Fixes
+
+* fix typo ([#64](https://github.com/streamnative/terraform-managed-cloud/issues/64)) ([fbafeb2](https://github.com/streamnative/terraform-managed-cloud/commit/fbafeb2ca6647cb81e81d4c0d2143a1484f6e414))
+
 ## [3.11.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.10.0...v3.11.0) (2024-01-23)
 
 
