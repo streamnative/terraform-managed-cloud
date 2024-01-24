@@ -46,7 +46,7 @@
         "iam:PutRolePermissionsBoundary",
         "iam:RemoveRoleFromInstanceProfile",
         "iam:SetDefaultPolicyVersion",
-        "iam:Tag*"
+        "iam:Tag*",
         "iam:Untag*",
         "iam:UpdateAssumeRolePolicy",
         "iam:UpdateOpenIDConnectProviderThumbprint",
