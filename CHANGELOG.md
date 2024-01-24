@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.11.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.10.0...v3.11.0) (2024-01-23)
+
+
+### Features
+
+* add azure production and staging env gsa ids ([#56](https://github.com/streamnative/terraform-managed-cloud/issues/56)) ([c935c91](https://github.com/streamnative/terraform-managed-cloud/commit/c935c91fd8a1728ece33fe2489bbca5f592eef47))
+
+
+### Bug Fixes
+
+* github workflow permission ([#57](https://github.com/streamnative/terraform-managed-cloud/issues/57)) ([1217189](https://github.com/streamnative/terraform-managed-cloud/commit/121718952f2ade66601a13816acc75286c5d6ca6))
+* reduce character count ([#62](https://github.com/streamnative/terraform-managed-cloud/issues/62)) ([5c423ef](https://github.com/streamnative/terraform-managed-cloud/commit/5c423ef5affaaf5425e204bda890bf9d9c7b8211))
+* reduce character limitr ([#61](https://github.com/streamnative/terraform-managed-cloud/issues/61)) ([d022643](https://github.com/streamnative/terraform-managed-cloud/commit/d0226435bf34e7be7539e90c73e82c629e646a2a))
+* update aws policy ([a08c964](https://github.com/streamnative/terraform-managed-cloud/commit/a08c96475eb52c9385798a1d8e6e212c4f148f2e))
+* update aws policy and docs ([#59](https://github.com/streamnative/terraform-managed-cloud/issues/59)) ([a08c964](https://github.com/streamnative/terraform-managed-cloud/commit/a08c96475eb52c9385798a1d8e6e212c4f148f2e))
+
 ## [3.10.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.9.0...v3.10.0) (2024-01-23)
 
 
