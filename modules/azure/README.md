@@ -111,6 +111,10 @@ module "azure-managed-cloud" {
   sn_support_principal_id = module.azure-sn-cloud-manager.sn_support_principal_id
   sn_automation_client_id = module.azure-sn-cloud-manager.sn_automation_client_id
   sn_support_client_id = module.azure-sn-cloud-manager.sn_support_client_id
+
+  depends_on = [
+    module.azure-sn-cloud-manager
+  ]
 }
 ```
 
