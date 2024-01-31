@@ -44,6 +44,7 @@ provider "azuread" {}
 module "azure-sn-cloud-manager" {
   source = "github.com/streamnative/terraform-managed-cloud//modules/azure/sn-cloud-manager?ref=master"
 
+  streamnative_cloud_env = "test" # or staging, production
   resource_group_location = "westus2"
   streamnative_org_id = "o-12345"
 }
@@ -69,6 +70,11 @@ module "azure-managed-cloud" {
   resource_group_location = "westus2"
 
   streamnative_org_id = "o-12345"
+
+  sn_automation_principal_id = xxxx
+  sn_support_principal_id = xxxx
+  sn_automation_client_id = xxxx
+  sn_support_client_id = xxxx
 }
 ```
 
@@ -86,23 +92,25 @@ provider "azurerm" {
 provider "azuread" {}
 
 module "azure-sn-cloud-manager" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/sn-cloud-manager?ref=master"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/sn-cloud-manager?ref=main"
 
+  streamnative_cloud_env = "test" # or staging, production
   resource_group_location = "westus2"
   streamnative_org_id = "o-12345"
 }
 
 module "azure-managed-cloud" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/vendor-access?ref=master"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/vendor-access?ref=main"
 
   resource_group_name     = "azure-westus2-aks-test"
   resource_group_location = "westus2"
 
   streamnative_org_id = "o-12345"
 
-  depends_on = [
-    module.azure-sn-cloud-manager
-  ]
+  sn_automation_principal_id = module.azure-sn-cloud-manager.sn_automation_principal_id
+  sn_support_principal_id = module.azure-sn-cloud-manager.sn_support_principal_id
+  sn_automation_client_id = module.azure-sn-cloud-manager.sn_automation_client_id
+  sn_support_client_id = module.azure-sn-cloud-manager.sn_support_client_id
 }
 ```
 
