@@ -42,7 +42,7 @@ provider "azurerm" {
 provider "azuread" {}
 
 module "azure-sn-cloud-manager" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/sn-cloud-manager?ref=master"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/sn-cloud-manager?ref=main"
 
   streamnative_cloud_env = "test" # or staging, production
   resource_group_location = "westus2"
@@ -64,7 +64,7 @@ provider "azurerm" {
 provider "azuread" {}
 
 module "azure-managed-cloud" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/vendor-access?ref=master"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/vendor-access?ref=main"
 
   resource_group_name     = "azure-westus2-aks-test"
   resource_group_location = "westus2"
