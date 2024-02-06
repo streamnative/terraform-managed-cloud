@@ -64,20 +64,25 @@ provider "azurerm" {
 
 provider "azuread" {}
 
-module "azure_sn_cloud_manager" {
+module "azure-sn-cloud-manager" {
   source = "github.com/streamnative/terraform-managed-cloud//modules/azure/sn-cloud-manager?ref=<LATEST_GIT_TAG>"
 
   resource_group_location = "<RESOURCE_GROUP_LOCATION>"
   streamnative_org_id = "<YOUR_SNCLOUD_ORG_ID>"
 }
 
-module "sn_managed_cloud" {
+module "sn-managed-cloud" {
   source = "github.com/streamnative/terraform-managed-cloud//modules/azure/vendor-access?ref=<LATEST_GIT_TAG>"
 
   resource_group_name     = "<RESOURCE_GROUP_NAME>"
   resource_group_location = "<RESOURCE_GROUP_LOCATION>"
 
   streamnative_org_id = "<YOUR_SNCLOUD_ORG_ID>"
+
+  sn_automation_principal_id = module.azure-sn-cloud-manager.sn_automation_principal_id
+  sn_support_principal_id = module.azure-sn-cloud-manager.sn_support_principal_id
+  sn_automation_client_id = module.azure-sn-cloud-manager.sn_automation_client_id
+  sn_support_client_id = module.azure-sn-cloud-manager.sn_support_client_id
 
   depends_on = [
     module.azure-sn-cloud-manager
