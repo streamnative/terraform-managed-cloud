@@ -51,7 +51,7 @@ module "sn_managed_cloud" {
 }
 ```
 
-### Using Asure module
+### Using Azure module
 
 Run the following terraform file within your Azure credentials:
 
