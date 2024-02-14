@@ -1,0 +1,380 @@
+$ terraform plan
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
+following symbols:
++ create
+
+Terraform will perform the following actions:
+
+# module.sn_vendor.google_project_iam_member.sn_access["0"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-manager@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/editor"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["1"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:pool-automation@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/editor"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["10"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:pool-automation@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/compute.networkAdmin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["11"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-support-general@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/compute.networkAdmin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["12"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-manager@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/container.admin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["13"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:pool-automation@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/container.admin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["14"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-support-general@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/container.admin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["15"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-manager@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/dns.admin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["16"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:pool-automation@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/dns.admin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["17"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-support-general@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/dns.admin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["18"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-manager@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/storage.admin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["19"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:pool-automation@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/storage.admin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["2"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-support-general@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/editor"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["20"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-support-general@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/storage.admin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["21"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-manager@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/iam.serviceAccountAdmin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["22"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:pool-automation@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/iam.serviceAccountAdmin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["23"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-support-general@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/iam.serviceAccountAdmin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["24"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-manager@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/iam.workloadIdentityPoolAdmin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["25"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:pool-automation@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/iam.workloadIdentityPoolAdmin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["26"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-support-general@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/iam.workloadIdentityPoolAdmin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["27"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-manager@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/resourcemanager.projectIamAdmin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["28"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:pool-automation@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/resourcemanager.projectIamAdmin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["29"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-support-general@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/resourcemanager.projectIamAdmin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["3"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-manager@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/compute.admin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["4"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:pool-automation@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/compute.admin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["5"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-support-general@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/compute.admin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["6"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-manager@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/compute.loadBalancerAdmin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["7"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:pool-automation@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/compute.loadBalancerAdmin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["8"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-support-general@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/compute.loadBalancerAdmin"
+    }
+
+# module.sn_vendor.google_project_iam_member.sn_access["9"] will be created
++ resource "google_project_iam_member" "sn_access" {
+    + etag    = (known after apply)
+    + id      = (known after apply)
+    + member  = "serviceAccount:cloud-manager@sncloud-production.iam.gserviceaccount.com"
+    + project = "<YOUR_PROJECT>"
+    + role    = "roles/compute.networkAdmin"
+    }
+
+# module.sn_vendor.google_project_service.gcp_apis[0] will be created
++ resource "google_project_service" "gcp_apis" {
+    + disable_on_destroy = false
+    + id                 = (known after apply)
+    + project            = "<YOUR_PROJECT>"
+    + service            = "autoscaling.googleapis.com"
+    }
+
+# module.sn_vendor.google_project_service.gcp_apis[1] will be created
++ resource "google_project_service" "gcp_apis" {
+    + disable_on_destroy = false
+    + id                 = (known after apply)
+    + project            = "<YOUR_PROJECT>"
+    + service            = "cloudresourcemanager.googleapis.com"
+    }
+
+# module.sn_vendor.google_project_service.gcp_apis[2] will be created
++ resource "google_project_service" "gcp_apis" {
+    + disable_on_destroy = false
+    + id                 = (known after apply)
+    + project            = "<YOUR_PROJECT>"
+    + service            = "compute.googleapis.com"
+    }
+
+# module.sn_vendor.google_project_service.gcp_apis[3] will be created
++ resource "google_project_service" "gcp_apis" {
+    + disable_on_destroy = false
+    + id                 = (known after apply)
+    + project            = "<YOUR_PROJECT>"
+    + service            = "container.googleapis.com"
+    }
+
+# module.sn_vendor.google_project_service.gcp_apis[4] will be created
++ resource "google_project_service" "gcp_apis" {
+    + disable_on_destroy = false
+    + id                 = (known after apply)
+    + project            = "<YOUR_PROJECT>"
+    + service            = "dns.googleapis.com"
+    }
+
+# module.sn_vendor.google_project_service.gcp_apis[5] will be created
++ resource "google_project_service" "gcp_apis" {
+    + disable_on_destroy = false
+    + id                 = (known after apply)
+    + project            = "<YOUR_PROJECT>"
+    + service            = "domains.googleapis.com"
+    }
+
+# module.sn_vendor.google_project_service.gcp_apis[6] will be created
++ resource "google_project_service" "gcp_apis" {
+    + disable_on_destroy = false
+    + id                 = (known after apply)
+    + project            = "<YOUR_PROJECT>"
+    + service            = "iam.googleapis.com"
+    }
+
+# module.sn_vendor.google_project_service.gcp_apis[7] will be created
++ resource "google_project_service" "gcp_apis" {
+    + disable_on_destroy = false
+    + id                 = (known after apply)
+    + project            = "<YOUR_PROJECT>"
+    + service            = "iamcredentials.googleapis.com"
+    }
+
+# module.sn_vendor.google_project_service.gcp_apis[8] will be created
++ resource "google_project_service" "gcp_apis" {
+    + disable_on_destroy = false
+    + id                 = (known after apply)
+    + project            = "<YOUR_PROJECT>"
+    + service            = "networkmanagement.googleapis.com"
+    }
+
+# module.sn_vendor.google_project_service.gcp_apis[9] will be created
++ resource "google_project_service" "gcp_apis" {
+    + disable_on_destroy = false
+    + id                 = (known after apply)
+    + project            = "<YOUR_PROJECT>"
+    + service            = "servicedirectory.googleapis.com"
+    }
+
+# module.sn_vendor.google_project_service.gcp_apis[10] will be created
++ resource "google_project_service" "gcp_apis" {
+    + disable_on_destroy = false
+    + id                 = (known after apply)
+    + project            = "<YOUR_PROJECT>"
+    + service            = "servicemanagement.googleapis.com"
+    }
+
+# module.sn_vendor.google_project_service.gcp_apis[11] will be created
++ resource "google_project_service" "gcp_apis" {
+    + disable_on_destroy = false
+    + id                 = (known after apply)
+    + project            = "<YOUR_PROJECT>"
+    + service            = "siteverification.googleapis.com"
+    }
+
+Plan: 42 to add, 0 to change, 0 to destroy.
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run
+"terraform apply" now.

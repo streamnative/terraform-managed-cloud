@@ -1,0 +1,68 @@
+formatter: markdown
+settings:
+  indent: 3
+content: |-
+  {{ include "docs/license.txt" }}
+
+  # StreamNative Cloud - GCP BYOC Vendor Access
+  
+  This Terraform module creates IAM policies within your GCP project. These resources give StreamNative access only for the provisioning and management of StreamNative's BYOC offering.
+
+  For more information about StreamNative and our managed offerings for Apache Pulsar, visit our [website](https://streamnative.io/streamnativecloud/).
+
+  ## Usage
+
+  To use this module you must have [Terraform installed](https://learn.hashicorp.com/tutorials/terraform/install-cli) and be [familiar](https://developer.hashicorp.com/terraform/tutorials/gcp-get-started) with its usage for GCP. It is recommended to securely store the Terraform configuration you create in source control, as well as use [Terraform's Remote State](https://www.terraform.io/language/state/remote) for storing the `*.tfstate` file.
+
+  ### Get Started
+
+  Start by writing the following configuration to a new file `main.tf` containing the following Terraform code:
+
+  ```hcl
+  {{ include "docs/main.tf" }}
+  ```
+
+  After [authenticating to your GCP account](https://registry.terraform.io/providers/hashicorp/google/latest/docs#authentication-and-configuration) execute the following sequence of commands from the directory containing the `main.tf` configuration file:
+  1. `terraform init`
+     <details><summary>(example output)</summary><p>
+
+     ```bash
+     {{ include "docs/init.log" | nindent 3 }}
+     ```
+     
+     </p></details>
+  2. `terraform plan`
+     <details><summary>(example output)</summary><p>
+
+     ```bash
+     {{ include "docs/plan.log" | nindent 3 }}
+     ```
+     
+     </p></details>
+  3. `terraform apply`
+     <details><summary>(example output)</summary><p>
+
+     ```bash
+     {{ include "docs/apply.log" | nindent 3 }}
+     ```
+     
+     </p></details>
+
+  ## Terraform Docs
+  {{ .Requirements }}
+  
+  {{ .Providers }}
+
+  {{ .Modules }}
+  
+  ### Resources
+
+  | Name | Type |
+  |------|------|
+  | [google_project_iam_member.sn_access](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_iam#google_project_iam_member) | resource |
+  | [google_project_service.gcp_apis](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_service) | resource |
+  |
+
+  {{ .Inputs }}
+
+  {{ .Outputs }}
