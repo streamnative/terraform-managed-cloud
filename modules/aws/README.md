@@ -50,7 +50,7 @@ To use this module you must have [Terraform installed](https://learn.hashicorp.c
 ### Pre Requisites
 This module requires only one input to function:
 
-- `external_ids`: A list of [external IDs](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html) that correspond to your [Organization IDs](https://docs.streamnative.io/cloud/stable/concepts/concepts#organizations) within StreamNative Cloud. Our services use this ID for any [STS assume role calls](https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html) to IAM roles created by the module. To find your Organization ID(s), please refer to our [documentation](https://docs.streamnative.io/cloud/stable/use/organization).
+- `external_id`: The [external ID](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html) that correspond to your [Organization ID](https://docs.streamnative.io/cloud/stable/concepts/concepts#organizations) within StreamNative Cloud. Our services use this ID for any [STS assume role calls](https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html) to IAM roles created by the module. To find your Organization ID(s), please refer to our [documentation](https://docs.streamnative.io/cloud/stable/use/organization).
 
 ### Optional Inputs
 
@@ -68,9 +68,9 @@ provider "aws" {
 }
 
 module "sn_managed_cloud" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/aws?ref=v3.0.0"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/aws?ref=<LATEST_GIT_TAG>"
 
-  external_id             = "<YOUR_SNCLOUD_ORG_ID>"
+  external_id = "<YOUR_SNCLOUD_ORG_ID>"
 }
 ```
 
@@ -1488,8 +1488,8 @@ Apply complete! Resources: 9 added, 0 changed, 0 destroyed.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.32.0 |
-| <a name="provider_local"></a> [local](#provider\_local) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.4.0 |
+| <a name="provider_local"></a> [local](#provider\_local) | 2.4.0 |
 
 ## Modules
 
@@ -1507,6 +1507,8 @@ No modules.
 | [aws_iam_role.bootstrap_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.management_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.bootstrap_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.bootstrap_readonly](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.management_readonly](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.management_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [local_file.alb_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 | [local_file.bootstrap_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
@@ -1514,8 +1516,8 @@ No modules.
 | [local_file.permission_boundary_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 | [local_file.runtime_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
-| [aws_iam_policy_document.streamnative_control_plane_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.streamnative_vendor_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.streamnative_bootstrap_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.streamnative_management_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_kms_key.ebs_default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_key) | data source |
 | [aws_kms_key.s3_default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_key) | data source |
 | [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
@@ -1524,21 +1526,25 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_additional_iam_policy_arns"></a> [additional\_iam\_policy\_arns](#input\_additional\_iam\_policy\_arns) | Provide a list of additional IAM policy ARNs allowed for use with iam:AttachRolePolicy, defined in the StreamNativePermissionBoundary. | `list(string)` | `[]` | no |
-| <a name="input_create_bootstrap_role"></a> [create\_bootstrap\_role](#input\_create\_bootstrap\_role) | Whether or not to create the bootstrap role, which is used by StreamNative for the initial deployment of StreamNative Cloud | `string` | `true` | no |
-| <a name="input_ebs_kms_key_arns"></a> [ebs\_kms\_key\_arns](#input\_ebs\_kms\_key\_arns) | Sets the list of allowed KMS key ARNs, if not set, uses the default EBS KMS key | `list(any)` | `[]` | no |
-| <a name="input_eks_cluster_pattern"></a> [eks\_cluster\_pattern](#input\_eks\_cluster\_pattern) | Defines the EKS cluster prefix for streamnative clusters. This should normally remain the default value. | `string` | `"*snc*"` | no |
-| <a name="input_external_ids"></a> [external\_ids](#input\_external\_ids) | A list of external IDs that correspond to your Organizations within StreamNative Cloud. Used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. "["o-xhopj"]". | `list(string)` | n/a | yes |
+| <a name="input_additional_iam_policy_arns"></a> [additional\_iam\_policy\_arns](#input\_additional\_iam\_policy\_arns) | Provide a list of additional IAM policy arns allowed for use with iam:AttachRolePolicy, defined in the StreamNativePermissionBoundary. | `list(string)` | `[]` | no |
+| <a name="input_create_bootstrap_role"></a> [create\_bootstrap\_role](#input\_create\_bootstrap\_role) | Whether or not to create the bootstrap role, which is used by StreamNative for the initial deployment of the StreamNative Cloud | `string` | `true` | no |
+| <a name="input_ebs_kms_key_arns"></a> [ebs\_kms\_key\_arns](#input\_ebs\_kms\_key\_arns) | Sets the list of allowed kms key arns, if not set, uses the default ebs kms key | `list(any)` | `[]` | no |
+| <a name="input_eks_cluster_pattern"></a> [eks\_cluster\_pattern](#input\_eks\_cluster\_pattern) | Defines the eks clsuter prefix for streamnative clusters. This should normally remain the default value. | `string` | `"*snc*"` | no |
+| <a name="input_enforce_vendor_federation"></a> [enforce\_vendor\_federation](#input\_enforce\_vendor\_federation) | Do not enable this unless explicitly told to do so by StreamNative. Restrict access for the streamnative\_vendor\_access\_role\_arns to only federated Google accounts. Intended to be true by default in the future. | `bool` | `false` | no |
+| <a name="input_external_id"></a> [external\_id](#input\_external\_id) | A external ID that correspond to your Organization within StreamNative Cloud, used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. "o-xhopj". | `string` | n/a | yes |
 | <a name="input_hosted_zone_allowed_ids"></a> [hosted\_zone\_allowed\_ids](#input\_hosted\_zone\_allowed\_ids) | Allows for further scoping down policy for allowed hosted zones. The IDs provided are constructed into ARNs | `list(any)` | <pre>[<br>  "*"<br>]</pre> | no |
 | <a name="input_region"></a> [region](#input\_region) | The AWS region where your instance of StreamNative Cloud is deployed. Defaults to all regions "*" | `string` | `"*"` | no |
-| <a name="input_s3_bucket_pattern"></a> [s3\_bucket\_pattern](#input\_s3\_bucket\_pattern) | Defines the bucket prefix for StreamNative managed buckets (backup and offload). Typically defaults to "snc-*", but should match the bucket created using the tiered storage resources module | `string` | `"*snc*"` | no |
+| <a name="input_s3_bucket_pattern"></a> [s3\_bucket\_pattern](#input\_s3\_bucket\_pattern) | Defines the bucket prefix for streamnative managed buckets (backup and offload). Typically defaults to "snc-*", but should match the bucket created using the tiered-storage-resources module | `string` | `"*snc*"` | no |
 | <a name="input_s3_kms_key_arns"></a> [s3\_kms\_key\_arns](#input\_s3\_kms\_key\_arns) | List of KMS key ARNs to use for S3 buckets | `list(string)` | `[]` | no |
-| <a name="input_sn_policy_version"></a> [sn\_policy\_version](#input\_sn\_policy\_version) | The value of SNVersion tag | `string` | `"3.0.0"` | no |
+| <a name="input_sn_policy_version"></a> [sn\_policy\_version](#input\_sn\_policy\_version) | The value of SNVersion tag | `string` | `"3.11.1"` | no |
 | <a name="input_source_identities"></a> [source\_identities](#input\_source\_identities) | Place an additional constraint on source identity, disabled by default and only to be used if specified by StreamNative | `list(any)` | `[]` | no |
 | <a name="input_source_identity_test"></a> [source\_identity\_test](#input\_source\_identity\_test) | The test to use for source identity | `string` | `"ForAnyValue:StringLike"` | no |
 | <a name="input_streamnative_google_account_id"></a> [streamnative\_google\_account\_id](#input\_streamnative\_google\_account\_id) | The Google Cloud service account ID used by StreamNative for Control Plane operations | `string` | `"108050666045451143798"` | no |
-| <a name="input_streamnative_vendor_access_role_arns"></a> [streamnative\_vendor\_access\_role\_arns](#input\_streamnative\_vendor\_access\_role\_arns) | A list of  ARNs provided by StreamNative that enable us to work with the Vendor Access Roles created by this module (StreamNativeCloudBootstrapRole, StreamNativeCloudManagementRole). This is how StreamNative is granted access into your AWS account and should typically be the default value unless directed otherwise. | `list(string)` | <pre>[<br>  "arn:aws:iam::311022431024:role/cloud-manager"<br>]</pre> | no |
+| <a name="input_streamnative_principal_ids"></a> [streamnative\_principal\_ids](#input\_streamnative\_principal\_ids) | When set, this applies an additional check for certain StreamNative principals to futher restrict access to which services / users can access an account. | `list(string)` | `[]` | no |
+| <a name="input_streamnative_support_access_role_arns"></a> [streamnative\_support\_access\_role\_arns](#input\_streamnative\_support\_access\_role\_arns) | A list ARNs provided by StreamNative that enable streamnative support engineers access the StreamNativeCloudBootstrapRole. This is used only in some initial provisioning and in case of on-call support. | `list(string)` | <pre>[<br>  "arn:aws:iam::311022431024:role/cloud-support-general"<br>]</pre> | no |
+| <a name="input_streamnative_vendor_access_role_arns"></a> [streamnative\_vendor\_access\_role\_arns](#input\_streamnative\_vendor\_access\_role\_arns) | A list ARNs provided by StreamNative that enable us to work with the Vendor Access Roles created by this module (StreamNativeCloudBootstrapRole, StreamNativeCloudManagementRole). This is how StreamNative is granted access into your AWS account, and should typically be the default value unless directed otherwise. This arns are used *only* for automations. | `list(string)` | <pre>[<br>  "arn:aws:iam::311022431024:role/cloud-manager"<br>]</pre> | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Extra tags to apply to the resources created by this module. | `map(string)` | `{}` | no |
+| <a name="input_test_suffix"></a> [test\_suffix](#input\_test\_suffix) | Used in testing to apply us to apply multiple versions of the role | `string` | `""` | no |
 | <a name="input_vpc_allowed_ids"></a> [vpc\_allowed\_ids](#input\_vpc\_allowed\_ids) | Allows for further scoping down policy for allowed VPC | `list(any)` | <pre>[<br>  "*"<br>]</pre> | no |
 | <a name="input_write_policy_files"></a> [write\_policy\_files](#input\_write\_policy\_files) | Write the policy files locally to disk for debugging and validation | `bool` | `false` | no |
 
@@ -1549,6 +1555,6 @@ No modules.
 | <a name="output_aws_lbc_policy_arn"></a> [aws\_lbc\_policy\_arn](#output\_aws\_lbc\_policy\_arn) | The ARN of the AWS Load Balancer Controller Policy, if enabled |
 | <a name="output_bootstrap_role_arn"></a> [bootstrap\_role\_arn](#output\_bootstrap\_role\_arn) | The ARN of the Bootstrap role, if enabled |
 | <a name="output_management_role_arn"></a> [management\_role\_arn](#output\_management\_role\_arn) | The ARN of the Management Role |
-| <a name="output_permission_boundary_policy_arn"></a> [permission\_boundary\_policy\_arn](#output\_permission\_boundary\_policy\_arn) | The ARN of the Permission Boundary Policy |
+| <a name="output_permission_boundary_policy_arn"></a> [permission\_boundary\_policy\_arn](#output\_permission\_boundary\_policy\_arn) | The ARN of the Permssion Boundary Policy |
 | <a name="output_runtime_policy_arn"></a> [runtime\_policy\_arn](#output\_runtime\_policy\_arn) | The ARN of the Runtime Policy, if enabled |
 <!-- END_TF_DOCS -->
