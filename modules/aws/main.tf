@@ -188,6 +188,7 @@ resource "aws_iam_role" "bootstrap_role" {
   path                 = "/StreamNative/"
   permissions_boundary = aws_iam_policy.permission_boundary.arn
   tags                 = local.tag_set
+  max_session_duration = 43200
 }
 
 resource "aws_iam_policy" "bootstrap_policy" {
@@ -245,6 +246,7 @@ resource "aws_iam_role" "management_role" {
   path                 = "/StreamNative/"
   permissions_boundary = aws_iam_policy.permission_boundary.arn
   tags                 = local.tag_set
+  max_session_duration = 43200
 }
 
 resource "aws_iam_role_policy_attachment" "management_role" {
