@@ -44,3 +44,8 @@ variable "private_link_service_alias" {
   type        = string
   description = "The alias of the Private Link Service"
 }
+
+variable "domain" {
+  type        = string
+  description = "The domain of the Pulsar service endpoint"
+}

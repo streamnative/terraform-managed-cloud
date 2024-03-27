@@ -20,8 +20,8 @@ module "azure-managed-cloud" {
   vnet_name                  = "<the-vnet-name>"
   subnet_name                = "<the-subnet-name>"
   private_link_service_alias = "<the-private-link-service-alias>"
+  domain                     = "<the-domain-of-pulsar-service>"
 }
-
 ```
 
 1. terraform init
@@ -29,7 +29,7 @@ module "azure-managed-cloud" {
 3. terraform apply
 
 
-## Set DNS
+## Approve
 
 After create the Private Endpoint, you need to ask the manager of the Private Link Service to approve the request, and then
-you can use module [private-dns](../private-dns) to create a private dns record for your pulsar cluster
+you can access the private Pulsar cluster.

@@ -20,6 +20,10 @@ locals {
     "Vendor"                 = "StreamNative"
     "Service"                = "StreamNative Cloud"
   }, var.additional_tags)
+
+  split_domain = split(".", var.domain)
+  domain_name = local.split_domain[0]
+  root_domain = join(".", slice(local.split_domain, 1, length(local.split_domain)))
 }
 
 data "azurerm_virtual_network" "vnet" {
@@ -47,4 +51,27 @@ resource "azurerm_private_endpoint" "pe" {
   }
 
   tags = local.tags
+}
+
+resource "azurerm_private_dns_zone" "private-zone" {
+  name                = local.root_domain
+  resource_group_name = var.resource_group_name
+
+  tags = local.tags
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "private-link" {
+  name                  = "private-link"
+  resource_group_name   = var.resource_group_name
+  private_dns_zone_name = azurerm_private_dns_zone.private-zone.name
+  virtual_network_id    = data.azurerm_virtual_network.vnet.id
+  registration_enabled  = false
+}
+
+resource "azurerm_private_dns_a_record" "pulsar-record" {
+  name                = local.domain_name
+  zone_name           = azurerm_private_dns_zone.private-zone.name
+  resource_group_name = var.resource_group_name
+  ttl                 = 300
+  records             = [azurerm_private_endpoint.pe.private_service_connection[0].private_ip_address]
 }
