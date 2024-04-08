@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.12.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.11.1...v3.12.0) (2024-04-08)
+
+
+### Features
+
+* add module for creating private endpoint and private dns record in Azure ([#75](https://github.com/streamnative/terraform-managed-cloud/issues/75)) ([bba75e0](https://github.com/streamnative/terraform-managed-cloud/commit/bba75e0a453a084e17e9284aa2c3c901c5c93a33))
+* update aws role session duration ([#71](https://github.com/streamnative/terraform-managed-cloud/issues/71)) ([0683fc6](https://github.com/streamnative/terraform-managed-cloud/commit/0683fc6a89661894b27b8929ae1a4f1e058df50e))
+
 ## [3.11.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.11.0...v3.11.1) (2024-01-24)
 
 
