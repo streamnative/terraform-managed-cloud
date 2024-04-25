@@ -6,6 +6,7 @@ variable "project" {
 variable "roles" {
   default = [
     "roles/editor",
+    "roles/cloudkms.admin",
     "roles/compute.admin",
     "roles/compute.loadBalancerAdmin",
     "roles/compute.networkAdmin",
