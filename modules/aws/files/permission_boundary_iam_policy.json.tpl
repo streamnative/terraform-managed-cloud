@@ -6,6 +6,7 @@
       "Effect": "Allow",
       "Action": [
           "acm:*",
+          "acm-pca:*",
           "autoscaling:*",
           "cognito-idp:*",
           "dynamodb:*",

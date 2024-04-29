@@ -5,6 +5,9 @@
             "Sid": "ro",
             "Effect": "Allow",
             "Action": [
+                "acm-pca:DescribeCertificateAuthority",
+                "acm-pca:GetCertificate",
+                "acm-pca:IssueCertificate",
                 "autoscaling:Describe*",
                 "secretsmanager:ListSecrets",
                 "route53:ListTagsForResource",
