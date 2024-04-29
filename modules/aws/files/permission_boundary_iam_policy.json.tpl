@@ -4,7 +4,7 @@
     {
       "Sid": "AllowedServices",
       "Effect": "Allow",
-      "Action": [
+      "Action": [q
           "acm:*",
           "autoscaling:*",
           "cognito-idp:*",
@@ -43,6 +43,7 @@
         "iam:DeleteServiceLinkedRole",
         "iam:DetachRolePolicy",
         "iam:PutRolePolicy",
+        "iam:DeleteRolePolicy",
         "iam:PutRolePermissionsBoundary",
         "iam:RemoveRoleFromInstanceProfile",
         "iam:SetDefaultPolicyVersion",
