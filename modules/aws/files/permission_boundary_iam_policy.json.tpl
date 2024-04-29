@@ -4,7 +4,7 @@
     {
       "Sid": "AllowedServices",
       "Effect": "Allow",
-      "Action": [q
+      "Action": [
           "acm:*",
           "autoscaling:*",
           "cognito-idp:*",
