@@ -84,6 +84,8 @@
       "Action": [
         "iam:DeleteRole",
         "iam:DetachRolePolicy",
+        "iam:PutRolePolicy",
+        "iam:DeleteRolePolicy",
         "iam:PutRolePermissionsBoundary",
         "iam:SetDefaultPolicyVersion",
         "iam:UpdateAssumeRolePolicy",

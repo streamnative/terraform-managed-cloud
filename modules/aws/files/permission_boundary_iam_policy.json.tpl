@@ -43,6 +43,7 @@
         "iam:DeleteServiceLinkedRole",
         "iam:DetachRolePolicy",
         "iam:PutRolePolicy",
+        "iam:DeleteRolePolicy",
         "iam:PutRolePermissionsBoundary",
         "iam:RemoveRoleFromInstanceProfile",
         "iam:SetDefaultPolicyVersion",
