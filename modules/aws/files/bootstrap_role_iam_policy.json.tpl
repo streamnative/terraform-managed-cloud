@@ -215,6 +215,8 @@
         "ec2:CreateNetworkInterface",
         "ec2:CreateRoute",
         "ec2:CreateRouteTable",
+        "ec2:ReplaceRoute",
+        "ec2:ReplaceRouteTableAssociation",
         "ec2:CreateSecurityGroup",
         "ec2:CreateSubnet",
         "ec2:CreateTags",
