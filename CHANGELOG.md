@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.13.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.12.0...v3.13.0) (2024-05-07)
+
+
+### Features
+
+* Add KMS for encrypting k8s etcd ([#77](https://github.com/streamnative/terraform-managed-cloud/issues/77)) ([4632366](https://github.com/streamnative/terraform-managed-cloud/commit/46323664400a0f46ca8f674bb238d6c0241ca86a))
+* Allow iam:PutRolePolicy and iam:DeleteRolePolicy in aws ([#79](https://github.com/streamnative/terraform-managed-cloud/issues/79)) ([8740a56](https://github.com/streamnative/terraform-managed-cloud/commit/8740a562ecaf847a54ec0209bcb70fe4c721547b))
+* **aws:** allow update route tables ([#80](https://github.com/streamnative/terraform-managed-cloud/issues/80)) ([577978d](https://github.com/streamnative/terraform-managed-cloud/commit/577978d4900fcde37a37be1c84ca620cc7f2ca10))
+
 ## [3.12.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.11.1...v3.12.0) (2024-04-08)
 
 
