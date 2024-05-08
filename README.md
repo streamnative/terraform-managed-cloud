@@ -88,6 +88,31 @@ module "sn-managed-cloud" {
     module.azure-sn-cloud-manager
   ]
 }
+
+output "client_id" {
+  value       = module.sn-managed-cloud.sn_automation_client_id
+  description = "The client ID of the sn automation service principal for StreamNative Cloud automation"
+}
+
+output "support_client_id" {
+  value       = module.sn-managed-cloud.sn_support_client_id
+  description = "The client ID of the sn support service principal for StreamNative Cloud support access"
+}
+
+output "subscription_id" {
+  value       = module.sn-managed-cloud.subscription_id
+  description = "The subscription ID of the AKS cluster"
+}
+
+output "tenant_id" {
+  value       = module.sn-managed-cloud.tenant_id
+  description = "The tenant ID of the AKS cluster"
+}
+
+output "resource_group_name" {
+  value       = module.sn-managed-cloud.resource_group_name
+  description = "The name of the resource group where the AKS cluster will be created"
+}
 ```
 
 ## Examples
