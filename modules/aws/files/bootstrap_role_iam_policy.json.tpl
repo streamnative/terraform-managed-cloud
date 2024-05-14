@@ -2,6 +2,99 @@
   "Version": "2012-10-17",
   "Statement": [
     {
+      "Sid": "AllowStreamNativeManagedDNSRead",
+      "Effect": "Allow",
+      "Action": [
+        "route53:Get*",
+        "route53:List*",
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowStreamNativeManagedDNSWrite",
+      "Effect": "Allow",
+      "Action": [
+        "route53:CreateHostedZone",
+        "route53:ChangeTagsForResource",
+        "route53:DeleteHostedZone"
+      ],
+      "Resource": ${r53_zone_arns}
+    },
+    {
+      "Sid": "AllowManagePulsarClusterEndpoints",
+      "Effect": "Allow",
+      "Action": [
+        "route53:ChangeResourceRecordSets",
+      ],
+      "Resource": ${r53_zone_arns}
+    },
+    {
+      "Sid": "AllowStreamNativeManagedBucketsRead",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListAllMyBuckets",
+        "s3:ListBucket"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowStreamNativeManagedBucketsWrite",
+      "Effect": "Allow",
+      "Action":[
+        "s3:CreateBucket",
+        "s3:Delete*",
+        "s3:Get*",
+        "s3:List*",
+        "s3:PutBucket*",
+        "s3:PutObject*",
+        "s3:PutLifecycle*",
+        "s3:PutAccelerateConfiguration",
+        "s3:PutAccessPointPolicy",
+        "s3:PutAccountPublicAccessBlock",
+        "s3:PutAnalyticsConfiguration",
+        "s3:PutEncryptionConfiguration"
+       ],
+       "Resource": [
+          "arn:${partition}:s3:::${bucket_pattern}"
+       ]
+    },
+    {
+      "Sid": "AllowStreamNativeManagedEKSReadASG",
+      "Effect": "Allow",
+      "Action": [
+        "autoscaling:Describe*",
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowStreamNativeManagedEKSTagASG",
+      "Effect": "Allow",
+      "Action": [
+        "autoscaling:CreateOrUpdateTags",
+        "autoscaling:Delete*",
+      ],
+      "Resource": [ "*" ],
+      "Condition": {
+        "StringLike": {
+          "aws:ResourceTag/eks:cluster-name": "${cluster_pattern}"
+        } 
+      }
+    },
+    {
+      "Sid": "AllowStreamNativeManagedEKSWriteASG",
+      "Effect": "Allow",
+      "Action": [
+        "autoscaling:CreateAutoScalingGroup",
+        "autoscaling:CreateLaunchConfiguration"
+      ],
+      "Resource": [ "*" ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/Vendor": "StreamNative"
+        } 
+      }
+    },
+    {
       "Sid": "UnResRW",
       "Effect": "Allow",
       "Action": [
@@ -10,8 +103,6 @@
         "kms:ScheduleKeyDeletion",
         "logs:CreateLogGroup",
         "logs:PutRetentionPolicy",
-        "route53:CreateHostedZone",
-        "route53:ChangeTagsForResource",
         "support:*",
         "servicequotas:List*",
         "servicequotas:Get*",
@@ -26,7 +117,6 @@
         "acm:ImportCertificate",
         "acm:ListCertificates",
         "acm:ListTagsForCertificate",
-        "autoscaling:Describe*",
         "ec2:Describe*",
         "ec2:Get*",
         "eks:Describe*",
@@ -44,11 +134,7 @@
         "kms:ListAliases",
         "kms:ListResourceTags",
         "logs:Describe*",
-        "logs:List*",
-        "route53:Get*",
-        "route53:List*",
-        "s3:ListAllMyBuckets",
-        "s3:ListBucket"
+        "logs:List*"
       ],
       "Resource": "*"
     },
@@ -86,15 +172,6 @@
       }
     },
     {
-      "Sid": "ResR53Z",
-      "Effect": "Allow",
-      "Action": [
-        "route53:ChangeResourceRecordSets",
-        "route53:DeleteHostedZone"
-      ],
-      "Resource": ${r53_zone_arns}
-    },
-    {
       "Sid": "ResEKS",
       "Effect": "Allow",
       "Action": [
@@ -103,20 +180,6 @@
       "Resource": [
         "arn:${partition}:eks:${region}:${account_id}:nodegroup/${cluster_pattern}/*/*"
       ]
-    },
-    {
-      "Sid": "AsgTags",
-      "Effect": "Allow",
-      "Action": [
-        "autoscaling:*Tags",
-        "autoscaling:Delete*"
-      ],
-      "Resource": [ "*" ],
-      "Condition": {
-        "StringLike": {
-          "autoscaling:ResourceTag/cluster-name": "${cluster_pattern}"
-        }
-      }
     },
     {
       "Sid": "EC2Tags",
@@ -171,7 +234,6 @@
         "acm:ImportCertificate",
         "acm:RemoveTagsFromCertificate",
         "acm:RequestCertificate",
-        "autoscaling:Create*",
         "ec2:*TransitGateway*",
         "ec2:AllocateAddress",
         "ec2:Create*",
@@ -201,7 +263,6 @@
         "acm:RemoveTagsFromCertificate",
         "acm:ResendValidationEmail",
         "autoscaling:AttachInstances",
-        "autoscaling:CreateOrUpdateTags",
         "autoscaling:Detach*",
         "autoscaling:Update*",
         "autoscaling:Resume*",
@@ -274,27 +335,6 @@
         "ssm:ResumeSession"
       ],
       "Resource": ["arn:aws:ssm:*:*:session/$${aws:username}-*"]
-    },
-    {
-      "Sid": "ResS3",
-      "Effect": "Allow",
-      "Action":[
-        "s3:CreateBucket",
-        "s3:Delete*",
-        "s3:Get*",
-        "s3:List*",
-        "s3:PutBucket*",
-        "s3:PutObject*",
-        "s3:PutLifecycle*",
-        "s3:PutAccelerateConfiguration",
-        "s3:PutAccessPointPolicy",
-        "s3:PutAccountPublicAccessBlock",
-        "s3:PutAnalyticsConfiguration",
-        "s3:PutEncryptionConfiguration"
-       ],
-       "Resource": [
-          "arn:${partition}:s3:::${bucket_pattern}"
-       ]
     },
     {
       "Sid": "IAMReqTag",
