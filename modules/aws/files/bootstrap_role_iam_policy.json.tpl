@@ -6,7 +6,7 @@
       "Effect": "Allow",
       "Action": [
         "route53:Get*",
-        "route53:List*",
+        "route53:List*"
       ],
       "Resource": "*"
     },
@@ -21,10 +21,10 @@
       "Resource": ${r53_zone_arns}
     },
     {
-      "Sid": "AllowManagePulsarClusterEndpoints",
+      "Sid": "AllowPulsarClusterEndpointsUpdate",
       "Effect": "Allow",
       "Action": [
-        "route53:ChangeResourceRecordSets",
+        "route53:ChangeResourceRecordSets"
       ],
       "Resource": ${r53_zone_arns}
     },
@@ -62,7 +62,7 @@
       "Sid": "AllowStreamNativeManagedEKSReadASG",
       "Effect": "Allow",
       "Action": [
-        "autoscaling:Describe*",
+        "autoscaling:Describe*"
       ],
       "Resource": "*"
     },
@@ -71,7 +71,7 @@
       "Effect": "Allow",
       "Action": [
         "autoscaling:CreateOrUpdateTags",
-        "autoscaling:Delete*",
+        "autoscaling:Delete*"
       ],
       "Resource": [ "*" ],
       "Condition": {
