@@ -76,7 +76,7 @@ resource "azurerm_private_dns_a_record" "pulsar-record" {
   records             = [azurerm_private_endpoint.pe.private_service_connection[0].private_ip_address]
 }
 
-resource "azurerm_private_dns_a_record" "pulsar-record" {
+resource "azurerm_private_dns_a_record" "broker-records" {
   count               = var.number_of_broker
   name                = format("pb%d-%s", count.index, local.domain_name)
   zone_name           = azurerm_private_dns_zone.private-zone.name
