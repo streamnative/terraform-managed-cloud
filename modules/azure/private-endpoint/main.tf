@@ -69,7 +69,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "private-link" {
 }
 
 resource "azurerm_private_dns_a_record" "pulsar-record" {
-  name                = local.domain_name
+  name                = "*"
   zone_name           = azurerm_private_dns_zone.private-zone.name
   resource_group_name = var.resource_group_name
   ttl                 = 300
