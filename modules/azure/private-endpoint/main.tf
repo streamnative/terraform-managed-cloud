@@ -75,3 +75,14 @@ resource "azurerm_private_dns_a_record" "pulsar-record" {
   ttl                 = 300
   records             = [azurerm_private_endpoint.pe.private_service_connection[0].private_ip_address]
 }
+
+resource "azurerm_private_dns_a_record" "pulsar-record" {
+  count               = var.number_of_broker
+  name                = format("pb%d-%s", count.index, local.domain_name)
+  zone_name           = azurerm_private_dns_zone.private-zone.name
+  resource_group_name = var.resource_group_name
+  ttl                 = 300
+  records             = [azurerm_private_endpoint.pe.private_service_connection[0].private_ip_address]
+  tags                = local.tags
+}
+

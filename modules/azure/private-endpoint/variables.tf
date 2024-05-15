@@ -49,3 +49,8 @@ variable "domain" {
   type        = string
   description = "The domain of the Pulsar service endpoint"
 }
+
+variable "number_of_broker" {
+  type        = number
+  description = "The number of broker instances"
+}
