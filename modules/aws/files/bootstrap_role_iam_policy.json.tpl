@@ -114,7 +114,7 @@
       "Resource": [ "*" ],
       "Condition": {
         "StringLike": {
-          "autoscaling:ResourceTag/cluster-name": "${cluster_pattern}"
+          "autoscaling:ResourceTag/eks:cluster-name": "${cluster_pattern}"
         }
       }
     },
