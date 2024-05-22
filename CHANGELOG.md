@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.13.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.13.0...v3.13.1) (2024-05-22)
+
+
+### Bug Fixes
+
+* autoscaling condition key ([470011e](https://github.com/streamnative/terraform-managed-cloud/commit/470011e4a69ac80ccb9813a3ce032bc272950094))
+* **aws:** autoscaling condition key ([#84](https://github.com/streamnative/terraform-managed-cloud/issues/84)) ([470011e](https://github.com/streamnative/terraform-managed-cloud/commit/470011e4a69ac80ccb9813a3ce032bc272950094))
+* use wildcard dns records for brokers in Azure private endpoint module ([#82](https://github.com/streamnative/terraform-managed-cloud/issues/82)) ([0528113](https://github.com/streamnative/terraform-managed-cloud/commit/0528113df0c5905abbf5958274470c680f79ca42))
+
 ## [3.13.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.12.0...v3.13.0) (2024-05-07)
 
 
