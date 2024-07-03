@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.14.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.13.1...v3.14.0) (2024-07-02)
+
+
+### Features
+
+* update federated web identify to support multiple gsa ids ([#85](https://github.com/streamnative/terraform-managed-cloud/issues/85)) ([bdf1df7](https://github.com/streamnative/terraform-managed-cloud/commit/bdf1df7f9a34d614ddfd2a1eb91d11406b69d3c2))
+
 ## [3.13.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.13.0...v3.13.1) (2024-05-22)
 
 
