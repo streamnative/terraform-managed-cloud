@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.14.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.14.0...v3.14.1) (2024-07-05)
+
+
+### Bug Fixes
+
+* Prioritizing streamnative_google_account_ids  ([#87](https://github.com/streamnative/terraform-managed-cloud/issues/87)) ([409f5e5](https://github.com/streamnative/terraform-managed-cloud/commit/409f5e5e37f432217922b92f805591455b1ef7e5))
+
 ## [3.14.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.13.1...v3.14.0) (2024-07-02)
 
 
