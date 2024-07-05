@@ -1,0 +1,11 @@
+{
+    "release-type": "terraform-module",
+    "packages": {
+        ".": {
+            "release-type": "terraform-module",
+            "extra-files": [
+                "modules/aws/variables.tf"
+            ]
+        }
+    }
+}
