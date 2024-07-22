@@ -1,5 +1,28 @@
 # Changelog
 
+## [3.14.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.14.0...v3.14.1) (2024-07-05)
+
+
+### Bug Fixes
+
+* Prioritizing streamnative_google_account_ids  ([#87](https://github.com/streamnative/terraform-managed-cloud/issues/87)) ([409f5e5](https://github.com/streamnative/terraform-managed-cloud/commit/409f5e5e37f432217922b92f805591455b1ef7e5))
+
+## [3.14.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.13.1...v3.14.0) (2024-07-02)
+
+
+### Features
+
+* update federated web identify to support multiple gsa ids ([#85](https://github.com/streamnative/terraform-managed-cloud/issues/85)) ([bdf1df7](https://github.com/streamnative/terraform-managed-cloud/commit/bdf1df7f9a34d614ddfd2a1eb91d11406b69d3c2))
+
+## [3.13.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.13.0...v3.13.1) (2024-05-22)
+
+
+### Bug Fixes
+
+* autoscaling condition key ([470011e](https://github.com/streamnative/terraform-managed-cloud/commit/470011e4a69ac80ccb9813a3ce032bc272950094))
+* **aws:** autoscaling condition key ([#84](https://github.com/streamnative/terraform-managed-cloud/issues/84)) ([470011e](https://github.com/streamnative/terraform-managed-cloud/commit/470011e4a69ac80ccb9813a3ce032bc272950094))
+* use wildcard dns records for brokers in Azure private endpoint module ([#82](https://github.com/streamnative/terraform-managed-cloud/issues/82)) ([0528113](https://github.com/streamnative/terraform-managed-cloud/commit/0528113df0c5905abbf5958274470c680f79ca42))
+
 ## [3.13.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.12.0...v3.13.0) (2024-05-07)
 
 

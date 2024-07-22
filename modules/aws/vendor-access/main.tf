@@ -110,7 +110,7 @@ data "aws_iam_policy_document" "streamnative_bootstrap_access" {
     }
     condition {
       test     = "StringEquals"
-      values   = [var.streamnative_google_account_id]
+      values   = length(var.streamnative_google_account_ids) > 0 ? var.streamnative_google_account_ids : [var.streamnative_google_account_id]
       variable = "accounts.google.com:aud"
     }
   }
@@ -149,7 +149,7 @@ data "aws_iam_policy_document" "streamnative_management_access" {
     }
     condition {
       test     = "StringEquals"
-      values   = [var.streamnative_google_account_id]
+      values   = length(var.streamnative_google_account_ids) > 0 ? var.streamnative_google_account_ids : [var.streamnative_google_account_id]
       variable = "accounts.google.com:aud"
     }
   }

@@ -16,7 +16,7 @@
 
 variable "sn_policy_version" {
   description = "The value of SNVersion tag"
-  default     = "3.13.0" # x-release-please-version
+  default     = "3.14.1"  # x-release-please-version
   type        = string
 }
 
@@ -88,8 +88,14 @@ variable "source_identity_test" {
 
 variable "streamnative_google_account_id" {
   default     = "108050666045451143798"
-  description = "The Google Cloud service account ID used by StreamNative for Control Plane operations"
+  description = "(Deprecated, use streamnative_google_account_ids instead) The Google Cloud service account ID used by StreamNative for Control Plane operations"
   type        = string
+}
+
+variable "streamnative_google_account_ids" {
+  default     = ["108050666045451143798"]
+  description = "The Google Cloud service account IDs used by StreamNative for Control Plane operations"
+  type        = list(string)
 }
 
 variable "streamnative_vendor_access_role_arns" {
