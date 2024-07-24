@@ -70,7 +70,7 @@ resource "google_service_account" "sn_bootstrap" {
   count        = local.is_impersonation_enabled ? 1 : 0
   account_id   = local.streamnative_bootstrap_gsa_name
   project      = var.project
-  display_name = "StreamNative Bootstrap GSA that will be imporsonated by StreamNative Cloud Control Plane and Support Roles."
+  display_name = "StreamNative Bootstrap GSA that will be impersonated by StreamNative Cloud Control Plane."
   depends_on   = [google_project_service.gcp_apis]
 }
 
