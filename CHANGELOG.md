@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.15.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.14.1...v3.15.0) (2024-07-27)
+
+
+### Features
+
+* **aws:** add private link module ([#92](https://github.com/streamnative/terraform-managed-cloud/issues/92)) ([b99a234](https://github.com/streamnative/terraform-managed-cloud/commit/b99a234e9a588344bb389080996ea800c9dcff4c))
+* Support GCP impersonation ([#94](https://github.com/streamnative/terraform-managed-cloud/issues/94)) ([97cfe1c](https://github.com/streamnative/terraform-managed-cloud/commit/97cfe1c53f6d9fa12953e975a7db5a71502197f5))
+
 ## [3.14.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.14.0...v3.14.1) (2024-07-05)
 
 
