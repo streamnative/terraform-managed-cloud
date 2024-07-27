@@ -34,8 +34,9 @@ provider "google" {
 }
 
 module "sn_managed_cloud" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/gcp/vendor-access?ref=v3.7.0"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/gcp/vendor-access?ref=v3.15.0"
   project = "<YOUR_PROJECT>"
+  streamnative_org_id = "<YOUR_ORG_ID>"
 }
 ```
 
@@ -523,7 +524,8 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_extra_google_services"></a> [extra\_google\_services](#input\_extra\_google\_services) | Extra google API services need to be enabled. | `list(string)` | `[]` | no |
 | <a name="input_project"></a> [project](#input\_project) | The project id of the target project | `string` | n/a | yes |
-| <a name="input_roles"></a> [roles](#input\_roles) | The role list will be associated with StreamNative GSA. | `list(string)` | <pre>[<br>  "roles/editor",<br>  "roles/compute.admin",<br>  "roles/compute.loadBalancerAdmin",<br>  "roles/compute.networkAdmin",<br>  "roles/container.admin",<br>  "roles/dns.admin",<br>  "roles/storage.admin",<br>  "roles/iam.serviceAccountAdmin",<br>  "roles/iam.workloadIdentityPoolAdmin",<br>  "roles/resourcemanager.projectIamAdmin"<br>]</pre> | no |
+| <a name="input_roles"></a> [roles](#input\_roles) | The role list will be associated with StreamNative GSA. | `list(string)` | <pre>[<br>  "roles/editor",<br>  "roles/cloudkms.admin",<br>  "roles/compute.admin",<br>  "roles/compute.loadBalancerAdmin",<br>  "roles/compute.networkAdmin",<br>  "roles/container.admin",<br>  "roles/dns.admin",<br>  "roles/storage.admin",<br>  "roles/iam.serviceAccountAdmin",<br>  "roles/iam.workloadIdentityPoolAdmin",<br>  "roles/resourcemanager.projectIamAdmin"<br>]</pre> | no |
+| <a name="input_streamnative_org_id"></a> [streamnative\_org\_id](#input\_streamnative\_org\_id) | Your Organization ID within StreamNative Cloud, used as name of impersonation GSA in your project. This will be the organization ID in the StreamNative console, e.g. "o-xhopj". | `string` | `""` | no |
 | <a name="input_streamnative_support_access_gsa"></a> [streamnative\_support\_access\_gsa](#input\_streamnative\_support\_access\_gsa) | The GSA will be used by StreamnNative support team. | `list(string)` | <pre>[<br>  "cloud-support-general@sncloud-production.iam.gserviceaccount.com"<br>]</pre> | no |
 | <a name="input_streamnative_vendor_access_gsa"></a> [streamnative\_vendor\_access\_gsa](#input\_streamnative\_vendor\_access\_gsa) | The GSA will be used by StreamnNative cloud. | `list(string)` | <pre>[<br>  "cloud-manager@sncloud-production.iam.gserviceaccount.com",<br>  "pool-automation@sncloud-production.iam.gserviceaccount.com"<br>]</pre> | no |
 
@@ -533,3 +535,4 @@ No modules.
 |------|-------------|
 | <a name="output_google_services"></a> [google\_services](#output\_google\_services) | Enabled google services. |
 | <a name="output_iam_bindings"></a> [iam\_bindings](#output\_iam\_bindings) | Configured iam policies. |
+| <a name="output_impersonation_iam_bindings"></a> [impersonation\_iam\_bindings](#output\_impersonation\_iam\_bindings) | Configured iam policies for impersonation. |
