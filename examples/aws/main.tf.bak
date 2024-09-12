@@ -16,12 +16,12 @@ provider "aws" {
   region = "us-west-2"
 }
 
-module "aws-managed-cloud" {
+module "sn_managed_cloud" {
   source = "github.com/streamnative/terraform-managed-cloud//modules/aws/vendor-access?ref=v3.15.0"
 
-  external_id             = "o-kxb4r"
-  hosted_zone_allowed_ids = ["Z00048871IAX8IX9HGD0"]
-  region                  = "us-west-2"
-  write_policy_files      = true # Writes the rendered policy files to the `policy_files` directory, found in this example
+  external_id = "o-wak6b"
 
+  # This is for staging env
+  streamnative_vendor_access_role_arns  = ["arn:aws:iam::311022431024:role/cloud-manager", "arn:aws:iam::554905616298:role/cloud-manager", "arn:aws:iam::738562057640:role/cloud-manager"]
+  streamnative_support_access_role_arns = ["arn:aws:iam::311022431024:role/cloud-support-general", "arn:aws:iam::554905616298:role/cloud-support-general", "arn:aws:iam::738562057640:role/cloud-support-general"]
 }
