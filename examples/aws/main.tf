@@ -17,7 +17,7 @@ provider "aws" {
 }
 
 module "aws-managed-cloud" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/aws?ref=v3.0.0"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/aws/vendor-access?ref=v3.15.0"
 
   external_id             = "o-kxb4r"
   hosted_zone_allowed_ids = ["Z00048871IAX8IX9HGD0"]
