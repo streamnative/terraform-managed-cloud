@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.15.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.15.0...v3.15.1) (2024-09-13)
+
+
+### Bug Fixes
+
+* update source path for new version ([#95](https://github.com/streamnative/terraform-managed-cloud/issues/95)) ([db248d5](https://github.com/streamnative/terraform-managed-cloud/commit/db248d5eb7ca8fcea9e20b22c30b7402f4634bf1))
+
 ## [3.15.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.14.1...v3.15.0) (2024-07-27)
 
 
