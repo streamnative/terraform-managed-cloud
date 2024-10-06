@@ -43,17 +43,17 @@ resource "google_project_service" "gcp_apis" {
 # }
 
 locals {
-  comput_network_user_gsa = var.network_project != "" ? concat(local.streamnative_gsa, [format("serviceAccount:%s@cloudservices.gserviceaccount.com", var.project_num)]) : []
+  comput_network_user_gsa           = var.network_project != "" ? concat(local.streamnative_gsa, [format("serviceAccount:%s@cloudservices.gserviceaccount.com", var.project_num)]) : []
+  container_host_service_agent_user = var.network_project != "" ? [format("serviceAccount:service-%s@container-engine-robot.iam.gserviceaccount.com", var.project_num)] : []
   comput_network_user_iam_binding = flatten([
     for subnet in var.shared_vpc_subnets : [
-      for gsa in local.comput_network_user_gsa : {
+      for gsa in concat(local.comput_network_user_gsa, local.container_host_service_agent_user) : {
         region : subnet.region,
         subnet : subnet.name,
         member : gsa,
       }
     ]
   ])
-  container_host_service_agent_user = var.network_project != "" ? [format("serviceAccount:service-%s@container-engine-robot.iam.gserviceaccount.com", var.project_num)] : []
 }
 
 resource "google_compute_subnetwork_iam_member" "network_user" {
