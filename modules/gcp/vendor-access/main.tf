@@ -31,16 +31,16 @@ resource "google_project_service" "gcp_apis" {
   service            = local.google_services[count.index]
 }
 
-resource "google_project_iam_member" "sn_access" {
-  for_each = {
-    for index, binding in local.iam_bindings :
-    index => binding
-  }
-  project    = var.project
-  role       = each.value.role
-  member     = each.value.member
-  depends_on = [google_project_service.gcp_apis]
-}
+# resource "google_project_iam_member" "sn_access" {
+#   for_each = {
+#     for index, binding in local.iam_bindings :
+#     index => binding
+#   }
+#   project    = var.project
+#   role       = each.value.role
+#   member     = each.value.member
+#   depends_on = [google_project_service.gcp_apis]
+# }
 
 locals {
   comput_network_user_gsa = var.network_project != "" ? concat(local.streamnative_gsa, [format("serviceAccount:%s@cloudservices.gserviceaccount.com", var.project_num)]) : []
