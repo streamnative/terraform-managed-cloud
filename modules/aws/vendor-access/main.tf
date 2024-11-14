@@ -32,12 +32,13 @@ locals {
   allowed_iam_policies       = join(", ", formatlist("\"%s\"", distinct(concat(local.additional_iam_policy_arns, local.default_allowed_iam_policies))))
   arn_like_vpcs              = formatlist("\"arn:%s:ec2:%s:%s:vpc/%s\"", local.aws_partition, var.region, local.account_id, var.vpc_allowed_ids)
   arn_like_vpcs_str          = format("[%s]", join(",", local.arn_like_vpcs))
-  assume_conditions          = concat(local.external_id, local.source_identity, local.principal_check, local.vendor_federation)
-  support_assume_conditions  = concat(local.external_id, local.source_identity)
+  assume_conditions          = length(var.external_ids) != 0 ? concat(local.external_ids, local.source_identity, local.principal_check, local.vendor_federation) : concat(local.external_id, local.source_identity, local.principal_check, local.vendor_federation)
+  support_assume_conditions  = length(var.external_ids) != 0 ? concat(local.external_ids, local.source_identity) : concat(local.external_id, local.source_identity)
   aws_partition              = data.aws_partition.current.partition
   build_r53_arns             = [for i, v in var.hosted_zone_allowed_ids : format("\"arn:%s:route53:::hostedzone/%s\"", local.aws_partition, v)]
   ebs_kms_key_arn            = length(var.ebs_kms_key_arns) > 0 ? var.ebs_kms_key_arns : [data.aws_kms_key.ebs_default.arn]
-  external_id                = (length(var.external_id) != 0 ? [{ test : "ForAllValues:StringEquals", variable : "sts:ExternalId", values : var.external_id }] : [])
+  external_id                = (var.external_id != "" ? [{ test : "StringEquals", variable : "sts:ExternalId", values : [var.external_id] }] : [])
+  external_ids               = (length(var.external_ids) != 0 ? [{ test : "ForAllValues:StringEquals", variable : "sts:ExternalId", values : var.external_ids }] : [])
   kms_key_arns               = join(", ", formatlist("\"%s\"", distinct(concat(local.ebs_kms_key_arn, local.s3_kms_key_arn))))
   r53_zone_arns              = format("[%s]", join(",", local.build_r53_arns))
   s3_kms_key_arn             = length(var.s3_kms_key_arns) > 0 ? var.s3_kms_key_arns : [data.aws_kms_key.s3_default.arn]

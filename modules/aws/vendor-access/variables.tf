@@ -52,7 +52,14 @@ variable "eks_cluster_pattern" {
 }
 
 variable "external_id" {
+  default     = ""
   description = "A external ID that correspond to your Organization within StreamNative Cloud, used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
+  type        = string
+}
+
+variable "external_ids" {
+  default     = []
+  description = "A list of external IDs that correspond to your Organization within StreamNative Cloud, used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
   type        = list(string)
 }
 
