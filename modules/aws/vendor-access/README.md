@@ -74,6 +74,21 @@ module "sn_managed_cloud" {
 }
 ```
 
+Or if using multiple orgs
+
+```hcl
+
+provider "aws" {
+  region = <YOUR_REGION>
+}
+
+module "sn_managed_cloud" {
+  source = "github.com/streamnative/terraform-managed-cloud//modules/aws/vendor-access?ref=<LATEST_GIT_TAG>"
+
+  external_ids = ["<YOUR_SNCLOUD_ORG_ID>", "<YOUR_SNCLOUD_ORG_ID>"]
+}
+```
+
 After [authenticating to your AWS account](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#authentication-and-configuration) execute the following sequence of commands from the directory containing the `main.tf` configuration file:
 
 1. Run `terraform init`
@@ -136,8 +151,9 @@ No modules.
 | <a name="input_ebs_kms_key_arns"></a> [ebs\_kms\_key\_arns](#input\_ebs\_kms\_key\_arns) | Sets the list of allowed kms key arns, if not set, uses the default ebs kms key | `list(any)` | `[]` | no |
 | <a name="input_eks_cluster_pattern"></a> [eks\_cluster\_pattern](#input\_eks\_cluster\_pattern) | Defines the eks clsuter prefix for streamnative clusters. This should normally remain the default value. | `string` | `"*snc*"` | no |
 | <a name="input_enforce_vendor_federation"></a> [enforce\_vendor\_federation](#input\_enforce\_vendor\_federation) | Do not enable this unless explicitly told to do so by StreamNative. Restrict access for the streamnative\_vendor\_access\_role\_arns to only federated Google accounts. Intended to be true by default in the future. | `bool` | `false` | no |
-| <a name="input_external_id"></a> [external\_id](#input\_external\_id) | A external ID that correspond to your Organization within StreamNative Cloud, used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. "o-xhopj". | `string` | n/a | yes |
-| <a name="input_hosted_zone_allowed_ids"></a> [hosted\_zone\_allowed\_ids](#input\_hosted\_zone\_allowed\_ids) | Allows for further scoping down policy for allowed hosted zones. The IDs provided are constructed into ARNs | `list(any)` | <pre>[<br>  "*"<br>]</pre> | no |
+| <a name="input_external_id"></a> [external\_id](#input\_external\_id) | A external ID that correspond to your Organization within StreamNative Cloud, used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. "o-xhopj". | `string` | `""` | no |
+| <a name="input_external_ids"></a> [external\_ids](#input\_external\_ids) | A list of external IDs that correspond to your Organization within StreamNative Cloud, used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. "o-xhopj". | `list(string)` | `[]` | no |
+| <a name="input_hosted_zone_allowed_ids"></a> [hosted\_zone\_allowed\_ids](#input\_hosted\_zone\_allowed\_ids) | Allows for further scoping down policy for allowed hosted zones. The IDs provided are constructed into ARNs | `list(any)` | <pre>[<br/>  "*"<br/>]</pre> | no |
 | <a name="input_region"></a> [region](#input\_region) | The AWS region where your instance of StreamNative Cloud is deployed. Defaults to all regions "*" | `string` | `"*"` | no |
 | <a name="input_s3_bucket_pattern"></a> [s3\_bucket\_pattern](#input\_s3\_bucket\_pattern) | Defines the bucket prefix for streamnative managed buckets (backup and offload). Typically defaults to "snc-*", but should match the bucket created using the tiered-storage-resources module | `string` | `"*snc*"` | no |
 | <a name="input_s3_kms_key_arns"></a> [s3\_kms\_key\_arns](#input\_s3\_kms\_key\_arns) | List of KMS key ARNs to use for S3 buckets | `list(string)` | `[]` | no |
