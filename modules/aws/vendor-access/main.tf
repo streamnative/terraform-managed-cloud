@@ -191,33 +191,70 @@ resource "aws_iam_role" "bootstrap_role" {
   max_session_duration = 43200
 }
 
-resource "aws_iam_policy" "bootstrap_policy" {
+resource "aws_iam_policy" "provision_preserve_policy" {
   count       = var.create_bootstrap_role ? 1 : 0
-  name        = "StreamNativeCloudBootstrapPolicy${var.test_suffix}"
-  description = "This policy sets the minimum amount of permissions needed by the StreamNativeCloudBootstrapRole to bootstrap the StreamNative Cloud deployment."
+  name        = "StreamNativeCloudProvisionPreservePolicy${var.test_suffix}"
+  description = "This policy sets the minimum amount of permissions needed by the StreamNativeCloudProvisionPreservePolicy to bootstrap the StreamNative Cloud deployment."
   path        = "/StreamNative/"
-  policy = templatefile("${path.module}/files/bootstrap_role_iam_policy.json.tpl",
+  policy = templatefile("${path.module}/files/provision_preserve.json.tpl",
     {
       account_id      = local.account_id
-      region          = var.region
-      vpc_ids         = local.arn_like_vpcs_str
       bucket_pattern  = var.s3_bucket_pattern
-      cluster_pattern = var.eks_cluster_pattern
       partition       = local.aws_partition
       r53_zone_arns   = local.r53_zone_arns
   })
   tags = local.tag_set
 }
 
-resource "aws_iam_role_policy_attachment" "bootstrap_policy" {
-  count      = var.create_bootstrap_role ? 1 : 0
-  policy_arn = aws_iam_policy.bootstrap_policy[0].arn
-  role       = aws_iam_role.bootstrap_role[0].name
+resource "aws_iam_policy" "provision_1_policy" {
+  count       = var.create_bootstrap_role ? 1 : 0
+  name        = "StreamNativeCloudProvision1Policy${var.test_suffix}"
+  description = "This policy sets the minimum amount of permissions needed by the StreamNativeCloudProvision1Policy to bootstrap the StreamNative Cloud deployment."
+  path        = "/StreamNative/"
+  policy = templatefile("${path.module}/files/provision1.json.tpl",
+    {
+      vpc_ids         = local.arn_like_vpcs_str
+  })
+  tags = local.tag_set
 }
+
+resource "aws_iam_policy" "provision_2_policy" {
+  count       = var.create_bootstrap_role ? 1 : 0
+  name        = "StreamNativeCloudProvision2Policy${var.test_suffix}"
+  description = "This policy sets the minimum amount of permissions needed by the StreamNativeCloudProvision2Policy to bootstrap the StreamNative Cloud deployment."
+  path        = "/StreamNative/"
+  policy = templatefile("${path.module}/files/provision2.json.tpl",
+    {
+      account_id      = local.account_id
+      region          = var.region
+      cluster_pattern = var.eks_cluster_pattern
+      partition       = local.aws_partition
+  })
+  tags = local.tag_set
+}
+
 
 resource "aws_iam_role_policy_attachment" "bootstrap_readonly" {
   count      = var.create_bootstrap_role ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  role       = aws_iam_role.bootstrap_role[0].name
+}
+
+resource "aws_iam_role_policy_attachment" "provision_preserve_policy" {
+  count      = var.create_bootstrap_role ? 1 : 0
+  policy_arn = aws_iam_policy.provision_preserve_policy[0].arn
+  role       = aws_iam_role.bootstrap_role[0].name
+}
+
+resource "aws_iam_role_policy_attachment" "provision1_policy" {
+  count      = var.create_bootstrap_role ? 1 : 0
+  policy_arn = aws_iam_policy.provision_1_policy[0].arn
+  role       = aws_iam_role.bootstrap_role[0].name
+}
+
+resource "aws_iam_role_policy_attachment" "provision2_policy" {
+  count      = var.create_bootstrap_role ? 1 : 0
+  policy_arn = aws_iam_policy.provision_2_policy[0].arn
   role       = aws_iam_role.bootstrap_role[0].name
 }
 
@@ -301,9 +338,9 @@ resource "local_file" "alb_policy" {
   filename = "alb_policy.json"
 }
 
-resource "local_file" "bootstrap_policy" {
+resource "local_file" "provision_preserve_policy" {
   count = var.write_policy_files ? 1 : 0
-  content = templatefile("${path.module}/files/bootstrap_role_iam_policy.json.tpl",
+  content = templatefile("${path.module}/files/provision_preserve.json.tpl",
     {
       account_id      = local.account_id
       region          = var.region
@@ -313,7 +350,37 @@ resource "local_file" "bootstrap_policy" {
       partition       = local.aws_partition
       r53_zone_arns   = local.r53_zone_arns
   })
-  filename = "bootstrap_policy.json"
+  filename = "provision_preserve.json"
+}
+
+resource "local_file" "provision1_policy" {
+  count = var.write_policy_files ? 1 : 0
+  content = templatefile("${path.module}/files/provision1.json.tpl",
+    {
+      account_id      = local.account_id
+      region          = var.region
+      vpc_ids         = local.arn_like_vpcs_str
+      bucket_pattern  = var.s3_bucket_pattern
+      cluster_pattern = var.eks_cluster_pattern
+      partition       = local.aws_partition
+      r53_zone_arns   = local.r53_zone_arns
+  })
+  filename = "provision1.json"
+}
+
+resource "local_file" "provision2_policy" {
+  count = var.write_policy_files ? 1 : 0
+  content = templatefile("${path.module}/files/provision2.json.tpl",
+    {
+      account_id      = local.account_id
+      region          = var.region
+      vpc_ids         = local.arn_like_vpcs_str
+      bucket_pattern  = var.s3_bucket_pattern
+      cluster_pattern = var.eks_cluster_pattern
+      partition       = local.aws_partition
+      r53_zone_arns   = local.r53_zone_arns
+  })
+  filename = "provision2.json"
 }
 
 resource "local_file" "management_policy" {
