@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.16.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.15.0...v3.16.0) (2024-11-20)
+
+
+### Features
+
+* Allow array of Org IDs ([#97](https://github.com/streamnative/terraform-managed-cloud/issues/97)) ([3990b48](https://github.com/streamnative/terraform-managed-cloud/commit/3990b48e511022c6e98f8f02fa2dee182cba8cdf))
+* Split AWS Policies ([#98](https://github.com/streamnative/terraform-managed-cloud/issues/98)) ([9c404c0](https://github.com/streamnative/terraform-managed-cloud/commit/9c404c00b5f3b7889c979b06ae2266dee65abaa1))
+
+
+### Bug Fixes
+
+* update source path for new version ([#95](https://github.com/streamnative/terraform-managed-cloud/issues/95)) ([db248d5](https://github.com/streamnative/terraform-managed-cloud/commit/db248d5eb7ca8fcea9e20b22c30b7402f4634bf1))
+
 ## [3.15.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.14.1...v3.15.0) (2024-07-27)
 
 
