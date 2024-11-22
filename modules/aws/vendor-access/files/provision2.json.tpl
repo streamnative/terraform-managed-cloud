@@ -100,7 +100,10 @@
       "Effect": "Allow",
       "Action": [
         "eks:TagResource",
-        "eks:UntagResource"
+        "eks:UntagResource",
+        "eks:AssociateAccessPolicy",
+        "eks:DisassociateAccessPolicy",
+        "eks:DeleteAccessEntry"
       ],
       "Resource": "*",
       "Condition": {
