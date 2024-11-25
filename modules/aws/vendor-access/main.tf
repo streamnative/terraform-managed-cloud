@@ -27,25 +27,27 @@ data "aws_kms_key" "s3_default" {
 }
 
 locals {
-  account_id                 = data.aws_caller_identity.current.account_id
-  additional_iam_policy_arns = distinct(compact(var.additional_iam_policy_arns))
-  allowed_iam_policies       = join(", ", formatlist("\"%s\"", distinct(concat(local.additional_iam_policy_arns, local.default_allowed_iam_policies))))
-  arn_like_vpcs              = formatlist("\"arn:%s:ec2:%s:%s:vpc/%s\"", local.aws_partition, var.region, local.account_id, var.vpc_allowed_ids)
-  arn_like_vpcs_str          = format("[%s]", join(",", local.arn_like_vpcs))
-  assume_conditions          = length(var.external_ids) != 0 ? concat(local.external_ids, local.source_identity, local.principal_check, local.vendor_federation) : concat(local.external_id, local.source_identity, local.principal_check, local.vendor_federation)
-  support_assume_conditions  = length(var.external_ids) != 0 ? concat(local.external_ids, local.source_identity) : concat(local.external_id, local.source_identity)
-  aws_partition              = data.aws_partition.current.partition
-  build_r53_arns             = [for i, v in var.hosted_zone_allowed_ids : format("\"arn:%s:route53:::hostedzone/%s\"", local.aws_partition, v)]
-  ebs_kms_key_arn            = length(var.ebs_kms_key_arns) > 0 ? var.ebs_kms_key_arns : [data.aws_kms_key.ebs_default.arn]
-  external_id                = (var.external_id != "" ? [{ test : "StringEquals", variable : "sts:ExternalId", values : [var.external_id] }] : [])
-  external_ids               = (length(var.external_ids) != 0 ? [{ test : "ForAllValues:StringEquals", variable : "sts:ExternalId", values : var.external_ids }] : [])
-  kms_key_arns               = join(", ", formatlist("\"%s\"", distinct(concat(local.ebs_kms_key_arn, local.s3_kms_key_arn))))
-  r53_zone_arns              = format("[%s]", join(",", local.build_r53_arns))
-  s3_kms_key_arn             = length(var.s3_kms_key_arns) > 0 ? var.s3_kms_key_arns : [data.aws_kms_key.s3_default.arn]
-  source_identity            = (length(var.source_identities) > 0 ? [{ test : var.source_identity_test, variable : "sts:SourceIdentity", values : var.source_identities }] : [])
-  principal_check            = (length(var.streamnative_principal_ids) > 0 ? [{ test : "StringLike", variable : "aws:PrincipalArn", values : var.streamnative_principal_ids }] : [])
-  vendor_federation          = (var.enforce_vendor_federation ? [{ test : "StringLike", variable : "aws:FederatedProvider", values : ["accounts.google.com"] }] : [])
-  tag_set                    = merge({ Vendor = "StreamNative", SNVersion = var.sn_policy_version }, var.tags)
+  account_id                  = data.aws_caller_identity.current.account_id
+  additional_iam_policy_arns  = distinct(compact(var.additional_iam_policy_arns))
+  allowed_iam_policies        = join(", ", formatlist("\"%s\"", distinct(concat(local.additional_iam_policy_arns, local.default_allowed_iam_policies))))
+  arn_like_vpcs               = formatlist("\"arn:%s:ec2:*:%s:vpc/%s\"", local.aws_partition, local.account_id, var.vpc_allowed_ids)
+  arn_like_vpcs_str           = format("[%s]", join(",", local.arn_like_vpcs))
+  nodegroup_region_alllow     = formatlist("\"arn:%s:eks:%s:%s:nodegroup/%s/*/*\"", local.aws_partition, var.regions, local.account_id, var.eks_cluster_pattern)
+  nodegroup_region_alllow_str = format("[%s]", join(",", local.nodegroup_region_alllow))
+  assume_conditions           = length(var.external_ids) != 0 ? concat(local.external_ids, local.source_identity, local.principal_check, local.vendor_federation) : concat(local.external_id, local.source_identity, local.principal_check, local.vendor_federation)
+  support_assume_conditions   = length(var.external_ids) != 0 ? concat(local.external_ids, local.source_identity) : concat(local.external_id, local.source_identity)
+  aws_partition               = data.aws_partition.current.partition
+  build_r53_arns              = [for i, v in var.hosted_zone_allowed_ids : format("\"arn:%s:route53:::hostedzone/%s\"", local.aws_partition, v)]
+  ebs_kms_key_arn             = length(var.ebs_kms_key_arns) > 0 ? var.ebs_kms_key_arns : [data.aws_kms_key.ebs_default.arn]
+  external_id                 = (var.external_id != "" ? [{ test : "StringEquals", variable : "sts:ExternalId", values : [var.external_id] }] : [])
+  external_ids                = (length(var.external_ids) != 0 ? [{ test : "ForAllValues:StringEquals", variable : "sts:ExternalId", values : var.external_ids }] : [])
+  kms_key_arns                = join(", ", formatlist("\"%s\"", distinct(concat(local.ebs_kms_key_arn, local.s3_kms_key_arn))))
+  r53_zone_arns               = format("[%s]", join(",", local.build_r53_arns))
+  s3_kms_key_arn              = length(var.s3_kms_key_arns) > 0 ? var.s3_kms_key_arns : [data.aws_kms_key.s3_default.arn]
+  source_identity             = (length(var.source_identities) > 0 ? [{ test : var.source_identity_test, variable : "sts:SourceIdentity", values : var.source_identities }] : [])
+  principal_check             = (length(var.streamnative_principal_ids) > 0 ? [{ test : "StringLike", variable : "aws:PrincipalArn", values : var.streamnative_principal_ids }] : [])
+  vendor_federation           = (var.enforce_vendor_federation ? [{ test : "StringLike", variable : "aws:FederatedProvider", values : ["accounts.google.com"] }] : [])
+  tag_set                     = merge({ Vendor = "StreamNative", SNVersion = var.sn_policy_version }, var.tags)
 
   default_allowed_iam_policies = compact([
     "arn:${local.aws_partition}:iam::${local.account_id}:policy/StreamNative/*",
@@ -171,7 +173,6 @@ resource "aws_iam_policy" "permission_boundary" {
       allowed_iam_policies = local.allowed_iam_policies
       cluster_pattern      = var.eks_cluster_pattern
       partition            = local.aws_partition
-      region               = var.region
   })
   tags = local.tag_set
 }
@@ -226,10 +227,11 @@ resource "aws_iam_policy" "provision_2_policy" {
   path        = "/StreamNative/"
   policy = templatefile("${path.module}/files/provision2.json.tpl",
     {
-      account_id      = local.account_id
-      region          = var.region
-      cluster_pattern = var.eks_cluster_pattern
-      partition       = local.aws_partition
+      account_id                = local.account_id
+      regions                   = var.regions
+      cluster_pattern           = var.eks_cluster_pattern
+      partition                 = local.aws_partition
+      allowed_nodegroup_regions = local.nodegroup_region_alllow_str
   })
   tags = local.tag_set
 }
@@ -272,7 +274,6 @@ resource "aws_iam_policy" "management_role" {
     {
       account_id = data.aws_caller_identity.current.account_id
       partition  = local.aws_partition
-      region     = var.region
   })
   tags = local.tag_set
 }
@@ -344,7 +345,6 @@ resource "local_file" "provision_preserve_policy" {
   content = templatefile("${path.module}/files/provision_preserve.json.tpl",
     {
       account_id      = local.account_id
-      region          = var.region
       vpc_ids         = local.arn_like_vpcs_str
       bucket_pattern  = var.s3_bucket_pattern
       cluster_pattern = var.eks_cluster_pattern
@@ -359,7 +359,6 @@ resource "local_file" "provision1_policy" {
   content = templatefile("${path.module}/files/provision1.json.tpl",
     {
       account_id      = local.account_id
-      region          = var.region
       vpc_ids         = local.arn_like_vpcs_str
       bucket_pattern  = var.s3_bucket_pattern
       cluster_pattern = var.eks_cluster_pattern
@@ -374,12 +373,13 @@ resource "local_file" "provision2_policy" {
   content = templatefile("${path.module}/files/provision2.json.tpl",
     {
       account_id      = local.account_id
-      region          = var.region
+      regions         = var.regions
       vpc_ids         = local.arn_like_vpcs_str
       bucket_pattern  = var.s3_bucket_pattern
       cluster_pattern = var.eks_cluster_pattern
       partition       = local.aws_partition
       r53_zone_arns   = local.r53_zone_arns
+      allowed_nodegroup_regions = local.nodegroup_region_alllow_str
   })
   filename = "provision2.json"
 }
@@ -389,7 +389,6 @@ resource "local_file" "management_policy" {
   content = templatefile("${path.module}/files/management_role_iam_policy.json.tpl",
     {
       account_id = data.aws_caller_identity.current.account_id
-      region     = var.region
       partition  = local.aws_partition
   })
   filename = "management_policy.json"
@@ -415,7 +414,6 @@ resource "local_file" "permission_boundary_policy" {
       allowed_iam_policies = local.allowed_iam_policies
       cluster_pattern      = var.eks_cluster_pattern
       partition            = local.aws_partition
-      region               = var.region
   })
   filename = "permission_boundary_policy.json"
 }

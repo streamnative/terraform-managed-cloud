@@ -69,10 +69,10 @@ variable "hosted_zone_allowed_ids" {
   type        = list(any)
 }
 
-variable "region" {
-  default     = "*"
-  description = "The AWS region where your instance of StreamNative Cloud is deployed. Defaults to all regions \"*\""
-  type        = string
+variable "regions" {
+  default     = ["*"]
+  description = "The AWS regions where your instance of StreamNative Cloud is deployed. Defaults to all regions [\"*\"]"
+  type        = list(string)
 }
 
 variable "s3_bucket_pattern" {

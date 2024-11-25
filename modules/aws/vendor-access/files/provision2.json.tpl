@@ -46,9 +46,7 @@
       "Action": [
         "eks:DeleteNode*"
       ],
-      "Resource": [
-        "arn:${partition}:eks:${region}:${account_id}:nodegroup/${cluster_pattern}/*/*"
-      ]
+      "Resource": ${allowed_nodegroup_regions}
     },
     {
       "Sid": "AsgTags",
