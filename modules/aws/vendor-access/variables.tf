@@ -55,6 +55,11 @@ variable "external_id" {
   default     = ""
   description = "A external ID that correspond to your Organization within StreamNative Cloud, used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
   type        = string
+
+  validation {
+    condition     = var.external_id == "" || can(regex("^o-", var.external_id))
+    error_message = "The external_id must either be empty or start with 'o-'. For example: 'o-xhopj'."
+  }
 }
 
 variable "external_ids" {
