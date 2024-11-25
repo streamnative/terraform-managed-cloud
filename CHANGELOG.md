@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.16.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.16.0...v3.16.1) (2024-11-25)
+
+
+### Bug Fixes
+
+* Add new required EKS permissions ([#99](https://github.com/streamnative/terraform-managed-cloud/issues/99)) ([cfa2446](https://github.com/streamnative/terraform-managed-cloud/commit/cfa24462cd61df1ce96bbcbb15c9ce0aa9b0958c))
+
 ## [3.16.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.15.0...v3.16.0) (2024-11-20)
 
 
