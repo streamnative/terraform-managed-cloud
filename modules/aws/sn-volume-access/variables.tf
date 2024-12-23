@@ -24,13 +24,13 @@ variable "streamnative_google_account_ids" {
 
 variable "streamnative_vendor_access_role_arns" {
   default     = ["arn:aws:iam::311022431024:role/cloud-manager"]
-  description = "A list ARNs provided by StreamNative that enable us to work with the Vendor Access Roles created by this module (StreamNativeCloudBootstrapRole, StreamNativeCloudManagementRole). This is how StreamNative is granted access into your AWS account, and should typically be the default value unless directed otherwise. This arns are used *only* for automations."
+  description = "This role for access customer s3 bucket on control plane."
   type        = list(string)
 }
 
-variable "additional_iam_policy_arns" {
+variable "additional_federated_identifiers" {
   default     = []
-  description = "Provide a list of additional IAM policy arns allowed for use with iam:AttachRolePolicy, defined in the StreamNativePermissionBoundary."
+  description = "This federated identified list for access customer s3 bucket on data plane."
   type        = list(string)
 }
 
@@ -58,26 +58,24 @@ variable "external_id" {
   type        = string
 }
 
-variable "external_ids" {
-  default     = []
-  description = "A list of external IDs that correspond to your Organization within StreamNative Cloud, used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
-  type        = list(string)
-}
-
 variable "tags" {
   default     = {}
   description = "Extra tags to apply to the resources created by this module."
   type        = map(string)
 }
 
-variable "test_suffix" {
-  default     = ""
-  description = "Used in testing to apply us to apply multiple versions of the role"
-  type        = string
-}
-
 variable "enforce_vendor_federation" {
   default     = false
   description = "Do not enable this unless explicitly told to do so by StreamNative. Restrict access for the streamnative_vendor_access_role_arns to only federated Google accounts. Intended to be true by default in the future."
   type        = bool
+}
+
+variable "bucket" {
+    description = "User bucket name"
+    type = string
+}
+
+variable "path" {
+    description = "S3 bucket path"
+    type = string
 }
