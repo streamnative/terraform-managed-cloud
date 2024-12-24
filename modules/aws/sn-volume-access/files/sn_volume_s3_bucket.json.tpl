@@ -4,20 +4,13 @@
         {
             "Effect": "Allow",
             "Action": [
-                "s3:ListBucket"
-            ],
-            "Resource": [
-                "arn:aws:s3:::${bucket}/${path}"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
+                "s3:ListBucket",
                 "s3:PutObject",
                 "s3:GetObject",
                 "s3:DeleteObject"
             ],
             "Resource": [
+                "arn:aws:s3:::${bucket}",
                 "arn:aws:s3:::${bucket}/${path}"
             ]
         },
