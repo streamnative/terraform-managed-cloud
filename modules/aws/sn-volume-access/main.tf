@@ -9,8 +9,10 @@ locals {
   principal_check           = (length(var.streamnative_principal_ids) > 0 ? [{ test : "StringLike", variable : "aws:PrincipalArn", values : var.streamnative_principal_ids }] : [])
   tag_set                   = merge({ Vendor = "StreamNative", Module = "StreamNative Volume", SNVersion = var.sn_policy_version }, var.tags)
   vendor_federation         = (var.enforce_vendor_federation ? [{ test : "StringLike", variable : "aws:FederatedProvider", values : ["accounts.google.com"] }] : [])
-  default_oidc_providers    = compact([])
-  conditionSuffix           = ["aud", "sub"]
+  # Add streamnative default eks oidc provider
+  default_oidc_providers = compact([
+
+  ])
   conditions = [
     for value in local.oidc_providers :
     [
@@ -30,13 +32,11 @@ locals {
   ]
 }
 
-output "conditions" {
-  value = local.conditions
-}
 resource "aws_iam_openid_connect_provider" "streamnative_oidc_providers" {
   count          = length(local.oidc_providers)
   url            = "https://${var.oidc_providers[count.index]}"
   client_id_list = ["sts.amazonaws.com"]
+  tags           = local.tag_set
 }
 
 data "aws_iam_policy_document" "streamnative_management_access" {
