@@ -1,6 +1,6 @@
 variable "sn_policy_version" {
   description = "The value of SNVersion tag"
-  default     = "3.16.1"  # {{ x-release-please-version }}
+  default     = "3.16.1" # {{ x-release-please-version }}
   type        = string
 }
 
@@ -8,18 +8,6 @@ variable "region" {
   default     = "*"
   description = "The AWS region where your instance of StreamNative Cloud is deployed. Defaults to all regions \"*\""
   type        = string
-}
-
-variable "streamnative_google_account_id" {
-  default     = "108050666045451143798"
-  description = "(Deprecated, use streamnative_google_account_ids instead) The Google Cloud service account ID used by StreamNative for Control Plane operations"
-  type        = string
-}
-
-variable "streamnative_google_account_ids" {
-  default     = ["108050666045451143798"]
-  description = "The Google Cloud service account IDs used by StreamNative for Control Plane operations"
-  type        = list(string)
 }
 
 variable "streamnative_vendor_access_role_arns" {
@@ -71,11 +59,17 @@ variable "enforce_vendor_federation" {
 }
 
 variable "bucket" {
-    description = "User bucket name"
-    type = string
+  description = "User bucket name"
+  type        = string
 }
 
 variable "path" {
-    description = "S3 bucket path"
-    type = string
+  description = "S3 bucket path"
+  type        = string
+}
+
+variable "oidc_providers" {
+  default     = []
+  description = "Your aws eks cluster OIDC Providers"
+  type        = list(string)
 }
