@@ -7,6 +7,7 @@
       "Action": [
           "acm:*",
           "autoscaling:*",
+          "cloudwatch:*",
           "cognito-idp:*",
           "dynamodb:*",
           "ec2:*",
@@ -17,16 +18,17 @@
           "iam:List*",
           "kms:*",
           "logs:*",
+          "pricing:*"
           "route53:*",
           "s3:*",
           "servicequotas:*",
           "shield:*",
-          "support:*",
+          "sqs:*",
+          "ssm:*",
           "sts:*",
+          "support:*",
           "waf-regional:*",
-          "wafv2:*",
-          "cloudwatch:*",
-          "pricing:*"
+          "wafv2:*"
       ],
       "Resource": "*"
     },
@@ -94,7 +96,7 @@
       }
     },
     {
-      "Sid": "RestrictPassRoleToEKS",
+      "Sid": "RestrictPassRole",
       "Effect": "Allow",
       "Action": [
         "iam:PassRole"
