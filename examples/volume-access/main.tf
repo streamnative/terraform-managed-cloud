@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "sn_managed_cloud" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/aws/volume-access"
+  source = "../../modules/aws/volume-access"
 
   external_id = "max"
   bucket      = "test-ursa-storage"
