@@ -13,6 +13,5 @@ module "sn_managed_cloud" {
   ]
 
   streamnative_vendor_access_role_arns = [
-    "arn:aws:iam::738562057640:role/cloud-manager"
   ]
 }
