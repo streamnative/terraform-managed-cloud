@@ -2,13 +2,9 @@ data "aws_caller_identity" "current" {}
 locals {
   account_id                = data.aws_caller_identity.current.account_id
   external_id               = (var.external_id != "" ? [{ test : "StringEquals", variable : "sts:ExternalId", values : [var.external_id] }] : [])
-  assume_conditions         = concat(local.external_id, local.source_identity, local.principal_check, local.vendor_federation)
-  support_assume_conditions = concat(local.external_id, local.source_identity)
-  source_identity           = (length(var.source_identities) > 0 ? [{ test : var.source_identity_test, variable : "sts:SourceIdentity", values : var.source_identities }] : [])
+  assume_conditions         = local.external_id
   oidc_providers            = distinct(concat(var.oidc_providers, local.default_oidc_providers))
-  principal_check           = (length(var.streamnative_principal_ids) > 0 ? [{ test : "StringLike", variable : "aws:PrincipalArn", values : var.streamnative_principal_ids }] : [])
   tag_set                   = merge({ Vendor = "StreamNative", Module = "StreamNative Volume", SNVersion = var.sn_policy_version }, var.tags)
-  vendor_federation         = (var.enforce_vendor_federation ? [{ test : "StringLike", variable : "aws:FederatedProvider", values : ["accounts.google.com"] }] : [])
   # Add streamnative default eks oidc provider
   default_oidc_providers = compact([
 
@@ -89,7 +85,7 @@ resource "aws_iam_policy" "access_bucket_role" {
   name        = "sn-${var.external_id}-${var.bucket}-${var.path}"
   description = "This policy sets the limits for the access s3 bucket for StreamNative's vendor access."
   path        = "/StreamNative/"
-  policy = templatefile("${path.module}/files/sn_volume_s3_bucket.json.tpl",
+  policy = templatefile("${path.module}/files/volume_s3_bucket.json.tpl",
     {
       bucket = var.bucket
       path   = var.path
