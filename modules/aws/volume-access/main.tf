@@ -28,11 +28,24 @@ locals {
   ]
 }
 
-resource "aws_iam_openid_connect_provider" "streamnative_oidc_providers" {
-  count          = length(local.oidc_providers)
-  url            = "https://${var.oidc_providers[count.index]}"
+data "external" "check_oidc_provider" {
+  program = ["bash", "${path.module}/check_oidc_providers.sh"]
+  query = {
+    account_id = local.account_id
+    oidc_providers_str = join(" ", local.oidc_providers)
+  }
+}
+
+locals {
+  provider_not_exists = compact(split(" ", data.external.check_oidc_provider.result.oidc_providers))
+}
+
+resource "aws_iam_openid_connect_provider" "oidc_provider" {
+  count          = length(local.provider_not_exists)
+  url            = "https://${local.provider_not_exists[count.index]}"
   client_id_list = ["sts.amazonaws.com"]
   tags           = local.tag_set
+  depends_on = [data.external.check_oidc_provider]
 }
 
 data "aws_iam_policy_document" "streamnative_management_access" {
