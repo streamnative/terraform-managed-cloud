@@ -1,10 +1,10 @@
 data "aws_caller_identity" "current" {}
 locals {
-  account_id                = data.aws_caller_identity.current.account_id
-  external_id               = (var.external_id != "" ? [{ test : "StringEquals", variable : "sts:ExternalId", values : [var.external_id] }] : [])
-  assume_conditions         = local.external_id
-  oidc_providers            = distinct(concat(var.oidc_providers, local.default_oidc_providers))
-  tag_set                   = merge({ Vendor = "StreamNative", Module = "StreamNative Volume", SNVersion = var.sn_policy_version }, var.tags)
+  account_id        = data.aws_caller_identity.current.account_id
+  external_id       = (var.external_id != "" ? [{ test : "StringEquals", variable : "sts:ExternalId", values : [var.external_id] }] : [])
+  assume_conditions = local.external_id
+  oidc_providers    = distinct(concat(var.oidc_providers, local.default_oidc_providers))
+  tag_set           = merge({ Vendor = "StreamNative", Module = "StreamNative Volume", SNVersion = var.sn_policy_version }, var.tags)
   # Add streamnative default eks oidc provider
   default_oidc_providers = compact([
 
@@ -85,12 +85,41 @@ resource "aws_iam_policy" "access_bucket_role" {
   name        = "sn-${var.external_id}-${var.bucket}-${var.path}"
   description = "This policy sets the limits for the access s3 bucket for StreamNative's vendor access."
   path        = "/StreamNative/"
-  policy = templatefile("${path.module}/files/volume_s3_bucket.json.tpl",
-    {
-      bucket = var.bucket
-      path   = var.path
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "s3:ListBucket"
+        ],
+        "Resource" : [
+          "arn:aws:s3:::${var.bucket}"
+        ]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:DeleteObject"
+        ],
+        "Resource" : [
+          "arn:aws:s3:::${var.bucket}/${var.path}/*"
+        ]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "s3:PutLifecycleConfiguration",
+          "s3:GetLifecycleConfiguration"
+        ],
+        "Resource" : [
+          "arn:aws:s3:::${var.bucket}/${var.path}"
+        ]
+      }
+    ]
   })
-  tags = local.tag_set
 }
 
 resource "aws_iam_role" "access_bucket_role" {
