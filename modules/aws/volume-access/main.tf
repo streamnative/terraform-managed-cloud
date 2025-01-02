@@ -3,7 +3,8 @@ locals {
   account_id        = data.aws_caller_identity.current.account_id
   external_id       = (var.external_id != "" ? [{ test : "StringEquals", variable : "sts:ExternalId", values : [var.external_id] }] : [])
   assume_conditions = local.external_id
-  oidc_providers    = distinct(concat(var.oidc_providers, local.default_oidc_providers))
+  convert_oidc_providers = [for url in var.oidc_providers : replace(url, "https://", "")]
+  oidc_providers    = distinct(concat(local.convert_oidc_providers, local.default_oidc_providers))
   tag_set           = merge({ Vendor = "StreamNative", Module = "StreamNative Volume", SNVersion = var.sn_policy_version }, var.tags)
   # Add streamnative default eks oidc provider
   default_oidc_providers = compact([
@@ -30,7 +31,7 @@ locals {
 
 resource "aws_iam_openid_connect_provider" "streamnative_oidc_providers" {
   count          = var.init_oidc_providers ? length(local.oidc_providers) : 0
-  url            = "https://${var.oidc_providers[count.index]}"
+  url            = "https://${local.oidc_providers[count.index]}"
   client_id_list = ["sts.amazonaws.com"]
   tags           = local.tag_set
 }
