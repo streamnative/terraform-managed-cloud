@@ -20,7 +20,7 @@ locals {
       },
       {
         provider : "${value}",
-        test : "StringEquals",
+        test : "StringLike",
         variable : "${value}:sub",
         values : [format("system:serviceaccount:%s:*", var.external_id)]
       }
@@ -28,24 +28,11 @@ locals {
   ]
 }
 
-data "external" "check_oidc_provider" {
-  program = ["bash", "${path.module}/check_oidc_providers.sh"]
-  query = {
-    account_id = local.account_id
-    oidc_providers_str = join(" ", local.oidc_providers)
-  }
-}
-
-locals {
-  provider_not_exists = compact(split(" ", data.external.check_oidc_provider.result.oidc_providers))
-}
-
-resource "aws_iam_openid_connect_provider" "oidc_provider" {
-  count          = length(local.provider_not_exists)
-  url            = "https://${local.provider_not_exists[count.index]}"
+resource "aws_iam_openid_connect_provider" "streamnative_oidc_providers" {
+  count          = var.init_oidc_providers ? length(local.oidc_providers): 0
+  url            = "https://${var.oidc_providers[count.index]}"
   client_id_list = ["sts.amazonaws.com"]
   tags           = local.tag_set
-  depends_on = [data.external.check_oidc_provider]
 }
 
 data "aws_iam_policy_document" "streamnative_management_access" {

@@ -37,3 +37,9 @@ variable "oidc_providers" {
   description = "Your aws eks cluster OIDC Providers"
   type        = list(string)
 }
+
+variable "init_oidc_providers" {
+  default = true
+  description = ""
+  type        = bool
+}
