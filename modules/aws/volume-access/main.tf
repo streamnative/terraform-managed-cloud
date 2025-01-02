@@ -29,7 +29,7 @@ locals {
 }
 
 resource "aws_iam_openid_connect_provider" "streamnative_oidc_providers" {
-  count          = var.init_oidc_providers ? length(local.oidc_providers): 0
+  count          = var.init_oidc_providers ? length(local.oidc_providers) : 0
   url            = "https://${var.oidc_providers[count.index]}"
   client_id_list = ["sts.amazonaws.com"]
   tags           = local.tag_set

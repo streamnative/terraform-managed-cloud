@@ -39,7 +39,7 @@ variable "oidc_providers" {
 }
 
 variable "init_oidc_providers" {
-  default = true
+  default     = true
   description = ""
   type        = bool
 }
