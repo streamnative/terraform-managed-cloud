@@ -22,24 +22,19 @@ variable "tags" {
   type        = map(string)
 }
 
-variable "bucket" {
-  description = "User bucket name"
-  type        = string
-}
-
-variable "path" {
-  description = "S3 bucket path"
-  type        = string
-}
-
-variable "oidc_providers" {
-  default     = []
-  description = "Your aws eks cluster OIDC Providers"
+variable "buckets" {
+  default = []
+  description = "User bucket and path name"
   type        = list(string)
 }
 
-variable "init_oidc_providers" {
-  default     = true
-  description = ""
-  type        = bool
+variable "role" {
+  description = "Your aws iam role for access s3 bucket"
+  type = string
+}
+
+variable "account_ids" {
+  default = []
+  description = "Your account id"
+  type = list(string)
 }

@@ -1,39 +1,24 @@
 data "aws_caller_identity" "current" {}
 locals {
-  account_id        = data.aws_caller_identity.current.account_id
   external_id       = (var.external_id != "" ? [{ test : "StringEquals", variable : "sts:ExternalId", values : [var.external_id] }] : [])
   assume_conditions = local.external_id
-  convert_oidc_providers = [for url in var.oidc_providers : replace(url, "https://", "")]
-  oidc_providers    = distinct(concat(local.convert_oidc_providers, local.default_oidc_providers))
+  account_ids = distinct(concat(var.account_ids, local.default_account_ids))
+  bucket_list = distinct([for item in var.buckets : "arn:aws:s3:::${split("/", item)[0]}"])
+  bucket_path_list = distinct([for item in var.buckets: "arn:aws:s3:::${item}"])
   tag_set           = merge({ Vendor = "StreamNative", Module = "StreamNative Volume", SNVersion = var.sn_policy_version }, var.tags)
-  # Add streamnative default eks oidc provider
-  default_oidc_providers = compact([
+  default_account_ids = compact([
 
   ])
   conditions = [
-    for value in local.oidc_providers :
+    for value in local.account_ids :
     [
       {
-        provider : "${value}",
         test : "StringEquals",
-        variable : "${value}:aud",
-        values : ["sts.amazonaws.com"]
-      },
-      {
-        provider : "${value}",
-        test : "StringLike",
-        variable : "${value}:sub",
-        values : [format("system:serviceaccount:%s:*", var.external_id)]
+        variable : "sts:ExternalId",
+        values : [var.external_id]
       }
     ]
   ]
-}
-
-resource "aws_iam_openid_connect_provider" "streamnative_oidc_providers" {
-  count          = var.init_oidc_providers ? length(local.oidc_providers) : 0
-  url            = "https://${local.oidc_providers[count.index]}"
-  client_id_list = ["sts.amazonaws.com"]
-  tags           = local.tag_set
 }
 
 data "aws_iam_policy_document" "streamnative_management_access" {
@@ -60,13 +45,12 @@ data "aws_iam_policy_document" "streamnative_management_access" {
     for_each = local.conditions
     content {
       effect  = "Allow"
-      actions = ["sts:AssumeRoleWithWebIdentity"]
+      actions = ["sts:AssumeRole"]
 
       principals {
-        type        = "Federated"
-        identifiers = [for provider in local.oidc_providers : "arn:aws:iam::${local.account_id}:oidc-provider/${provider}" if "${provider}" == statement.value[0].provider]
+        type        = "AWS"
+        identifiers = [for account_id in local.account_ids : "arn:aws:iam::${account_id}:root"]
       }
-
       dynamic "condition" {
         for_each = toset(statement.value)
         content {
@@ -83,7 +67,7 @@ data "aws_iam_policy_document" "streamnative_management_access" {
 #-- Create the IAM role for the the StreamNative Cloud data access to s3 bucket
 ######
 resource "aws_iam_policy" "access_bucket_role" {
-  name        = "sn-${var.external_id}-${var.bucket}-${var.path}"
+  name        = "${var.role}"
   description = "This policy sets the limits for the access s3 bucket for StreamNative's vendor access."
   path        = "/StreamNative/"
   policy = jsonencode({
@@ -94,9 +78,7 @@ resource "aws_iam_policy" "access_bucket_role" {
         "Action" : [
           "s3:ListBucket"
         ],
-        "Resource" : [
-          "arn:aws:s3:::${var.bucket}"
-        ]
+        "Resource" : local.bucket_list
       },
       {
         "Effect" : "Allow",
@@ -105,9 +87,7 @@ resource "aws_iam_policy" "access_bucket_role" {
           "s3:GetObject",
           "s3:DeleteObject"
         ],
-        "Resource" : [
-          "arn:aws:s3:::${var.bucket}/${var.path}/*"
-        ]
+        "Resource" : [for item in local.bucket_path_list: "${item}/*"]
       },
       {
         "Effect" : "Allow",
@@ -115,16 +95,14 @@ resource "aws_iam_policy" "access_bucket_role" {
           "s3:PutLifecycleConfiguration",
           "s3:GetLifecycleConfiguration"
         ],
-        "Resource" : [
-          "arn:aws:s3:::${var.bucket}/${var.path}"
-        ]
+        "Resource" : local.bucket_path_list
       }
     ]
   })
 }
 
 resource "aws_iam_role" "access_bucket_role" {
-  name                 = "sn-${var.external_id}-${var.bucket}-${var.path}"
+  name                 = "${var.role}"
   description          = "This role is used by StreamNative for the access s3 bucket."
   assume_role_policy   = data.aws_iam_policy_document.streamnative_management_access.json
   path                 = "/StreamNative/"
