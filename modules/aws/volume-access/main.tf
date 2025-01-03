@@ -6,7 +6,7 @@ locals {
   bucket_path_list = distinct([for item in var.buckets: "arn:aws:s3:::${item}"])
   tag_set           = merge({ Vendor = "StreamNative", Module = "StreamNative Volume", SNVersion = var.sn_policy_version }, var.tags)
   default_account_ids = compact([
-
+    # will add it in the next pr
   ])
   conditions = [
     for value in local.account_ids :
