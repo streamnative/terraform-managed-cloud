@@ -1,7 +1,6 @@
 data "aws_caller_identity" "current" {}
 locals {
   external_id       = (var.external_id != "" ? [{ test : "StringEquals", variable : "sts:ExternalId", values : [var.external_id] }] : [])
-  assume_conditions = local.external_id
   account_ids = distinct(concat(var.account_ids, local.default_account_ids))
   bucket_list = distinct([for item in var.buckets : "arn:aws:s3:::${split("/", item)[0]}"])
   bucket_path_list = distinct([for item in var.buckets: "arn:aws:s3:::${item}"])
@@ -32,7 +31,7 @@ data "aws_iam_policy_document" "streamnative_management_access" {
       identifiers = var.streamnative_vendor_access_role_arns
     }
     dynamic "condition" {
-      for_each = local.assume_conditions
+      for_each = local.external_id
       content {
         test     = condition.value["test"]
         values   = condition.value["values"]
