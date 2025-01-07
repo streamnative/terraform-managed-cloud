@@ -23,18 +23,18 @@ variable "tags" {
 }
 
 variable "buckets" {
-  default = []
+  default     = []
   description = "User bucket and path name"
   type        = list(string)
 }
 
 variable "role" {
   description = "Your aws iam role for access s3 bucket"
-  type = string
+  type        = string
 }
 
 variable "account_ids" {
-  default = []
+  default     = []
   description = "Your account id"
-  type = list(string)
+  type        = list(string)
 }
