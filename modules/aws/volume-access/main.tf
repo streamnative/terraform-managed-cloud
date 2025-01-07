@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "streamnative_management_access" {
 }
 
 ######
-#-- Create the IAM role for the the StreamNative Cloud data access to s3 bucket
+#-- Create the IAM role for the the StreamNative Cloud data plane access to s3 bucket
 ######
 resource "aws_iam_role_policy" "access_bucket_role" {
   name        = var.role
