@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.17.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.16.1...v3.17.0) (2025-01-07)
+
+
+### Features
+
+* **azure:** add `Storage Blob Data Owner` for role assignment condition ([#106](https://github.com/streamnative/terraform-managed-cloud/issues/106)) ([b6506da](https://github.com/streamnative/terraform-managed-cloud/commit/b6506dac7c4b6b314129db9233b17e3ed7ccb72f))
+
 ## [3.16.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.16.0...v3.16.1) (2024-11-25)
 
 
