@@ -2,22 +2,13 @@ data "aws_caller_identity" "current" {}
 locals {
   external_id      = (var.external_id != "" ? [{ test : "StringEquals", variable : "sts:ExternalId", values : [var.external_id] }] : [])
   account_ids      = distinct(concat(var.account_ids, local.default_account_ids))
+  identifiers_list = [for account_id in local.account_ids : "arn:aws:iam::${account_id}:root"]
   bucket_list      = distinct([for item in var.buckets : "arn:aws:s3:::${split("/", item)[0]}"])
   bucket_path_list = distinct([for item in var.buckets : "arn:aws:s3:::${item}"])
   tag_set          = merge({ Vendor = "StreamNative", Module = "StreamNative Volume", SNVersion = var.sn_policy_version }, var.tags)
   default_account_ids = compact([
     # will add it in the next pr
   ])
-  conditions = [
-    for value in local.account_ids :
-    [
-      {
-        test : "StringEquals",
-        variable : "sts:ExternalId",
-        values : [var.external_id]
-      }
-    ]
-  ]
 }
 
 data "aws_iam_policy_document" "streamnative_management_access" {
@@ -28,7 +19,7 @@ data "aws_iam_policy_document" "streamnative_management_access" {
 
     principals {
       type        = "AWS"
-      identifiers = var.streamnative_vendor_access_role_arns
+      identifiers = concat(var.streamnative_vendor_access_role_arns, local.identifiers_list)
     }
     dynamic "condition" {
       for_each = local.external_id
@@ -39,27 +30,6 @@ data "aws_iam_policy_document" "streamnative_management_access" {
       }
     }
   }
-
-  dynamic "statement" {
-    for_each = local.conditions
-    content {
-      effect  = "Allow"
-      actions = ["sts:AssumeRole"]
-
-      principals {
-        type        = "AWS"
-        identifiers = [for account_id in local.account_ids : "arn:aws:iam::${account_id}:root"]
-      }
-      dynamic "condition" {
-        for_each = toset(statement.value)
-        content {
-          test     = condition.value["test"]
-          values   = condition.value["values"]
-          variable = condition.value["variable"]
-        }
-      }
-    }
-  }
 }
 
 ######
@@ -67,7 +37,7 @@ data "aws_iam_policy_document" "streamnative_management_access" {
 ######
 resource "aws_iam_role_policy" "access_bucket_role" {
   name        = var.role
-  role        = var.role
+  role        = aws_iam_role.access_bucket_role.id
   policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
