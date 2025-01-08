@@ -19,7 +19,7 @@ data "aws_iam_policy_document" "streamnative_management_access" {
 
     principals {
       type        = "AWS"
-      identifiers = concat(var.streamnative_vendor_access_role_arns, local.identifiers_list)
+      identifiers = distinct(concat(var.streamnative_vendor_access_role_arns, local.identifiers_list))
     }
     dynamic "condition" {
       for_each = local.external_id
