@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.18.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.17.0...v3.18.0) (2025-01-14)
+
+
+### Features
+
+* Support permission init for control plane management volume ([#104](https://github.com/streamnative/terraform-managed-cloud/issues/104)) ([54cfb6f](https://github.com/streamnative/terraform-managed-cloud/commit/54cfb6f0c0a7a2d325691c24a3e402b6c46950e3))
+
+
+### Bug Fixes
+
+* **azure:** add `depends_on` for azure vendor-access module ([#109](https://github.com/streamnative/terraform-managed-cloud/issues/109)) ([64ee2b3](https://github.com/streamnative/terraform-managed-cloud/commit/64ee2b319d446f4cd03100d6c922331a104673dc))
+
 ## [3.17.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.16.1...v3.17.0) (2025-01-07)
 
 
