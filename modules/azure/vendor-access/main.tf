@@ -62,6 +62,7 @@ resource "azurerm_role_definition" "velero_backup_role" {
     not_data_actions = []
     not_actions      = []
   }
+  depends_on = [azurerm_resource_group.aks]
 }
 
 # Grand the sn automation service principal as the Contributor to the AKS resource group
@@ -69,6 +70,7 @@ resource "azurerm_role_assignment" "sn_automation" {
   scope                = azurerm_resource_group.aks.id
   role_definition_name = "Contributor"
   principal_id         = var.sn_automation_principal_id
+  depends_on           = [azurerm_resource_group.aks]
 }
 
 # Grand the sn automation service principal as the Azure Kubernetes Service Cluster Admin Role to the AKS resource group
@@ -76,6 +78,7 @@ resource "azurerm_role_assignment" "sn_automation_cluster_admin" {
   scope                = azurerm_resource_group.aks.id
   role_definition_name = "Azure Kubernetes Service Cluster Admin Role"
   principal_id         = var.sn_automation_principal_id
+  depends_on           = [azurerm_resource_group.aks]
 }
 
 # Grand the sn support service principal as the Azure Kubernetes Service Cluster User Role to the AKS resource group
@@ -83,6 +86,7 @@ resource "azurerm_role_assignment" "sn_support" {
   scope                = azurerm_resource_group.aks.id
   role_definition_name = "Azure Kubernetes Service Cluster User Role"
   principal_id         = var.sn_support_principal_id
+  depends_on           = [azurerm_resource_group.aks]
 }
 
 # Grand the sn automation service principal as the Constrain roles by Role Based Access Control Administrator to the AKS resource group
@@ -92,4 +96,5 @@ resource "azurerm_role_assignment" "user_access_administrator" {
   principal_id         = var.sn_automation_principal_id
   condition_version    = "2.0"
   condition            = templatefile("${path.module}/role-assignment-condition.tpl", { role_definition_id = azurerm_role_definition.velero_backup_role.role_definition_id })
+  depends_on           = [azurerm_role_definition.velero_backup_role]
 }
