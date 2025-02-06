@@ -28,6 +28,12 @@ variable "buckets" {
   type        = list(string)
 }
 
+variable "s3_tables" {
+  default     = []
+  description = "User s3 tables and path name"
+  type        = list(string)
+}
+
 variable "role" {
   description = "Your aws iam role for access s3 bucket"
   type        = string
