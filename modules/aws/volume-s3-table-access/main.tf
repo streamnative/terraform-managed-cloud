@@ -78,11 +78,6 @@ locals {
   ])
 }
 
-
-output "test2" {
-  value = local.s3_tables_init_statement
-}
-
 data "aws_iam_policy_document" "streamnative_management_access" {
   statement {
     sid     = "AllowStreamNativeControlPlaneAccess"
