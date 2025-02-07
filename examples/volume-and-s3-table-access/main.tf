@@ -1,8 +1,8 @@
 module "sn_managed_cloud_access_bucket" {
   source = "../../modules/aws/volume-access"
 
-  external_id = "max"
-  role        = "sn-ursa-accoss-account"
+  external_id = "<your-organization>"
+  role        = "<your-role-name>"
   buckets = [
   ]
 
