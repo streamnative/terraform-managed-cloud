@@ -77,3 +77,8 @@ resource "aws_iam_role" "access_bucket_role" {
   tags                 = local.tag_set
   max_session_duration = 43200
 }
+
+output "role" {
+  value       = var.role
+  description = "role name"
+}
