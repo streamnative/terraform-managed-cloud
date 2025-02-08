@@ -8,7 +8,7 @@ locals {
 #-- Create the IAM role inline policy for the the StreamNative Cloud access to s3 table
 ######
 resource "aws_iam_role_policy" "s3_access_policy" {
-  name = var.role
+  name = "${var.role}-s3-table"
   role = var.role
   policy = jsonencode({
     "Version" : "2012-10-17",
