@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 locals {
   s3_tables_resource = distinct([for item in var.s3_tables : endswith(item, "/*") ? "${item}" : "${item}/*"])
-  tag_set            = merge({ Vendor = "StreamNative", Module = "StreamNative Volume", SNVersion = var.sn_policy_version }, var.tags)
+  tag_set            = merge({ Vendor = "StreamNative", Module = "StreamNative S3 Table Access", SNVersion = var.sn_policy_version }, var.tags)
 }
 
 ######
