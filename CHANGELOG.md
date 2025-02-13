@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.19.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.18.0...v3.19.0) (2025-02-13)
+
+
+### Features
+
+* Support s3 table ([#111](https://github.com/streamnative/terraform-managed-cloud/issues/111)) ([55280ad](https://github.com/streamnative/terraform-managed-cloud/commit/55280ad602c5f37f4fc76a70e1f9386f016eb9f8))
+
 ## [3.18.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.17.0...v3.18.0) (2025-01-14)
 
 
