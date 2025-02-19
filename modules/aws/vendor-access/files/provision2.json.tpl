@@ -194,6 +194,7 @@
         "iam:AddRoleToInstanceProfile",
         "iam:CreateRole",
         "iam:CreatePolicy*",
+        "iam:CreateInstanceProfile",
         "iam:DeleteInstanceProfile",
         "iam:DeleteOpenIDConnectProvider",
         "iam:DeleteRole*",

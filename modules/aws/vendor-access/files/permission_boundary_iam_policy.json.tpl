@@ -18,8 +18,9 @@
           "iam:List*",
           "kms:*",
           "logs:*",
-          "pricing:*"
+          "pricing:*",
           "route53:*",
+          "route53domains:*",
           "s3:*",
           "servicequotas:*",
           "shield:*",
