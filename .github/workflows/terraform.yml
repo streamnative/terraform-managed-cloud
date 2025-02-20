@@ -1,4 +1,5 @@
-name: "TF GH Action"
+name: Terraform
+
 on:
   - pull_request
 
@@ -11,12 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1.3.2
+        uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 0.15.x
+          terraform_version: "1.5.5"
 
       - name: Terraform fmt
         run: terraform fmt -recursive -write=false -check -diff .
@@ -27,13 +28,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        terraform_version: [1.3.x]
+        terraform_version: ["1.5.5"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Terraform ${{ matrix.terraform_version }}
-        uses: hashicorp/setup-terraform@v1.3.2
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ matrix.terraform_version }}
 

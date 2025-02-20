@@ -28,33 +28,44 @@ More detailed documentation can be viewed in the respective module directory.
 
 Run the following terraform file within your AWS profile:
 
+<!-- x-release-please-start-version -->
 ```hcl
+provider "aws" {
+  region = <YOUR_REGION>
+}
+
 module "sn_managed_cloud" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/aws?ref=<LATEST_GIT_TAG>"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/aws/vendor-access?ref=v3.19.0"
 
   external_id = "<YOUR_SNCLOUD_ORG_ID>"
 }
 ```
+<!-- x-release-please-end -->
 
 ### Using GCP module
 
 Run the following terraform file within your GCP credentials:
 
+<!-- x-release-please-start-version -->
 ```hcl
 provider "google" {
   project = "<YOUR_PROJECT>"
 }
 
 module "sn_managed_cloud" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/gcp/vendor-access?ref=<LATEST_GIT_TAG>"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/gcp/vendor-access?ref=v3.19.0"
+
   project = "<YOUR_PROJECT>"
+  streamnative_org_id = "<YOUR_SNCLOUD_ORG_ID>"
 }
 ```
+<!-- x-release-please-end -->
 
 ### Using Azure module
 
 Run the following terraform file within your Azure credentials:
 
+<!-- x-release-please-start-version -->
 ```hcl
 provider "azurerm" {
   features {
@@ -64,56 +75,56 @@ provider "azurerm" {
 
 provider "azuread" {}
 
-module "azure-sn-cloud-manager" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/sn-cloud-manager?ref=<LATEST_GIT_TAG>"
+module "sn_cloud_manager" {
+  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/sn-cloud-manager?ref=v3.19.0"
 
+  streamnative_org_id     = "<YOUR_SNCLOUD_ORG_ID>"
   resource_group_location = "<RESOURCE_GROUP_LOCATION>"
-  streamnative_org_id = "<YOUR_SNCLOUD_ORG_ID>"
 }
 
-module "sn-managed-cloud" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/vendor-access?ref=<LATEST_GIT_TAG>"
+module "sn_managed_cloud" {
+  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/vendor-access?ref=v3.19.0"
 
+  streamnative_org_id     = "<YOUR_SNCLOUD_ORG_ID>"
   resource_group_name     = "<RESOURCE_GROUP_NAME>"
   resource_group_location = "<RESOURCE_GROUP_LOCATION>"
 
-  streamnative_org_id = "<YOUR_SNCLOUD_ORG_ID>"
-
-  sn_automation_principal_id = module.azure-sn-cloud-manager.sn_automation_principal_id
-  sn_support_principal_id = module.azure-sn-cloud-manager.sn_support_principal_id
-  sn_automation_client_id = module.azure-sn-cloud-manager.sn_automation_client_id
-  sn_support_client_id = module.azure-sn-cloud-manager.sn_support_client_id
+  sn_automation_principal_id = module.sn_cloud_manager.sn_automation_principal_id
+  sn_automation_client_id = module.sn_cloud_manager.sn_automation_client_id
+  sn_support_principal_id = module.sn_cloud_manager.sn_support_principal_id
+  sn_support_client_id = module.sn_cloud_manager.sn_support_client_id
 
   depends_on = [
-    module.azure-sn-cloud-manager
+    module.sn_cloud_manager
   ]
 }
 
-output "client_id" {
-  value       = module.sn-managed-cloud.sn_automation_client_id
-  description = "The client ID of the sn automation service principal for StreamNative Cloud automation"
-}
-
-output "support_client_id" {
-  value       = module.sn-managed-cloud.sn_support_client_id
-  description = "The client ID of the sn support service principal for StreamNative Cloud support access"
-}
-
 output "subscription_id" {
-  value       = module.sn-managed-cloud.subscription_id
+  value       = module.sn_managed_cloud.subscription_id
   description = "The subscription ID of the AKS cluster"
 }
 
 output "tenant_id" {
-  value       = module.sn-managed-cloud.tenant_id
+  value       = module.sn_managed_cloud.tenant_id
   description = "The tenant ID of the AKS cluster"
 }
 
+output "client_id" {
+  value       = module.sn_managed_cloud.sn_automation_client_id
+  description = "The client ID of the sn automation service principal for StreamNative Cloud automation"
+}
+
+output "support_client_id" {
+  value       = module.sn_managed_cloud.sn_support_client_id
+  description = "The client ID of the sn support service principal for StreamNative Cloud support access"
+}
+
 output "resource_group_name" {
-  value       = module.sn-managed-cloud.resource_group_name
+  value       = module.sn_managed_cloud.resource_group_name
   description = "The name of the resource group where the AKS cluster will be created"
 }
 ```
+<!-- x-release-please-end -->
 
 ## Examples
 Examples of the modules can be found in the `examples` directory.
