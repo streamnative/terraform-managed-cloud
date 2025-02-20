@@ -120,20 +120,26 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_iam_policy.alb_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
-| [aws_iam_policy.bootstrap_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.management_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.permission_boundary](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.provision_1_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.provision_2_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.provision_preserve_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.runtime_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.bootstrap_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.management_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_iam_role_policy_attachment.bootstrap_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.bootstrap_readonly](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.management_readonly](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.management_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.provision1_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.provision2_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.provision_preserve_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [local_file.alb_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [local_file.bootstrap_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 | [local_file.management_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 | [local_file.permission_boundary_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
+| [local_file.provision1_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
+| [local_file.provision2_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
+| [local_file.provision_preserve_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 | [local_file.runtime_policy](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.streamnative_bootstrap_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -157,17 +163,17 @@ No modules.
 | <a name="input_region"></a> [region](#input\_region) | The AWS region where your instance of StreamNative Cloud is deployed. Defaults to all regions "*" | `string` | `"*"` | no |
 | <a name="input_s3_bucket_pattern"></a> [s3\_bucket\_pattern](#input\_s3\_bucket\_pattern) | Defines the bucket prefix for streamnative managed buckets (backup and offload). Typically defaults to "snc-*", but should match the bucket created using the tiered-storage-resources module | `string` | `"*snc*"` | no |
 | <a name="input_s3_kms_key_arns"></a> [s3\_kms\_key\_arns](#input\_s3\_kms\_key\_arns) | List of KMS key ARNs to use for S3 buckets | `list(string)` | `[]` | no |
-| <a name="input_sn_policy_version"></a> [sn\_policy\_version](#input\_sn\_policy\_version) | The value of SNVersion tag | `string` | `"3.14.1"` | no |
+| <a name="input_sn_policy_version"></a> [sn\_policy\_version](#input\_sn\_policy\_version) | The value of SNVersion tag | `string` | `"3.16.1"` | no |
 | <a name="input_source_identities"></a> [source\_identities](#input\_source\_identities) | Place an additional constraint on source identity, disabled by default and only to be used if specified by StreamNative | `list(any)` | `[]` | no |
 | <a name="input_source_identity_test"></a> [source\_identity\_test](#input\_source\_identity\_test) | The test to use for source identity | `string` | `"ForAnyValue:StringLike"` | no |
 | <a name="input_streamnative_google_account_id"></a> [streamnative\_google\_account\_id](#input\_streamnative\_google\_account\_id) | (Deprecated, use streamnative\_google\_account\_ids instead) The Google Cloud service account ID used by StreamNative for Control Plane operations | `string` | `"108050666045451143798"` | no |
-| <a name="input_streamnative_google_account_ids"></a> [streamnative\_google\_account\_ids](#input\_streamnative\_google\_account\_ids) | The Google Cloud service account IDs used by StreamNative for Control Plane operations | `list(string)` | <pre>[<br>  "108050666045451143798"<br>]</pre> | no |
+| <a name="input_streamnative_google_account_ids"></a> [streamnative\_google\_account\_ids](#input\_streamnative\_google\_account\_ids) | The Google Cloud service account IDs used by StreamNative for Control Plane operations | `list(string)` | <pre>[<br/>  "108050666045451143798"<br/>]</pre> | no |
 | <a name="input_streamnative_principal_ids"></a> [streamnative\_principal\_ids](#input\_streamnative\_principal\_ids) | When set, this applies an additional check for certain StreamNative principals to futher restrict access to which services / users can access an account. | `list(string)` | `[]` | no |
-| <a name="input_streamnative_support_access_role_arns"></a> [streamnative\_support\_access\_role\_arns](#input\_streamnative\_support\_access\_role\_arns) | A list ARNs provided by StreamNative that enable streamnative support engineers access the StreamNativeCloudBootstrapRole. This is used only in some initial provisioning and in case of on-call support. | `list(string)` | <pre>[<br>  "arn:aws:iam::311022431024:role/cloud-support-general"<br>]</pre> | no |
-| <a name="input_streamnative_vendor_access_role_arns"></a> [streamnative\_vendor\_access\_role\_arns](#input\_streamnative\_vendor\_access\_role\_arns) | A list ARNs provided by StreamNative that enable us to work with the Vendor Access Roles created by this module (StreamNativeCloudBootstrapRole, StreamNativeCloudManagementRole). This is how StreamNative is granted access into your AWS account, and should typically be the default value unless directed otherwise. This arns are used *only* for automations. | `list(string)` | <pre>[<br>  "arn:aws:iam::311022431024:role/cloud-manager"<br>]</pre> | no |
+| <a name="input_streamnative_support_access_role_arns"></a> [streamnative\_support\_access\_role\_arns](#input\_streamnative\_support\_access\_role\_arns) | A list ARNs provided by StreamNative that enable streamnative support engineers access the StreamNativeCloudBootstrapRole. This is used only in some initial provisioning and in case of on-call support. | `list(string)` | <pre>[<br/>  "arn:aws:iam::311022431024:role/cloud-support-general"<br/>]</pre> | no |
+| <a name="input_streamnative_vendor_access_role_arns"></a> [streamnative\_vendor\_access\_role\_arns](#input\_streamnative\_vendor\_access\_role\_arns) | A list ARNs provided by StreamNative that enable us to work with the Vendor Access Roles created by this module (StreamNativeCloudBootstrapRole, StreamNativeCloudManagementRole). This is how StreamNative is granted access into your AWS account, and should typically be the default value unless directed otherwise. This arns are used *only* for automations. | `list(string)` | <pre>[<br/>  "arn:aws:iam::311022431024:role/cloud-manager"<br/>]</pre> | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Extra tags to apply to the resources created by this module. | `map(string)` | `{}` | no |
 | <a name="input_test_suffix"></a> [test\_suffix](#input\_test\_suffix) | Used in testing to apply us to apply multiple versions of the role | `string` | `""` | no |
-| <a name="input_vpc_allowed_ids"></a> [vpc\_allowed\_ids](#input\_vpc\_allowed\_ids) | Allows for further scoping down policy for allowed VPC | `list(any)` | <pre>[<br>  "*"<br>]</pre> | no |
+| <a name="input_vpc_allowed_ids"></a> [vpc\_allowed\_ids](#input\_vpc\_allowed\_ids) | Allows for further scoping down policy for allowed VPC | `list(any)` | <pre>[<br/>  "*"<br/>]</pre> | no |
 | <a name="input_write_policy_files"></a> [write\_policy\_files](#input\_write\_policy\_files) | Write the policy files locally to disk for debugging and validation | `bool` | `false` | no |
 
 ## Outputs

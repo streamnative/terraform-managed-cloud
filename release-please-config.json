@@ -11,7 +11,8 @@
                 ".github"
             ],
             "extra-files": [
-                "modules/aws/variables.tf"
+                "README.md",
+                "modules/aws/vendor-access/variables.tf"
             ]
         }
     }
