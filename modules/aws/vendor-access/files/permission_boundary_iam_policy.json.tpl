@@ -7,6 +7,7 @@
       "Action": [
           "acm:*",
           "autoscaling:*",
+          "cloudwatch:*",
           "cognito-idp:*",
           "dynamodb:*",
           "ec2:*",
@@ -17,12 +18,16 @@
           "iam:List*",
           "kms:*",
           "logs:*",
+          "pricing:*",
           "route53:*",
+          "route53domains:*",
           "s3:*",
           "servicequotas:*",
           "shield:*",
-          "support:*",
+          "sqs:*",
+          "ssm:*",
           "sts:*",
+          "support:*",
           "waf-regional:*",
           "wafv2:*"
       ],
@@ -36,6 +41,7 @@
         "iam:CreateOpenIDConnectProvider",
         "iam:CreateServiceLinkedRole",
         "iam:CreatePolicy*",
+        "iam:CreateInstanceProfile",
         "iam:DeleteInstanceProfile",
         "iam:DeleteOpenIDConnectProvider",
         "iam:DeletePolicy*",
@@ -91,18 +97,21 @@
       }
     },
     {
-      "Sid": "RestrictPassRoleToEKS",
+      "Sid": "RestrictPassRole",
       "Effect": "Allow",
       "Action": [
         "iam:PassRole"
       ],
       "Resource": [
         "arn:${partition}:iam::${account_id}:role/${cluster_pattern}",
-        "arn:${partition}:iam::${account_id}:role/StreamNative/${cluster_pattern}"
+        "arn:${partition}:iam::${account_id}:role/StreamNative/*"
       ],
       "Condition": {
         "StringEquals": {
-          "iam:PassedToService": "eks.amazonaws.com"
+          "iam:PassedToService": [
+            "ec2.amazonaws.com",
+            "eks.amazonaws.com"
+          ]
         }
       }
     },
