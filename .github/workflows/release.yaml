@@ -17,3 +17,29 @@ jobs:
         with:
           token: ${{ secrets.SNBOT_GITHUB_TOKEN }}
           target-branch: ${{ github.ref_name }}
+  sync-doc:
+    runs-on: ubuntu-latest
+    needs: release
+    steps:
+      - name: Checkout sn-docs
+        uses: actions/checkout@v4
+        with:
+          repository: streamnative/sn-docs
+          token: ${{ secrets.SNBOT_GITHUB_TOKEN }}
+
+      - name: Update version in docs
+        run: |
+          NEW_VERSION="${{ needs.release.outputs.tag_name }}"
+          FILE_PATH="src/content/03 - Manage StreamNative Clusters/303 - Manage BYOC Infrastructure/2 - Grant Vendor Access/2 - BYOC on AWS/2 - Account Access for BYOC on AWS.md"
+          sed -i "s|ref=v[0-9]\+\.[0-9]\+\.[0-9]\+|ref=${NEW_VERSION}|" "$FILE_PATH"
+
+      - name: Push to release branch
+        run: |
+          NEW_VERSION="${{ needs.release.outputs.tag_name }}"
+          git config --global user.email "streamnativebot@streamnative.io"
+          git config --global user.name "streamnativebot"
+          git checkout -b bump/update-module-version-${NEW_VERSION}
+          git add .
+          git commit -m "Upgrade aws vendor access module version to ${NEW_VERSION}"
+          git push origin --delete bump/update-module-version-${NEW_VERSION} || true
+          git push --set-upstream origin bump/update-module-version-${NEW_VERSION}
