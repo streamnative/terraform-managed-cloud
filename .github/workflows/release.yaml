@@ -43,3 +43,9 @@ jobs:
           git commit -m "Upgrade aws vendor access module version to ${NEW_VERSION}"
           git push origin --delete bump/update-module-version-${NEW_VERSION} || true
           git push --set-upstream origin bump/update-module-version-${NEW_VERSION}
+
+      - name: Create PR
+        env:
+          GH_TOKEN: ${{ secrets.SNBOT_GITHUB_TOKEN }}
+        run: |
+          gh pr create --title "Upgrade aws vendor access module version to ${{ needs.release.outputs.tag_name }}" --body "This is a PR created by snbot" -R streamnative/sn-doc
