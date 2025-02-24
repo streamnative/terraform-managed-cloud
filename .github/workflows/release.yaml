@@ -30,7 +30,7 @@ jobs:
       - name: Update version in docs
         run: |
           NEW_VERSION="${{ needs.release.outputs.tag_name }}"
-          FILE_PATH="src/content/03 - Manage StreamNative Clusters/303 - Manage BYOC Infrastructure/2 - Grant Vendor Access/2 - BYOC on AWS/2 - Account Access for BYOC on AWS.md"
+          FILE_PATH="src/content/docs/03 - Manage StreamNative Clusters/303 - Manage BYOC Infrastructure/2 - Grant Vendor Access/2 - BYOC on AWS/2 - Account Access for BYOC on AWS.md"
           sed -i "s|ref=v[0-9]\+\.[0-9]\+\.[0-9]\+|ref=${NEW_VERSION}|" "$FILE_PATH"
 
       - name: Push to release branch
