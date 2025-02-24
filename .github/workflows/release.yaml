@@ -19,6 +19,7 @@ jobs:
           target-branch: ${{ github.ref_name }}
   sync-doc:
     runs-on: ubuntu-latest
+    if: ${{ needs.release.outputs.release_created }}
     needs: release
     steps:
       - name: Checkout sn-docs
@@ -48,4 +49,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.SNBOT_GITHUB_TOKEN }}
         run: |
-          gh pr create --title "Upgrade aws vendor access module version to ${{ needs.release.outputs.tag_name }}" --body "This is a PR created by snbot" -R streamnative/sn-doc
+          gh pr create --title "Upgrade aws vendor access module version to ${{ needs.release.outputs.tag_name }}" --body "This is a PR created by snbot" -R streamnative/sn-docs
