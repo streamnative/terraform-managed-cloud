@@ -17,7 +17,7 @@ jobs:
         with:
           token: ${{ secrets.SNBOT_GITHUB_TOKEN }}
           target-branch: ${{ github.ref_name }}
-  sync-doc:
+  sync-docs:
     runs-on: ubuntu-latest
     if: ${{ needs.release.outputs.release_created }}
     needs: release
