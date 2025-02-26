@@ -27,12 +27,12 @@ locals {
 
 data "azurerm_user_assigned_identity" "automation" {
   name                = format("sncloud-%s-automation", var.streamnative_org_id)
-  resource_group_name = locals.identity_resource_group
+  resource_group_name = local.identity_resource_group
 }
 
 data "azurerm_user_assigned_identity" "support" {
   name                = format("sncloud-%s-support", var.streamnative_org_id)
-  resource_group_name = locals.identity_resource_group
+  resource_group_name = local.identity_resource_group
 }
 
 # Create a resource group for the AKS cluster
