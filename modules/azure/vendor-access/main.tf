@@ -21,6 +21,18 @@ locals {
     "Service"                = "StreamNative Cloud"
     "StreamNativeCloudOrgID" = var.streamnative_org_id
   }, var.additional_tags)
+
+  identity_resource_group    = var.identity_resource_group != "" ? var.identity_resource_group : format("sncloud-%s-manager-rg", var.streamnative_org_id)
+}
+
+data "azurerm_user_assigned_identity" "automation" {
+  name                = format("sncloud-%s-automation", var.streamnative_org_id)
+  resource_group_name = locals.identity_resource_group
+}
+
+data "azurerm_user_assigned_identity" "support" {
+  name                = format("sncloud-%s-support", var.streamnative_org_id)
+  resource_group_name = locals.identity_resource_group
 }
 
 # Create a resource group for the AKS cluster
@@ -69,7 +81,7 @@ resource "azurerm_role_definition" "velero_backup_role" {
 resource "azurerm_role_assignment" "sn_automation" {
   scope                = azurerm_resource_group.aks.id
   role_definition_name = "Contributor"
-  principal_id         = var.sn_automation_principal_id
+  principal_id         = data.azurerm_user_assigned_identity.automation.principal_id
   depends_on           = [azurerm_resource_group.aks]
 }
 
@@ -77,7 +89,7 @@ resource "azurerm_role_assignment" "sn_automation" {
 resource "azurerm_role_assignment" "sn_automation_cluster_admin" {
   scope                = azurerm_resource_group.aks.id
   role_definition_name = "Azure Kubernetes Service Cluster Admin Role"
-  principal_id         = var.sn_automation_principal_id
+  principal_id         = data.azurerm_user_assigned_identity.automation.principal_id
   depends_on           = [azurerm_resource_group.aks]
 }
 
@@ -85,7 +97,7 @@ resource "azurerm_role_assignment" "sn_automation_cluster_admin" {
 resource "azurerm_role_assignment" "sn_support" {
   scope                = azurerm_resource_group.aks.id
   role_definition_name = "Azure Kubernetes Service Cluster User Role"
-  principal_id         = var.sn_support_principal_id
+  principal_id         = data.azurerm_user_assigned_identity.support.principal_id
   depends_on           = [azurerm_resource_group.aks]
 }
 
@@ -93,7 +105,7 @@ resource "azurerm_role_assignment" "sn_support" {
 resource "azurerm_role_assignment" "user_access_administrator" {
   scope                = azurerm_resource_group.aks.id
   role_definition_name = "Role Based Access Control Administrator"
-  principal_id         = var.sn_automation_principal_id
+  principal_id         = data.azurerm_user_assigned_identity.automation.principal_id
   condition_version    = "2.0"
   condition            = templatefile("${path.module}/role-assignment-condition.tpl", { role_definition_id = azurerm_role_definition.velero_backup_role.role_definition_id })
   depends_on           = [azurerm_role_definition.velero_backup_role]
