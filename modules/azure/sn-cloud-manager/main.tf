@@ -202,3 +202,13 @@ output "sn_automation_principal_id" {
   value       = azurerm_user_assigned_identity.sn_automation.principal_id
   description = "The principal ID of the sn automation service principal for StreamNative Cloud automation"
 }
+
+output "subscription_id" {
+  value       = data.azurerm_subscription.current.subscription_id
+  description = "The subscription ID of the AKS cluster"
+}
+
+output "tenant_id" {
+  value       = data.azurerm_subscription.current.tenant_id
+  description = "The tenant ID of the AKS cluster"
+}
