@@ -55,7 +55,7 @@ variable "sn_support_client_id" {
   description = "The client ID of the sn support service principal for StreamNative Cloud support access"
 }
 
-varible "identity_resource_group" {
+variable "identity_resource_group" {
   type        = string
   description = "The resource group name which contains the automation and support managed identities"
   default     = ""
