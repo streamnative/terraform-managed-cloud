@@ -217,7 +217,8 @@
       "Resource": [
         "arn:${partition}:iam::${account_id}:role/StreamNative/*",
         "arn:${partition}:iam::${account_id}:policy/StreamNative/*",
-        "arn:${partition}:iam::${account_id}:oidc-provider/*"
+        "arn:${partition}:iam::${account_id}:oidc-provider/*",
+        "arn:${partition}:iam::${account_id}:instance-profile/*"
       ],
       "Condition": {
         "StringEquals": {
