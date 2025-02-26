@@ -19,6 +19,7 @@
           "logs:*",
           "route53:*",
           "s3:*",
+          "s3tables:*",
           "servicequotas:*",
           "shield:*",
           "support:*",
