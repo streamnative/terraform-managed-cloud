@@ -18,7 +18,7 @@ output "sn_automation_client_id" {
 }
 
 output "sn_automation_principal_id" {
-  value       = var.sn_automation_principal_id
+  value       = data.azurerm_user_assigned_identity.automation.principal_id
   description = "The principal ID of the sn automation service principal for StreamNative Cloud automation"
 }
 
@@ -28,7 +28,7 @@ output "sn_support_client_id" {
 }
 
 output "sn_support_principal_id" {
-  value       = var.sn_support_principal_id
+  value       = data.azurerm_user_assigned_identity.support.principal_id
   description = "The principal ID of the sn support service principal for StreamNative Cloud support access"
 }
 
