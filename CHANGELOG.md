@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.19.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.18.0...v3.19.0) (2025-02-28)
+
+
+### Features
+
+* add permissions for karpenter ([#105](https://github.com/streamnative/terraform-managed-cloud/issues/105)) ([ec3f23b](https://github.com/streamnative/terraform-managed-cloud/commit/ec3f23b3c0a971ef8ae68da48b5ce06769e672b4))
+* simplify azure vendor access module ([#118](https://github.com/streamnative/terraform-managed-cloud/issues/118)) ([8f46442](https://github.com/streamnative/terraform-managed-cloud/commit/8f46442ae9c9747403a0ad5264ed442b2d2e3109))
+* Support s3 table ([#111](https://github.com/streamnative/terraform-managed-cloud/issues/111)) ([55280ad](https://github.com/streamnative/terraform-managed-cloud/commit/55280ad602c5f37f4fc76a70e1f9386f016eb9f8))
+
+
+### Bug Fixes
+
+* add s3tables to boundary ([#119](https://github.com/streamnative/terraform-managed-cloud/issues/119)) ([91d111d](https://github.com/streamnative/terraform-managed-cloud/commit/91d111d885e93ba733aac5a0147d51377046f471))
+* allow detach instance profile ([#117](https://github.com/streamnative/terraform-managed-cloud/issues/117)) ([ac58095](https://github.com/streamnative/terraform-managed-cloud/commit/ac58095a118aacd7f887a401f65f13e70f64d325))
+* reduce s3table access permission ([#120](https://github.com/streamnative/terraform-managed-cloud/issues/120)) ([29ad930](https://github.com/streamnative/terraform-managed-cloud/commit/29ad9305e8dfaaaa99933eaad34dc29ced78d3d0))
+
 ## [3.18.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.17.0...v3.18.0) (2025-01-14)
 
 
