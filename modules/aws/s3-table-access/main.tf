@@ -1,6 +1,7 @@
 data "aws_caller_identity" "current" {}
 locals {
-  s3_tables_resource = distinct([for item in var.s3_tables : endswith(item, "/*") ? "${item}" : "${item}/*"])
+  s3_tables_resource = distinct(var.s3_tables)
+  s3_tables_path_resource = distinct([for item in local.s3_tables_resource : "${item}/*"])
   tag_set            = merge({ Vendor = "StreamNative", Module = "StreamNative S3 Table Access", SNVersion = var.sn_policy_version }, var.tags)
 }
 
@@ -44,7 +45,7 @@ resource "aws_iam_role_policy" "s3_access_policy" {
           "s3tables:GetTableData",
           "s3tables:PutTableData"
         ],
-        "Resource" : local.s3_tables_resource
+        "Resource" : concat(local.s3_tables_resource, local.s3_tables_path_resource)
       }
     ]
   })
