@@ -12,6 +12,8 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
     steps:
       - uses: googleapis/release-please-action@v4
         with:
@@ -19,7 +21,7 @@ jobs:
           target-branch: ${{ github.ref_name }}
   sync-docs:
     runs-on: ubuntu-latest
-    if: ${{ needs.release.outputs.release_created }}
+    if: ${{ needs.release.outputs.release_created == 'true' }}
     needs: release
     steps:
       - name: Checkout sn-docs
