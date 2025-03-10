@@ -22,7 +22,7 @@ jobs:
           target-branch: ${{ github.ref_name }}
   sync-docs:
     runs-on: ubuntu-latest
-    if: ${{ needs.release.outputs.release_created == 'true' }}
+    if: ${{ needs.release.outputs.release_created }}
     needs: release
     steps:
       - name: Checkout sn-docs
