@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.19.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.19.0...v3.19.1) (2025-03-14)
+
+
+### Bug Fixes
+
+* removed slash suffix for volume access module ([#124](https://github.com/streamnative/terraform-managed-cloud/issues/124)) ([32b5b54](https://github.com/streamnative/terraform-managed-cloud/commit/32b5b54798eaed23c0385896fb7f80152298472c))
+* update s3 table permission ([#122](https://github.com/streamnative/terraform-managed-cloud/issues/122)) ([1264638](https://github.com/streamnative/terraform-managed-cloud/commit/12646384589c0c8b1fdf661aa417098bde0fdd29))
+
 ## [3.19.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.18.0...v3.19.0) (2025-02-28)
 
 
