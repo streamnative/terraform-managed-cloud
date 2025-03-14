@@ -4,7 +4,7 @@ locals {
   account_ids      = distinct(concat(var.account_ids, local.default_account_ids))
   identifiers_list = [for account_id in local.account_ids : "arn:aws:iam::${account_id}:root"]
   bucket_list      = distinct([for item in var.buckets : "arn:aws:s3:::${split("/", item)[0]}"])
-  bucket_path_list = distinct([for item in var.buckets : "arn:aws:s3:::${item}"])
+  bucket_path_list = distinct([for item in var.buckets : "arn:aws:s3:::${replace(item, "/(\\/|\\/\\*)+$/", "")}"])
   tag_set          = merge({ Vendor = "StreamNative", Module = "StreamNative Volume", SNVersion = var.sn_policy_version }, var.tags)
   default_account_ids = compact([
     # will add it in the next pr
