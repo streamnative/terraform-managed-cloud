@@ -64,3 +64,9 @@ resource "google_service_account_iam_member" "sn_data_plane" {
     expression  = "resource.type == 'serviceAccount' && resource.name.startsWith('projects/-/serviceAccounts/${google_service_account.gsa.email}')"
   }
 }
+
+output "google_service_account" {
+  value       = google_service_account.gsa
+  description = "Google Service Account for Access GCS Bucket"
+  depends_on  = [google_service_account.gsa]
+}
