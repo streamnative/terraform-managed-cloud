@@ -24,4 +24,11 @@ variable "cluster_projects" {
 variable "buckets" {
   description = "User bucket and path name"
   type        = list(string)
+
+  validation {
+    condition = alltrue([
+      for s in var.buckets : length(split("/", s)) >= 2
+    ])
+    error_message = "Invalid bucket path found, please make sure the bucket contains at least one path <bucket-name>/<bucket-path>"
+  }
 }
