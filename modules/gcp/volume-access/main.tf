@@ -16,7 +16,7 @@ locals {
       for bucket_path in local.buckets_path : {
         bucket : split("/", bucket_path)[0],
         role : role,
-        expression : length(split("/", bucket_path)) == 1 ? format("resource.name.startsWith('projects/_/buckets/%s/objects')", split("/", bucket_path)[0]) : format("resource.name.startsWith('projects/_/buckets/%s/objects/%s')", split("/", bucket_path)[0], join("/", slice(split("/", bucket_path), 1, length(split("/", bucket_path)))))
+        expression : role == "roles/storage.objectViewer" ? "" : (length(split("/", bucket_path)) == 1 ? format("resource.name.startsWith(\"projects/_/buckets/%s/objects\")", split("/", bucket_path)[0]) : format("resource.name.startsWith(\"projects/_/buckets/%s/objects/%s/\")", split("/", bucket_path)[0], join("/", slice(split("/", bucket_path), 1, length(split("/", bucket_path))))))
       }
     ]
   ])
@@ -51,18 +51,18 @@ resource "google_service_account_iam_member" "sn_control_plane" {
   depends_on         = [google_service_account.gsa]
 }
 
+data "google_project" "project" {
+  count      = length(local.cluster_projects)
+  project_id = local.cluster_projects[count.index]
+}
+
 resource "google_service_account_iam_member" "sn_data_plane" {
   count              = length(local.cluster_projects)
   service_account_id = google_service_account.gsa.id
   role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${local.cluster_projects[count.index]}.svc.id.goog[dummy/dummy]"
+  member             = "principalSet://iam.googleapis.com/projects/${data.google_project.project[count.index].number}/locations/global/workloadIdentityPools/gcp-byoc-test.svc.id.goog/namespace/${var.streamnative_org_id}"
   depends_on         = [google_service_account.gsa]
 
-  condition {
-    title       = "limit_ksa_condition"
-    description = "Check ksa access"
-    expression  = "resource.type == 'serviceAccount' && resource.name.startsWith('projects/-/serviceAccounts/${google_service_account.gsa.email}')"
-  }
 }
 
 output "google_service_account" {

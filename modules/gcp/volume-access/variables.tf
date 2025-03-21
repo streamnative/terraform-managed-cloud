@@ -1,3 +1,12 @@
+variable "streamnative_org_id" {
+  type        = string
+  description = "Your Organization ID within StreamNative Cloud, used as name of impersonation GSA in your project. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
+  validation {
+    condition     = length(var.streamnative_org_id) <= 18
+    error_message = "The organization ID must not exceed 18 characters. If you reach this limit, please contact StreamNative support."
+  }
+}
+
 variable "streamnative_vendor_access_gsa" {
   default = [
     "cloud-manager@sncloud-production.iam.gserviceaccount.com"
