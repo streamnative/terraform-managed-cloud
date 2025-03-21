@@ -60,7 +60,7 @@ resource "google_service_account_iam_member" "sn_data_plane" {
   count              = length(local.cluster_projects)
   service_account_id = google_service_account.gsa.id
   role               = "roles/iam.workloadIdentityUser"
-  member             = "principalSet://iam.googleapis.com/projects/${data.google_project.project[count.index].number}/locations/global/workloadIdentityPools/gcp-byoc-test.svc.id.goog/namespace/${var.streamnative_org_id}"
+  member             = "principalSet://iam.googleapis.com/projects/${data.google_project.project[count.index].number}/locations/global/workloadIdentityPools/${local.cluster_projects[count.index]}.svc.id.goog/namespace/${var.streamnative_org_id}"
   depends_on         = [google_service_account.gsa]
 
 }
