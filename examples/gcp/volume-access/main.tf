@@ -8,7 +8,8 @@ module "sn_managed_cloud_access_bucket" {
     "<your-ursa-cluster-project-name>"
   ]
 
-  account_id = "<your-google-service-account-id>"
+  # https://cloud.google.com/iam/docs/service-accounts-create#creating
+  google_service_account_id = "<your-google-service-account-id>"
 
   buckets = [
     "<your-gcs-bucket-path>"
