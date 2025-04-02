@@ -23,9 +23,9 @@ locals {
 
 }
 resource "google_service_account" "gsa" {
-  account_id   = var.account_id
+  account_id   = var.google_service_account_id
   project      = var.project
-  display_name = "StreamNative Cloud Control Plane access bucket service account."
+  display_name = "StreamNative Cloud access bucket service account."
 }
 
 resource "google_storage_bucket_iam_member" "gcs" {
