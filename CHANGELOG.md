@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.20.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.19.0...v3.20.0) (2025-04-03)
+
+
+### Features
+
+* support volume access for gcp ([#125](https://github.com/streamnative/terraform-managed-cloud/issues/125)) ([45ed5ac](https://github.com/streamnative/terraform-managed-cloud/commit/45ed5acb7f5575df6e1aa2b97b9dba27b574e854))
+
+
+### Bug Fixes
+
+* removed slash suffix for volume access module ([#124](https://github.com/streamnative/terraform-managed-cloud/issues/124)) ([32b5b54](https://github.com/streamnative/terraform-managed-cloud/commit/32b5b54798eaed23c0385896fb7f80152298472c))
+* Rename account id to google service account id ([#126](https://github.com/streamnative/terraform-managed-cloud/issues/126)) ([2c26a43](https://github.com/streamnative/terraform-managed-cloud/commit/2c26a437c3819a1722c6750071b4b61f4d9f8423))
+* update s3 table permission ([#122](https://github.com/streamnative/terraform-managed-cloud/issues/122)) ([1264638](https://github.com/streamnative/terraform-managed-cloud/commit/12646384589c0c8b1fdf661aa417098bde0fdd29))
+
 ## [3.19.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.18.0...v3.19.0) (2025-02-28)
 
 
