@@ -15,9 +15,9 @@ variable "streamnative_vendor_access_gsa" {
   description = "The GSA will be used by StreamnNative cloud."
 }
 
-variable "account_id" {
+variable "google_service_account_id" {
   type        = string
-  description = "Google Service Account ID, <id>@<your-project>.iam.gserviceaccount.com"
+  description = "Google Service Account ID, <id>@<your-project>.iam.gserviceaccount.com, ref https://cloud.google.com/iam/docs/service-accounts-create#creating"
 }
 
 variable "project" {
