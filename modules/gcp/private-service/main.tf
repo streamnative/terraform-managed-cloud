@@ -111,7 +111,7 @@ output "network_id" {
   value = data.google_compute_network.network.id
 }
 
-output "endpoint_address" {
+output "endpoint_addresses" {
   value = local.enable_topology_aware_gateway ? [
     for zone, id in local.service_attachments : google_compute_address.psc_endpoint_addresses[zone].address
   ] : [google_compute_address.psc_endpoint_address[0].address]
