@@ -55,3 +55,30 @@ module "gcp-private-service-shared" {
   suffix              = "shared"
 }
 
+# Expose Topology Aware Private Pulsar Service to region us-east1 in network default
+
+module "gcp-private-service-topology-aware" {
+  source = "github.com/streamnative/terraform-managed-cloud//modules/gcp/private-service?ref=v3.21.0"
+
+  region       = local.region
+  project      = local.project_id
+  network_name = "default"
+  subnet_name  = "default"
+  domain_name  = "gcp-use1-prod-snc.o-xxxx.g.snio.cloud"
+  service_attachments = [
+    {
+      zone = "us-east1-a",
+      id   = "projects/<pulsar-project>/regions/us-east1/serviceAttachments/istio-system-istio-ingressgateway-us-central1-a",
+    },
+    {
+      zone = "us-east1-b",
+      id   = "projects/<pulsar-project>/regions/us-east1/serviceAttachments/istio-system-istio-ingressgateway-us-central1-b",
+    },
+    {
+      zone = "us-east1-c",
+      id   = "projects/<pulsar-project>/regions/us-east1/serviceAttachments/istio-system-istio-ingressgateway-us-central1-c",
+    }
+  ]
+  cross_region_access = false
+  suffix              = "topology-aware"
+}
