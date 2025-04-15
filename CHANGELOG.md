@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.21.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.20.0...v3.21.0) (2025-04-15)
+
+
+### Features
+
+* Support creating separate PSC for each zone in GCP ([#127](https://github.com/streamnative/terraform-managed-cloud/issues/127)) ([7b7746a](https://github.com/streamnative/terraform-managed-cloud/commit/7b7746a222b5af3bc631c6722c9a333c60a5b002))
+
 ## [3.20.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.19.0...v3.20.0) (2025-04-03)
 
 
