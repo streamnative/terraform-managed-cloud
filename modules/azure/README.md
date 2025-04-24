@@ -44,7 +44,6 @@ provider "azuread" {}
 module "azure-sn-cloud-manager" {
   source = "github.com/streamnative/terraform-managed-cloud//modules/azure/sn-cloud-manager?ref=main"
 
-  streamnative_cloud_env = "test" # or staging, production
   resource_group_location = "westus2"
   streamnative_org_id = "o-12345"
 }
@@ -94,7 +93,6 @@ provider "azuread" {}
 module "azure-sn-cloud-manager" {
   source = "github.com/streamnative/terraform-managed-cloud//modules/azure/sn-cloud-manager?ref=main"
 
-  streamnative_cloud_env = "test" # or staging, production
   resource_group_location = "westus2"
   streamnative_org_id = "o-123456"
 }
