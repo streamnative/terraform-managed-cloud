@@ -54,12 +54,19 @@ data "alicloud_ack_service" "open" {
     type   = "propayasgo"
 }
 
+output "account_id" {
+  value = data.alicloud_caller_identity.current.account_id
+}
+
+output "organization_id" {
+  value = var.organization_id
+}
+
 
 # data "alicloud_ram_roles" "roles" {
 #     policy_type = "Custom"
 #     name_regex  = "^Aliyun.*Role$"
 # }
-
 
 # locals {
 #   all_role_names = [for role in var.buildin_roles : role.name]
@@ -68,26 +75,26 @@ data "alicloud_ack_service" "open" {
 #   complement_roles = [for role in var.buildin_roles : role if contains(local.complement_names, role.name)]
 # }
 
-resource "alicloud_ram_role" "role" {
-  for_each    = { for r in var.buildin_roles : r.name => r }
-  name        = each.value.name
-  document    = each.value.policy_document
-  description = each.value.description
-  force       = true
-}
+# resource "alicloud_ram_role" "role" {
+#   for_each    = { for r in local.complement_roles : r.name => r }
+#   name        = each.value.name
+#   document    = each.value.policy_document
+#   description = each.value.description
+#   force       = false
+# }
 
-resource "alicloud_ram_role_policy_attachment" "attach" {
-  for_each    = { for r in var.buildin_roles : r.name => r }
-  policy_name = each.value.policy_name
-  policy_type = "System"
-  role_name   = each.value.name
-  depends_on  = [alicloud_ram_role.role]
-}
+# resource "alicloud_ram_role_policy_attachment" "attach" {
+#   for_each    = { for r in local.complement_roles : r.name => r }
+#   policy_name = each.value.policy_name
+#   policy_type = "System"
+#   role_name   = each.value.name
+#   depends_on  = [alicloud_ram_role.role]
+# }
 
 
-output "complement_roles" {
-  value = [for role in var.buildin_roles : {
-    name        = role.name
-    description = role.description
-  }]
-}
+# output "complement_roles" {
+#   value = [for role in var.buildin_roles : {
+#     name        = role.name
+#     description = role.description
+#   }]
+# }

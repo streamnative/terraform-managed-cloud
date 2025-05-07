@@ -54,10 +54,12 @@
     {
       "Action": [
         "vpc:Get*",
+        "vpc:List*",
         "vpc:Create*",
         "vpc:Describe*",
         "vpc:Modify*",
         "vpc:Allocate*",
+        "vpc:AssociateEipAddress",
         "vpc:AssociateRouteTable",
         "vpc:Release*",
         "vpc:Unassociate*",
@@ -67,6 +69,7 @@
         "vpc:DeleteVSwitch",
         "vpc:DeleteVpc",
         "vpc:DeleteNatGateway",
+        "vpc:DeleteSnatEntry",
         "vpc:TagResources"
       ],
       "Effect": "Allow",
@@ -93,6 +96,10 @@
         "ram:DetachPolicyFromRole",
         "ram:UpdateAccessKey",
         "ram:UpdateRole",
+        "ram:CreateUser",
+        "ram:DeleteUser",
+        "ram:AttachPolicyToUser",
+        "ram:DetachPolicyFromUser",
         "sts:AssumeRole"
       ],
       "Resource": [
@@ -114,6 +121,7 @@
         "cs:DeletePolicyInstance",
         "cs:DeleteTemplate",
         "cs:DeployPolicyInstance",
+        "cs:*ClusterAddons",
         "cs:ModifyCluster",
         "cs:ModifyClusterAddon",
         "cs:ModifyClusterConfiguration",
@@ -132,6 +140,7 @@
         "cs:UnInstallK8sComponents",
         "cs:UpdateK8sClusterUserConfigExpire",
         "cs:UpdateTemplate",
+        "cs:UpdateUserPermissions",
         "cs:UpgradeCluster",
         "cs:UpgradeK8sComponents"
       ],
@@ -160,6 +169,7 @@
     {
       "Effect": "Allow",
       "Action": [
+        "alidns:Get*",
         "alidns:List*",
         "alidns:Describe*",
         "alidns:AddDomain",
@@ -167,9 +177,34 @@
         "alidns:DeleteDomain",
         "alidns:DeleteDomainRecord",
         "alidns:RetrieveDomain",
-        "alidns:UpdateDomainRecord",
-        "alidns:UpdateDomainRecordRemark",
-        "alidns:UpdateDomainRemark"
+        "alidns:Update*",
+        "alidns:Set*",
+        "alidns:BindInstanceDomains",
+        "alidns:UnbindInstanceDomains",
+        "alidns:*",
+        "pvtz:*"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "alidns:Get*",
+        "alidns:List*",
+        "alidns:Describe*",
+        "alidns:AddDomain",
+        "alidns:AddDomainRecord",
+        "alidns:DeleteDomain",
+        "alidns:DeleteDomainRecord",
+        "alidns:RetrieveDomain",
+        "alidns:Update*",
+        "alidns:Set*",
+        "alidns:BindInstanceDomains",
+        "alidns:UnbindInstanceDomains",
+        "pvtz:*",
+        "bss:ModifyInstance"
       ],
       "Resource": [
         "*"
