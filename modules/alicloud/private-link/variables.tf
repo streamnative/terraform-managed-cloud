@@ -50,32 +50,28 @@ variable "use_existing_security_group" {
 variable "security_group_inbound_rules" {
   description = "List of inbound rules for the security group."
   type = list(object({
-    port        = number
+    port        = string
     description = string
   }))
   default = [
     {
-      port        = 443,
+      port        = "443/443",
       description = "Allow HTTPS traffic to the endpoint"
     },
     {
-      port        = 6651,
+      port        = "6651/6651",
       description = "Allow Pulsar traffic to the endpoint"
     },
     {
-      port        = 9093,
+      port        = "9093/9093",
       description = "Allow Kafka traffic to the endpoint"
     },
     {
-      port        = 5671,
+      port        = "5671/5671",
       description = "Allow AMQP traffic to the endpoint"
     },
     {
-      port        = 5672,
-      description = "Allow AMQP traffic to the endpoint"
-    },
-    {
-      port        = 8883,
+      port        = "8883/8883",
       description = "Allow MQTT traffic to the endpoint"
     }
   ]
