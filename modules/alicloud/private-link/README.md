@@ -4,13 +4,11 @@ This Terraform module configures your AliCloud network to access private StreamN
 
 # QuickStart
 
-Run the following terraform file with [AliCloud credentials](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs#authentication) configured in your environment:
-
 ## Create PrivateLink with default settings
 
 ```hcl
 provider "alicloud" {
-  region = "region"
+  region = "<region>"
 }
 
 module "alicloud_private_link" {
@@ -65,13 +63,15 @@ module "alicloud_private_link" {
 
 Make sure you have the following inbound rules in your security group:
 
-- Allow TCP port 443 from the VPC
-- Allow TCP port 6651 from the VPC
-- Allow TCP port 9093 from the VPC
-- Allow TCP port 5671 from the VPC
-- Allow TCP port 8883 from the VPC
+- Allow TCP port 443 from the VPC CIDR
+- Allow TCP port 6651 from the VPC CIDR
+- Allow TCP port 9093 from the VPC CIDR
+- Allow TCP port 5671 from the VPC CIDR
+- Allow TCP port 8883 from the VPC CIDR
 
 ## Run terraform
+
+After [authenticating to your AliCloud international account](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs#authentication) execute the following sequence of commands from the directory containing the `main.tf` configuration file:
 
 1. Run `terraform init`
 2. Run `terraform plan`
