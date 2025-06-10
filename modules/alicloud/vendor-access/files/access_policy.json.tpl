@@ -209,6 +209,19 @@
       "Resource": [
         "*"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "oss:Get*",
+        "oss:List*",
+        "oss:Delete*",
+        "oss:Put*",
+        "oss:Restore*"
+      ],
+      "Resource": [
+        "*"
+      ]
     }
   ]
 }

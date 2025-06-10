@@ -2,9 +2,9 @@ variable "sn_policy_version" {
   default = ""  
 }
 
-variable "organization_id" {
+variable "organization_ids" {
   description = "The ID of your organization on StreamNative Cloud."
-  type        = string 
+  type        = list(string)
 }
 
 variable "region" {
@@ -12,10 +12,17 @@ variable "region" {
   description = "The aliyun region where your StreamNative Cloud Environment can be deployed. Defaults to all regions."
 }
 
+variable "streamnative_cloud_manager_role_arns" {
+  default = ["acs:ram::5855446584058772:role/cloud-manager"]
+  description = "The list of StreamNative cloud manager role ARNs. This is used to grant StreamNative cloud manager to your environment."
+  type        = list(string)
+}
 
-variable "streamnative_support_access_role_arns" {
-  default = ["acs:ram::5855446584058772:role/streamnativesupport"]
-  description = "The list of StreamNative support access role ARNs. This is used to grant StreamNative support access to your environment."
+
+
+variable "streamnative_support_role_arns" {
+  default = ["acs:ram::5855446584058772:role/support-general"]
+  description = "The list of StreamNative support role ARNs. This is used to grant StreamNative support to your environment."
   type        = list(string)
 }
 
