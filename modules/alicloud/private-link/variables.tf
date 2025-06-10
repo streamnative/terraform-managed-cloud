@@ -7,48 +7,43 @@ terraform {
   }
 }
 
+variable "privatelink_service_id" {
+  description = "The ID of the PrivateLink service, it should be obtained from StreamNative Cloud."
+  type        = string
+}
+
+variable "domain_name" {
+  description = "The domain suffix of the Pulsar endpoint, it should be obtained from StreamNative Cloud."
+  type        = string
+}
+
+variable "endpoint_name" {
+  description = "The name of the VPC endpoint will be created, used to identify from other endpoints."
+  type        = string
+  default     = "streamnative-pulsar-endpoint"
+}
+
 variable "vpc_id" {
   description = "The ID of the VPC to create the endpoint in."
   type        = string
 }
 
-variable "privatelink_service_id" {
-  description = "The ID of the PrivateLink service."
-  type        = string
-}
-
-variable "endpoint_name" {
-  description = "The name of the VPC endpoint."
-  type        = string
-}
-
 variable "vswitches" {
-  description = "The list of VSwitch IDs to associate with the endpoint."
+  description = "The list of VSwitches to associate with the endpoint."
   type = list(object({
     id   = string
     zone = string
   }))
 }
 
-variable "domain_name" {
-  description = "The domain suffix used by the service."
-  type        = string
-}
-
 variable "security_group_ids" {
-  description = "The list of security group IDs to associate with the endpoint."
+  description = "The list of security group IDs to associate with the endpoint, will create a new security group if this is empty."
   type        = list(string)
   default     = []
 }
 
-variable "use_existing_security_group" {
-  description = "Flag to indicate whether to use existing security groups or create new ones."
-  type        = bool
-  default     = false
-}
-
 variable "security_group_inbound_rules" {
-  description = "List of inbound rules for the security group."
+  description = "List of inbound rules for the security group, allowing traffic to the endpoint."
   type = list(object({
     port        = string
     description = string
