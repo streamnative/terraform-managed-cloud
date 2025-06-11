@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.22.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.21.0...v3.22.0) (2025-06-11)
+
+
+### Features
+
+* Support alicloud international ([#130](https://github.com/streamnative/terraform-managed-cloud/issues/130)) ([fe64024](https://github.com/streamnative/terraform-managed-cloud/commit/fe640247e00f64245f89e83d7be188c505ea8942))
+
 ## [3.21.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.20.0...v3.21.0) (2025-04-15)
 
 
