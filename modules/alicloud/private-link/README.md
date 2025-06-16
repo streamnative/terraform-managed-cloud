@@ -12,7 +12,7 @@ This module should be applied to the VPC hosting your Pulsar applications. It wi
 
 ## Examples
 
-1. Create PrivateLink with default settings
+### Create PrivateLink with default settings
 
 ```hcl
 provider "alicloud" {
@@ -48,7 +48,7 @@ module "alicloud_private_link" {
 - `endpoint_name`: The name that the VPC endpoint, will be used to identify from other endpoints if you have multiple ones.
 - `vswitches`: The list of VSwitches to associate with the endpoint, it should be the VSwitches in the same VPC.
 
-2. Create PrivateLink with customized Security Group
+### Create PrivateLink with customized Security Group
 
 ```hcl
 provider "alicloud" {
