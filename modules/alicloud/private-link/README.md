@@ -1,10 +1,18 @@
 # StreamNative Cloud - Managed AliCloud Private Link
 
-This Terraform module configures your AliCloud network to access private StreamNative BYOC pulsar service.
+This Terraform module configures your AliCloud network to access private StreamNative BYOC Pulsar service.
 
 # QuickStart
 
-## Create PrivateLink with default settings
+## Pre Requisites
+
+To use this module you must have [Terraform installed](https://learn.hashicorp.com/tutorials/terraform/install-cli) and be familiar with its usage for [AliCloud](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs#authentication). It is recommended to securely store the Terraform configuration you create in source control, as well as use [Terraform's Remote State](https://www.terraform.io/language/state/remote) for storing the `*.tfstate` file.
+
+This module should be applied to the VPC hosting your Pulsar applications. It will create a PrivateLink endpoint and a private DNS zone to provide access to the private Pulsar service in your BYOC AliCloud environments.
+
+## Examples
+
+### Create PrivateLink with default settings
 
 ```hcl
 provider "alicloud" {
@@ -32,7 +40,15 @@ module "alicloud_private_link" {
 }
 ```
 
-## Create PrivateLink with customized Security Group
+**Parameter Notes**
+
+- `privatelink_service_id`: The ID of the PrivateLink service, it should be obtained from StreamNative Cloud.
+- `domain_name`: The domain suffix of the Pulsar endpoint, it should be obtained from StreamNative Cloud.
+- `vpc_id`: The ID of the VPC to create the endpoint in, it should be the VPC hosting your Pulsar Applications.
+- `endpoint_name`: The name that the VPC endpoint, will be used to identify from other endpoints if you have multiple ones.
+- `vswitches`: The list of VSwitches to associate with the endpoint, it should be the VSwitches in the same VPC.
+
+### Create PrivateLink with customized Security Group
 
 ```hcl
 provider "alicloud" {
@@ -61,13 +77,22 @@ module "alicloud_private_link" {
 }
 ```
 
-Make sure you have the following inbound rules in your security group:
+**Parameter Notes**
 
-- Allow TCP port 443 from the VPC CIDR
-- Allow TCP port 6651 from the VPC CIDR
-- Allow TCP port 9093 from the VPC CIDR
-- Allow TCP port 5671 from the VPC CIDR
-- Allow TCP port 8883 from the VPC CIDR
+- `privatelink_service_id`: The ID of the PrivateLink service, it should be obtained from StreamNative Cloud.
+- `domain_name`: The domain suffix of the Pulsar endpoint, it should be obtained from StreamNative Cloud.
+- `vpc_id`: The ID of the VPC to create the endpoint in, it should be the VPC hosting your Pulsar Applications.
+- `endpoint_name`: The name that the VPC endpoint, will be used to identify from other endpoints if you have multiple ones.
+- `vswitches`: The list of VSwitches to associate with the endpoint, it should be the VSwitches in the same VPC.
+- `security_group_ids`: The list of existing security group IDs to associate with the endpoint, if this is empty a new security group will be created.
+
+  Make sure you have the following inbound rules in your existing security group:
+
+  - Allow TCP port 443 from the VPC CIDR
+  - Allow TCP port 6651 from the VPC CIDR
+  - Allow TCP port 9093 from the VPC CIDR
+  - Allow TCP port 5671 from the VPC CIDR
+  - Allow TCP port 8883 from the VPC CIDR
 
 ## Run terraform
 
