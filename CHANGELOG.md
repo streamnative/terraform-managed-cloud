@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.22.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.22.0...v3.22.1) (2025-07-11)
+
+
+### Bug Fixes
+
+* remove provider block in child module ([#134](https://github.com/streamnative/terraform-managed-cloud/issues/134)) ([3d6c3ff](https://github.com/streamnative/terraform-managed-cloud/commit/3d6c3ffaa18509a245c921f17ba46d1191f0cbcf))
+
 ## [3.22.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.21.0...v3.22.0) (2025-06-11)
 
 
