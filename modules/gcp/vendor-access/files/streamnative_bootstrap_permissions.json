@@ -82,6 +82,7 @@
   "storage.buckets.create",
   "storage.buckets.delete",
   "storage.buckets.get",
+  "compute.regions.list",
   "container.apiServices.create",
   "container.apiServices.delete",
   "container.apiServices.get",
