@@ -82,7 +82,6 @@
     "storage.buckets.create",
     "storage.buckets.delete",
     "storage.buckets.get",
-    //K8s engine permissions
     "container.apiServices.create",
     "container.apiServices.delete",
     "container.apiServices.get",
