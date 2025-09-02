@@ -49,7 +49,7 @@ locals {
 resource "google_project_iam_member" "sn_access" {
   count = length(local.iam_bindings)
   project    = var.project
-  role       = local.iam_bindings[count.index].role
+  role       = "organizations/${var.project}/${local.iam_bindings[count.index].role}"
   member     = local.iam_bindings[count.index].member
   depends_on = [google_project_service.gcp_apis, google_project_iam_custom_role.streamnative_cloud_bootstrap_role]
 }
@@ -84,7 +84,7 @@ resource "google_service_account" "sn_bootstrap" {
 resource "google_project_iam_member" "sn_bootstrap" {
   count      = length(local.streamnative_bootstrap_roles)
   project    = var.project
-  role       = local.streamnative_bootstrap_roles[count.index]
+  role       = "organizations/${var.project}/${local.streamnative_bootstrap_roles[count.index]}"
   member     = format("serviceAccount:%s", google_service_account.sn_bootstrap[0].email)
   depends_on = [google_service_account.sn_bootstrap, google_project_iam_custom_role.streamnative_cloud_bootstrap_role]
 }
@@ -92,7 +92,7 @@ resource "google_project_iam_member" "sn_bootstrap" {
 resource "google_service_account_iam_member" "sn_bootstrap_impersonation" {
   count              = length(local.impersonation_iam_bindings)
   service_account_id = google_service_account.sn_bootstrap[0].id
-  role               = local.impersonation_iam_bindings[count.index].role
+  role               = "organizations/${var.project}/${local.impersonation_iam_bindings[count.index].role}"
   member             = local.impersonation_iam_bindings[count.index].member
   depends_on         = [google_service_account.sn_bootstrap, google_project_iam_custom_role.streamnative_cloud_bootstrap_role]
 }
