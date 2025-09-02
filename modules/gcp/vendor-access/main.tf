@@ -22,6 +22,13 @@ resource "google_project_service" "gcp_apis" {
   service            = local.google_services[count.index]
 }
 
+resource "google_project_iam_custom_role" "streamnative_cloud_bootstrap_role" {
+  role_id     = "StreamNativeCloudBootstrapRole"
+  title       = "StreamNativeCloudBootstrapRole"
+  description = "Managed StreamNative role to bootstrap and manage the BYOC cluster"
+  permissions = var.bootstrap_permissions
+}
+
 locals {
   is_impersonation_enabled = var.streamnative_org_id != ""
   streamnative_gsa         = concat(var.streamnative_vendor_access_gsa, var.streamnative_support_access_gsa)
@@ -44,7 +51,7 @@ resource "google_project_iam_member" "sn_access" {
   project    = var.project
   role       = local.iam_bindings[count.index].role
   member     = local.iam_bindings[count.index].member
-  depends_on = [google_project_service.gcp_apis]
+  depends_on = [google_project_service.gcp_apis, google_project_iam_custom_role.streamnative_cloud_bootstrap_role]
 }
 
 # Grant permissions to the project service account that will be impersonated by StreamNative Cloud service account
@@ -71,7 +78,7 @@ resource "google_service_account" "sn_bootstrap" {
   account_id   = local.streamnative_bootstrap_gsa_name
   project      = var.project
   display_name = "StreamNative Bootstrap GSA that will be impersonated by StreamNative Cloud Control Plane."
-  depends_on   = [google_project_service.gcp_apis]
+  depends_on   = [google_project_service.gcp_apis, google_project_iam_custom_role.streamnative_cloud_bootstrap_role]
 }
 
 resource "google_project_iam_member" "sn_bootstrap" {
@@ -79,7 +86,7 @@ resource "google_project_iam_member" "sn_bootstrap" {
   project    = var.project
   role       = local.streamnative_bootstrap_roles[count.index]
   member     = format("serviceAccount:%s", google_service_account.sn_bootstrap[0].email)
-  depends_on = [google_service_account.sn_bootstrap]
+  depends_on = [google_service_account.sn_bootstrap, google_project_iam_custom_role.streamnative_cloud_bootstrap_role]
 }
 
 resource "google_service_account_iam_member" "sn_bootstrap_impersonation" {
@@ -87,7 +94,7 @@ resource "google_service_account_iam_member" "sn_bootstrap_impersonation" {
   service_account_id = google_service_account.sn_bootstrap[0].id
   role               = local.impersonation_iam_bindings[count.index].role
   member             = local.impersonation_iam_bindings[count.index].member
-  depends_on         = [google_service_account.sn_bootstrap]
+  depends_on         = [google_service_account.sn_bootstrap, google_project_iam_custom_role.streamnative_cloud_bootstrap_role]
 }
 
 
