@@ -26,7 +26,7 @@ resource "google_project_iam_custom_role" "streamnative_cloud_bootstrap_role" {
   role_id     = "StreamNativeCloudBootstrapRole"
   title       = "StreamNativeCloudBootstrapRole"
   description = "Managed StreamNative role to bootstrap and manage the BYOC cluster"
-  permissions = templatefile("${path.module}/files/streamnative_bootstrap_permissions.yaml",
+  permissions = filejson("${path.module}/files/streamnative_bootstrap_permissions.json")
 }
 
 locals {
