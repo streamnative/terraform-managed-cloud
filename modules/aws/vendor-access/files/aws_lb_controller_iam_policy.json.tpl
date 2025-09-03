@@ -29,6 +29,9 @@
                 "ec2:DescribeTags",
                 "ec2:GetCoipPoolUsage",
                 "ec2:DescribeCoipPools",
+                "ec2:GetSecurityGroupsForVpc",
+                "ec2:DescribeIpamPools",
+                "ec2:DescribeRouteTables",
                 "elasticloadbalancing:DescribeLoadBalancers",
                 "elasticloadbalancing:DescribeLoadBalancerAttributes",
                 "elasticloadbalancing:DescribeListeners",
@@ -38,7 +41,10 @@
                 "elasticloadbalancing:DescribeTargetGroups",
                 "elasticloadbalancing:DescribeTargetGroupAttributes",
                 "elasticloadbalancing:DescribeTargetHealth",
-                "elasticloadbalancing:DescribeTags"
+                "elasticloadbalancing:DescribeTags",
+                "elasticloadbalancing:DescribeTrustStores",
+                "elasticloadbalancing:DescribeListenerAttributes",
+                "elasticloadbalancing:DescribeCapacityReservation"
             ],
             "Resource": "*"
         },
@@ -195,7 +201,10 @@
                 "elasticloadbalancing:DeleteLoadBalancer",
                 "elasticloadbalancing:ModifyTargetGroup",
                 "elasticloadbalancing:ModifyTargetGroupAttributes",
-                "elasticloadbalancing:DeleteTargetGroup"
+                "elasticloadbalancing:DeleteTargetGroup",
+                "elasticloadbalancing:ModifyListenerAttributes",
+                "elasticloadbalancing:ModifyCapacityReservation",
+                "elasticloadbalancing:ModifyIpPools"
             ],
             "Resource": "*",
             "Condition": {
@@ -241,7 +250,8 @@
                 "elasticloadbalancing:ModifyListener",
                 "elasticloadbalancing:AddListenerCertificates",
                 "elasticloadbalancing:RemoveListenerCertificates",
-                "elasticloadbalancing:ModifyRule"
+                "elasticloadbalancing:ModifyRule",
+                "elasticloadbalancing:SetRulePriorities"
             ],
             "Resource": "*"
         }
