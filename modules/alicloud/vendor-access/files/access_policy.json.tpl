@@ -151,7 +151,8 @@
     {
       "Effect": "Allow",
       "Action": [
-        "nlb:*"
+        "nlb:*",
+        "slb:*"
       ],
       "Resource": [
         "*"
