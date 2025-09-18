@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.23.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.22.1...v3.23.0) (2025-09-18)
+
+
+### Features
+
+* Declare SLB permissions on AliCloud ([#137](https://github.com/streamnative/terraform-managed-cloud/issues/137)) ([c9bb72e](https://github.com/streamnative/terraform-managed-cloud/commit/c9bb72e5c3e52575ecd96226a97aed02a76260dd))
+
 ## [3.22.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.22.0...v3.22.1) (2025-07-11)
 
 
