@@ -30,6 +30,16 @@ After [authenticating to your AliCloud international account](https://registry.t
 2. Run `terraform plan`
 3. Run `terraform apply`
 
+## Execute following commands to import existing roles and policies if you lost the tfstate
+```bash
+terraform import module.vendor_access.alicloud_ram_policy.cloud_manager_access streamnative-bootstrap
+terraform import  module.vendor_access.alicloud_ram_policy.support_access streamnative-support
+terraform import module.vendor_access.alicloud_ram_role.cloud_manager_role streamnative-bootstrap
+terraform import module.vendor_access.alicloud_ram_role.support_role streamnative-support
+terraform import module.vendor_access.alicloud_ram_role_policy_attachment.cloud_manager_access role:streamnative-bootstrap:Custom:streamnative-bootstrap
+terraform import module.vendor_access.alicloud_ram_role_policy_attachment.support_access role:streamnative-support:Custom:streamnative-support
+```
+
 # Terraform Docs
 
 ## Requirements
