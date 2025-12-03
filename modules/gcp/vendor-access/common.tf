@@ -52,3 +52,10 @@ variable "extra_google_services" {
   type        = list(string)
   description = "Extra google API services need to be enabled."
 }
+
+
+variable "existing_service_account_id" {
+  default     = ""
+  type        = string
+  description = "The ID of the existing service account that will be impersonated by StreamNative Cloud service account."
+}

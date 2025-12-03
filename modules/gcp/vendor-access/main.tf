@@ -52,8 +52,8 @@ locals {
   streamnative_bootstrap_gsa_name = format("snbootstrap-%s", var.streamnative_org_id)
   streamnative_bootstrap_roles    = local.is_impersonation_enabled ? var.roles : []
   impersonation_roles = [
-    "roles/iam.serviceAccountUser",
-    "roles/iam.serviceAccountAdmin",
+    # "roles/iam.serviceAccountUser",
+    # "roles/iam.serviceAccountAdmin",
     "roles/iam.serviceAccountTokenCreator",
   ]
   impersonation_iam_bindings = local.is_impersonation_enabled ? flatten([
@@ -67,24 +67,35 @@ locals {
 
 }
 resource "google_service_account" "sn_bootstrap" {
-  count        = local.is_impersonation_enabled ? 1 : 0
+  count        = local.is_impersonation_enabled && var.existing_service_account_id == "" ? 1 : 0
   account_id   = local.streamnative_bootstrap_gsa_name
   project      = var.project
   display_name = "StreamNative Bootstrap GSA that will be impersonated by StreamNative Cloud Control Plane."
   depends_on   = [google_project_service.gcp_apis]
 }
 
+data "google_service_account" "sn_bootstrap" {
+  count        = local.is_impersonation_enabled && var.existing_service_account_id != "" ? 1 : 0
+  account_id   = var.existing_service_account_id
+  project      = var.project
+  depends_on   = [google_project_service.gcp_apis]
+}
+
+locals {
+  sn_bootstrap_email = var.existing_service_account_id == "" ? google_service_account.sn_bootstrap[0].email : data.google_service_account.sn_bootstrap[0].email
+  sn_bootstrap_id = var.existing_service_account_id == "" ? google_service_account.sn_bootstrap[0].id : data.google_service_account.sn_bootstrap[0].id
+}
+
 resource "google_project_iam_member" "sn_bootstrap" {
   count      = length(local.streamnative_bootstrap_roles)
   project    = var.project
   role       = local.streamnative_bootstrap_roles[count.index]
-  member     = format("serviceAccount:%s", google_service_account.sn_bootstrap[0].email)
-  depends_on = [google_service_account.sn_bootstrap]
+  member     = format("serviceAccount:%s", local.sn_bootstrap_email)
 }
 
 resource "google_service_account_iam_member" "sn_bootstrap_impersonation" {
   count              = length(local.impersonation_iam_bindings)
-  service_account_id = google_service_account.sn_bootstrap[0].id
+  service_account_id = local.sn_bootstrap_id
   role               = local.impersonation_iam_bindings[count.index].role
   member             = local.impersonation_iam_bindings[count.index].member
   depends_on         = [google_service_account.sn_bootstrap]
