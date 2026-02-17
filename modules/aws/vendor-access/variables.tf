@@ -16,7 +16,7 @@
 
 variable "sn_policy_version" {
   description = "The value of SNVersion tag"
-  default     = "3.23.3"  # {{ x-release-please-version }}
+  default     = "3.24.0"  # {{ x-release-please-version }}
   type        = string
 }
 
