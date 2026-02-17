@@ -74,9 +74,11 @@ locals {
 }
 
 resource "aws_vpc_endpoint" "this" {
+  region             = var.region
   vpc_id             = var.vpc_id
   subnet_ids         = var.subnet_ids
   service_name       = var.service_name
+  service_region     = var.service_region != "" ? var.service_region : var.region
   security_group_ids = local.security_group_ids
 
   vpc_endpoint_type   = "Interface"
@@ -92,6 +94,7 @@ resource "aws_security_group" "this" {
   count = var.security_group_ids == null ? 1 : 0
 
   name_prefix = var.service_name
+  region      = var.region
   vpc_id      = var.vpc_id
   description = "For access vpc endpoint service ${var.service_name}"
 
@@ -107,6 +110,7 @@ resource "aws_security_group" "this" {
 resource "aws_security_group_rule" "this" {
   for_each = { for k, v in local.security_group_rules : k => v if var.security_group_ids == null }
 
+  region            = var.region
   security_group_id = aws_security_group.this[0].id
   type              = each.value.type
   protocol          = each.value.protocol

@@ -1,6 +1,12 @@
 variable "region" {
   type        = string
-  description = "The region of vpc endpoint service. The VPC Endpoint must be the same region as Endpoint Service"
+  description = "The region of vpc endpoint to be created. This should be the same as the region of the VPC."
+}
+
+variable "service_region" {
+  type        = string
+  description = "The region of the VPC endpoint service. The VPC Endpoint can be in a different region, will fallback to the VPC endpoint region if not specified."
+  default = ""
 }
 
 variable "vpc_id" {
