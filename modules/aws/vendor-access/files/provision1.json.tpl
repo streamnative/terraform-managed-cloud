@@ -44,6 +44,7 @@
         "ec2:ReplaceRouteTableAssociation",
         "ec2:CreateSubnet",
         "ec2:CreateVpcEndpoint",
+        "vpce:AllowMultiRegion",
         "ec2:DescribeVpcPeeringConnections",
         "ec2:CreateVpcPeeringConnection",
         "ec2:DeleteVpcPeeringConnection"
