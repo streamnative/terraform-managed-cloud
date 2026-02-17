@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.24.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.23.3...v3.24.0) (2026-02-17)
+
+
+### Features
+
+* Support cross region privatelink endpoint ([#146](https://github.com/streamnative/terraform-managed-cloud/issues/146)) ([0f4b8b5](https://github.com/streamnative/terraform-managed-cloud/commit/0f4b8b590a120867b5fb2ec1921832ebc2a7459c))
+
 ## [3.23.3](https://github.com/streamnative/terraform-managed-cloud/compare/v3.23.2...v3.23.3) (2026-02-17)
 
 
