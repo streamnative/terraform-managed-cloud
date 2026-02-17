@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.23.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.23.0...v3.23.1) (2026-02-17)
+
+
+### Bug Fixes
+
+* Add permissions to create private link service cross regions ([#140](https://github.com/streamnative/terraform-managed-cloud/issues/140)) ([c0380cf](https://github.com/streamnative/terraform-managed-cloud/commit/c0380cf52c9383d22560d63c3d854c0c58c68ed5))
+
 ## [3.23.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.22.1...v3.23.0) (2025-09-18)
 
 
