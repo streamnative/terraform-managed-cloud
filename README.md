@@ -35,7 +35,7 @@ provider "aws" {
 }
 
 module "sn_managed_cloud" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/aws/vendor-access?ref=v3.24.0"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/aws/vendor-access?ref=v3.24.1"
 
   external_id = "<YOUR_SNCLOUD_ORG_ID>"
 }
@@ -53,7 +53,7 @@ provider "google" {
 }
 
 module "sn_managed_cloud" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/gcp/vendor-access?ref=v3.24.0"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/gcp/vendor-access?ref=v3.24.1"
 
   project = "<YOUR_PROJECT>"
   streamnative_org_id = "<YOUR_SNCLOUD_ORG_ID>"
@@ -76,14 +76,14 @@ provider "azurerm" {
 provider "azuread" {}
 
 module "sn_cloud_manager" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/sn-cloud-manager?ref=v3.24.0"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/sn-cloud-manager?ref=v3.24.1"
 
   streamnative_org_id     = "<YOUR_SNCLOUD_ORG_ID>"
   resource_group_location = "<RESOURCE_GROUP_LOCATION>"
 }
 
 module "sn_managed_cloud" {
-  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/vendor-access?ref=v3.24.0"
+  source = "github.com/streamnative/terraform-managed-cloud//modules/azure/vendor-access?ref=v3.24.1"
 
   streamnative_org_id     = "<YOUR_SNCLOUD_ORG_ID>"
   resource_group_name     = "<RESOURCE_GROUP_NAME>"
