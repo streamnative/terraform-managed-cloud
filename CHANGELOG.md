@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.23.3](https://github.com/streamnative/terraform-managed-cloud/compare/v3.23.2...v3.23.3) (2026-02-17)
+
+
+### Bug Fixes
+
+* Move vpce:AllowMultiRegion to statement without tag condition ([#144](https://github.com/streamnative/terraform-managed-cloud/issues/144)) ([bd4f11f](https://github.com/streamnative/terraform-managed-cloud/commit/bd4f11ff652ad04eeb4c8980fdf14a2f7880c069))
+
 ## [3.23.2](https://github.com/streamnative/terraform-managed-cloud/compare/v3.23.1...v3.23.2) (2026-02-17)
 
 
