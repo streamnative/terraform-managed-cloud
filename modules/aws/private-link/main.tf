@@ -30,6 +30,14 @@ locals {
       cidr_blocks = data.aws_vpc.this.cidr_block_associations.*.cidr_block
       description = "HTTPS to VPC"
     }
+    egress_zk_tls = {
+      type        = "egress"
+      protocol    = "tcp"
+      from_port   = 2181
+      to_port     = 2181
+      cidr_blocks = data.aws_vpc.this.cidr_block_associations.*.cidr_block
+      description = "Zookeeper TLS to VPC"
+    }
     egress_broker_tls = {
       type        = "egress"
       protocol    = "tcp"
