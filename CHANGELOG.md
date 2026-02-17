@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.24.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.24.0...v3.24.1) (2026-02-17)
+
+
+### Bug Fixes
+
+* Add global zk required port 2181 to SG ([#148](https://github.com/streamnative/terraform-managed-cloud/issues/148)) ([d2a09ee](https://github.com/streamnative/terraform-managed-cloud/commit/d2a09ee435a624e27915d4f61c8d7b81187d2b46))
+
 ## [3.24.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.23.3...v3.24.0) (2026-02-17)
 
 
