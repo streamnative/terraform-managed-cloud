@@ -29,6 +29,7 @@
           "ssm:*",
           "sts:*",
           "support:*",
+          "vpce:*",
           "waf-regional:*",
           "wafv2:*"
       ],
