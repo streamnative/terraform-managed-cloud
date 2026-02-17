@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.23.2](https://github.com/streamnative/terraform-managed-cloud/compare/v3.23.1...v3.23.2) (2026-02-17)
+
+
+### Bug Fixes
+
+* Update permission boundary for vpce permissions ([#142](https://github.com/streamnative/terraform-managed-cloud/issues/142)) ([a03b303](https://github.com/streamnative/terraform-managed-cloud/commit/a03b303ef291629abdc38d3ecf1f38d74c2ef79d))
+
 ## [3.23.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.23.0...v3.23.1) (2026-02-17)
 
 
