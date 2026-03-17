@@ -212,3 +212,9 @@ output "tenant_id" {
   value       = data.azurerm_subscription.current.tenant_id
   description = "The tenant ID of the AKS cluster"
 }
+# Grant sn_automation Contributor access to the manager resource group so it can create Loki storage accounts
+resource "azurerm_role_assignment" "sn_automation_manager_rg" {
+  scope                = azurerm_resource_group.manager.id
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_user_assigned_identity.sn_automation.principal_id
+}
