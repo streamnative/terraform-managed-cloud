@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.25.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.24.1...v3.25.0) (2026-04-07)
+
+
+### Features
+
+* Updated aws_lb_controller_iam_policy.json.tpl to grant required permissions ([#136](https://github.com/streamnative/terraform-managed-cloud/issues/136)) ([c212889](https://github.com/streamnative/terraform-managed-cloud/commit/c212889f9994c0a5994119f12d0c3da0c438c61a))
+
 ## [3.24.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.24.0...v3.24.1) (2026-02-17)
 
 
