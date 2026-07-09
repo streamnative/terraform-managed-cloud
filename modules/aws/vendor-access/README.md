@@ -33,6 +33,7 @@ This module creates the following resources within your AWS account:
 
 - `role/StreamNativeCloudBootstrapRole` & `policy/StreamNativeCloudBootstrapPolicy`: These IAM resources are used for provisioning, deprovisioning, and regular or emergency maintenance. This role and policy have the following characteristics:
   - Have the ability to create, delete, manage, and read (within the limits of the permission boundary) EC2, EKS, IAM, DynamoDB, Route53, and KMS resources
+  - Have **read-only** access to CloudTrail management events (`cloudtrail:LookupEvents`, `DescribeTrails`, `GetTrailStatus`, `GetEventSelectors`, `ListTrails`) so StreamNative can diagnose out-of-band changes to StreamNative-managed IAM resources during incidents. These are read-only and cannot start, stop, delete, or modify trails.
   - Cannot create or modify IAM policies (but are allowed to work with IAM policies specified by this module)
   - Can only work with resources that have specific tags associated or certain expected patterns in the resource's friendly name.
 

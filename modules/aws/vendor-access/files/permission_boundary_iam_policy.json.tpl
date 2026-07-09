@@ -7,6 +7,11 @@
       "Action": [
           "acm:*",
           "autoscaling:*",
+          "cloudtrail:DescribeTrails",
+          "cloudtrail:GetEventSelectors",
+          "cloudtrail:GetTrailStatus",
+          "cloudtrail:ListTrails",
+          "cloudtrail:LookupEvents",
           "cloudwatch:*",
           "cognito-idp:*",
           "dynamodb:*",
