@@ -19,9 +19,6 @@
           "kms:*",
           "logs:*",
           "pricing:*",
-          "rds:DescribeDBInstances",
-          "rds:DescribeDBSubnetGroups",
-          "rds:ListTagsForResource",
           "route53:*",
           "route53domains:*",
           "s3:*",
@@ -37,71 +34,6 @@
           "wafv2:*"
       ],
       "Resource": "*"
-    },
-    {
-      "Sid": "SQLWorkspaceRDSCreateInstance",
-      "Effect": "Allow",
-      "Action": "rds:CreateDBInstance",
-      "Resource": [
-        "arn:${partition}:rds:${region}:${account_id}:db:rw-*-sqlworkspace-*",
-        "arn:${partition}:rds:${region}:${account_id}:og:default*",
-        "arn:${partition}:rds:${region}:${account_id}:pg:default*",
-        "arn:${partition}:rds:${region}:${account_id}:subgrp:rw-*-sqlworkspace-*"
-      ],
-      "Condition": {
-        "StringEquals": {
-          "aws:RequestTag/Vendor": "StreamNative",
-          "rds:DatabaseEngine": "postgres"
-        },
-        "Bool": {
-          "rds:PubliclyAccessible": "false",
-          "rds:StorageEncrypted": "true"
-        }
-      }
-    },
-    {
-      "Sid": "SQLWorkspaceRDSCreateSubnetGroup",
-      "Effect": "Allow",
-      "Action": "rds:CreateDBSubnetGroup",
-      "Resource": "arn:${partition}:rds:${region}:${account_id}:subgrp:rw-*-sqlworkspace-*",
-      "Condition": {
-        "StringEquals": {
-          "aws:RequestTag/Vendor": "StreamNative"
-        }
-      }
-    },
-    {
-      "Sid": "SQLWorkspaceRDSManage",
-      "Effect": "Allow",
-      "Action": [
-        "rds:DeleteDBInstance",
-        "rds:DeleteDBSubnetGroup",
-        "rds:ModifyDBInstance",
-        "rds:ModifyDBSubnetGroup",
-        "rds:RemoveTagsFromResource"
-      ],
-      "Resource": [
-        "arn:${partition}:rds:${region}:${account_id}:db:rw-*-sqlworkspace-*",
-        "arn:${partition}:rds:${region}:${account_id}:subgrp:rw-*-sqlworkspace-*"
-      ],
-      "Condition": {
-        "StringEquals": {
-          "aws:ResourceTag/Vendor": "StreamNative"
-        }
-      }
-    },
-    {
-      "Sid": "SQLWorkspaceRDSFinalSnapshot",
-      "Effect": "Allow",
-      "Action": [
-        "rds:AddTagsToResource",
-        "rds:CreateDBSnapshot"
-      ],
-      "Resource": [
-        "arn:${partition}:rds:${region}:${account_id}:db:rw-*-sqlworkspace-*",
-        "arn:${partition}:rds:${region}:${account_id}:snapshot:rw-*-sqlworkspace-*-final-*",
-        "arn:${partition}:rds:${region}:${account_id}:subgrp:rw-*-sqlworkspace-*"
-      ]
     },
     {
       "Sid": "IamRestrictions",
