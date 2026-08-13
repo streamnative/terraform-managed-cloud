@@ -36,7 +36,6 @@
         "route53:Get*",
         "route53:List*",
         "rds:DescribeDBInstances",
-        "rds:DescribeDBSnapshots",
         "rds:DescribeDBSubnetGroups",
         "rds:ListTagsForResource",
         "s3:ListAllMyBuckets",
@@ -204,7 +203,8 @@
         "s3:PutBucketPublicAccessBlock",
         "s3:PutBucketTagging",
         "s3:PutBucketVersioning",
-        "s3:PutEncryptionConfiguration"
+        "s3:PutEncryptionConfiguration",
+        "s3:PutLifecycleConfiguration"
       ],
       "Resource": "arn:${partition}:s3:::rw-*-${account_id}-${region}-*"
     },

@@ -20,7 +20,6 @@
           "logs:*",
           "pricing:*",
           "rds:DescribeDBInstances",
-          "rds:DescribeDBSnapshots",
           "rds:DescribeDBSubnetGroups",
           "rds:ListTagsForResource",
           "route53:*",
