@@ -33,6 +33,10 @@
         "kms:ListResourceTags",
         "logs:Describe*",
         "logs:List*",
+        "rds:DescribeDBInstances",
+        "rds:DescribeDBSnapshots",
+        "rds:DescribeDBSubnetGroups",
+        "rds:ListTagsForResource",
         "route53:Get*",
         "route53:List*",
         "s3:ListAllMyBuckets",
@@ -96,6 +100,71 @@
         "ssm:ResumeSession"
       ],
       "Resource": ["arn:aws:ssm:*:*:session/$${aws:username}-*"]
+    },
+    {
+      "Sid": "SQLWorkspaceRDSCreateInstance",
+      "Effect": "Allow",
+      "Action": "rds:CreateDBInstance",
+      "Resource": [
+        "arn:${partition}:rds:${region}:${account_id}:db:sqlworkspace-rds-*",
+        "arn:${partition}:rds:${region}:${account_id}:og:default*",
+        "arn:${partition}:rds:${region}:${account_id}:pg:default*",
+        "arn:${partition}:rds:${region}:${account_id}:subgrp:sqlworkspace-rds-*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/Vendor": "StreamNative",
+          "rds:DatabaseEngine": "postgres"
+        },
+        "Bool": {
+          "rds:PubliclyAccessible": "false",
+          "rds:StorageEncrypted": "true"
+        }
+      }
+    },
+    {
+      "Sid": "SQLWorkspaceRDSCreateSubnetGroup",
+      "Effect": "Allow",
+      "Action": "rds:CreateDBSubnetGroup",
+      "Resource": "arn:${partition}:rds:${region}:${account_id}:subgrp:sqlworkspace-rds-*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "SQLWorkspaceRDSManage",
+      "Effect": "Allow",
+      "Action": [
+        "rds:DeleteDBInstance",
+        "rds:DeleteDBSubnetGroup",
+        "rds:ModifyDBInstance",
+        "rds:ModifyDBSubnetGroup",
+        "rds:RemoveTagsFromResource"
+      ],
+      "Resource": [
+        "arn:${partition}:rds:${region}:${account_id}:db:sqlworkspace-rds-*",
+        "arn:${partition}:rds:${region}:${account_id}:subgrp:sqlworkspace-rds-*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "SQLWorkspaceRDSFinalSnapshot",
+      "Effect": "Allow",
+      "Action": [
+        "rds:AddTagsToResource",
+        "rds:CreateDBSnapshot"
+      ],
+      "Resource": [
+        "arn:${partition}:rds:${region}:${account_id}:db:sqlworkspace-rds-*",
+        "arn:${partition}:rds:${region}:${account_id}:snapshot:sqlworkspace-rds-*-final-*",
+        "arn:${partition}:rds:${region}:${account_id}:subgrp:sqlworkspace-rds-*"
+      ]
     },
     {
       "Sid": "ResS3",
