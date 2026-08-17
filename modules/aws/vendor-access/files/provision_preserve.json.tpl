@@ -182,7 +182,8 @@
         "s3:PutEncryptionConfiguration"
        ],
        "Resource": [
-          "arn:${partition}:s3:::${bucket_pattern}"
+          "arn:${partition}:s3:::${bucket_pattern}",
+          "arn:${partition}:s3:::*-tiered-storage-snc"
        ]
     },
     {
