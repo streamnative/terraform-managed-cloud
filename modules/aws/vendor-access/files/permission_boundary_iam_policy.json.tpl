@@ -42,10 +42,10 @@
       "Effect": "Allow",
       "Action": "rds:CreateDBInstance",
       "Resource": [
-        "arn:${partition}:rds:${region}:${account_id}:db:sqlworkspace-rds-*",
+        "arn:${partition}:rds:${region}:${account_id}:db:*-snc",
         "arn:${partition}:rds:${region}:${account_id}:og:default*",
         "arn:${partition}:rds:${region}:${account_id}:pg:default*",
-        "arn:${partition}:rds:${region}:${account_id}:subgrp:sqlworkspace-rds-*"
+        "arn:${partition}:rds:${region}:${account_id}:subgrp:*-snc"
       ],
       "Condition": {
         "StringEquals": {
@@ -62,7 +62,7 @@
       "Sid": "SQLWorkspaceRDSCreateSubnetGroup",
       "Effect": "Allow",
       "Action": "rds:CreateDBSubnetGroup",
-      "Resource": "arn:${partition}:rds:${region}:${account_id}:subgrp:sqlworkspace-rds-*",
+      "Resource": "arn:${partition}:rds:${region}:${account_id}:subgrp:*-snc",
       "Condition": {
         "StringEquals": {
           "aws:RequestTag/Vendor": "StreamNative"
@@ -80,8 +80,8 @@
         "rds:RemoveTagsFromResource"
       ],
       "Resource": [
-        "arn:${partition}:rds:${region}:${account_id}:db:sqlworkspace-rds-*",
-        "arn:${partition}:rds:${region}:${account_id}:subgrp:sqlworkspace-rds-*"
+        "arn:${partition}:rds:${region}:${account_id}:db:*-snc",
+        "arn:${partition}:rds:${region}:${account_id}:subgrp:*-snc"
       ],
       "Condition": {
         "StringEquals": {
@@ -90,16 +90,21 @@
       }
     },
     {
+      "Sid": "SQLWorkspaceRDSTagOnCreate",
+      "Effect": "Allow",
+      "Action": "rds:AddTagsToResource",
+      "Resource": [
+        "arn:${partition}:rds:${region}:${account_id}:db:*-snc",
+        "arn:${partition}:rds:${region}:${account_id}:subgrp:*-snc"
+      ]
+    },
+    {
       "Sid": "SQLWorkspaceRDSFinalSnapshot",
       "Effect": "Allow",
-      "Action": [
-        "rds:AddTagsToResource",
-        "rds:CreateDBSnapshot"
-      ],
+      "Action": "rds:CreateDBSnapshot",
       "Resource": [
-        "arn:${partition}:rds:${region}:${account_id}:db:sqlworkspace-rds-*",
-        "arn:${partition}:rds:${region}:${account_id}:snapshot:sqlworkspace-rds-*-final-*",
-        "arn:${partition}:rds:${region}:${account_id}:subgrp:sqlworkspace-rds-*"
+        "arn:${partition}:rds:${region}:${account_id}:db:*-snc",
+        "arn:${partition}:rds:${region}:${account_id}:snapshot:*-snc-final-*"
       ]
     },
     {
