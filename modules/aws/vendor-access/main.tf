@@ -203,7 +203,6 @@ resource "aws_iam_policy" "provision_preserve_policy" {
       bucket_pattern = var.s3_bucket_pattern
       partition      = local.aws_partition
       r53_zone_arns  = local.r53_zone_arns
-      region         = var.region
   })
   tags = local.tag_set
 }

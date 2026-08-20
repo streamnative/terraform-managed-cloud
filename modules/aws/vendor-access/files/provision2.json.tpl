@@ -225,6 +225,76 @@
           "aws:ResourceTag/Vendor": "StreamNative"
         }
       }
+    },
+    {
+      "Sid": "SQLWorkspaceRDSCreateInstance",
+      "Effect": "Allow",
+      "Action": "rds:CreateDBInstance",
+      "Resource": [
+        "arn:${partition}:rds:${region}:${account_id}:db:*-snc",
+        "arn:${partition}:rds:${region}:${account_id}:og:default*",
+        "arn:${partition}:rds:${region}:${account_id}:pg:default*",
+        "arn:${partition}:rds:${region}:${account_id}:subgrp:*-snc"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/Vendor": "StreamNative",
+          "rds:DatabaseEngine": "postgres"
+        },
+        "Bool": {
+          "rds:PubliclyAccessible": "false",
+          "rds:StorageEncrypted": "true"
+        }
+      }
+    },
+    {
+      "Sid": "SQLWorkspaceRDSCreateSubnetGroup",
+      "Effect": "Allow",
+      "Action": "rds:CreateDBSubnetGroup",
+      "Resource": "arn:${partition}:rds:${region}:${account_id}:subgrp:*-snc",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "SQLWorkspaceRDSManage",
+      "Effect": "Allow",
+      "Action": [
+        "rds:DeleteDBInstance",
+        "rds:DeleteDBSubnetGroup",
+        "rds:ModifyDBInstance",
+        "rds:ModifyDBSubnetGroup",
+        "rds:RemoveTagsFromResource"
+      ],
+      "Resource": [
+        "arn:${partition}:rds:${region}:${account_id}:db:*-snc",
+        "arn:${partition}:rds:${region}:${account_id}:subgrp:*-snc"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Vendor": "StreamNative"
+        }
+      }
+    },
+    {
+      "Sid": "SQLWorkspaceRDSTagOnCreate",
+      "Effect": "Allow",
+      "Action": "rds:AddTagsToResource",
+      "Resource": [
+        "arn:${partition}:rds:${region}:${account_id}:db:*-snc",
+        "arn:${partition}:rds:${region}:${account_id}:subgrp:*-snc"
+      ]
+    },
+    {
+      "Sid": "SQLWorkspaceRDSFinalSnapshot",
+      "Effect": "Allow",
+      "Action": "rds:CreateDBSnapshot",
+      "Resource": [
+        "arn:${partition}:rds:${region}:${account_id}:db:*-snc",
+        "arn:${partition}:rds:${region}:${account_id}:snapshot:*-snc-final-*"
+      ]
     }
   ]
 }
