@@ -82,10 +82,7 @@
                 "s3:ListMultipart*",
                 "s3:ListBucket"
             ],
-            "Resource": [
-                "arn:aws:s3:::${bucket_pattern}",
-                "arn:aws:s3:::*-tiered-storage-snc"
-            ]
+            "Resource": "arn:aws:s3:::${bucket_pattern}"
         },
         {
             "Sid": "s3o",
@@ -96,10 +93,7 @@
                 "s3:*Object",
                 "s3:*Multipart*"
             ],
-            "Resource": [
-                "arn:aws:s3:::${bucket_pattern}",
-                "arn:aws:s3:::*-tiered-storage-snc"
-            ]
+            "Resource": "arn:aws:s3:::${bucket_pattern}"
         },
         {
             "Sid": "vbc",

@@ -191,28 +191,6 @@
        ]
     },
     {
-      "Sid": "SQLWorkspaceS3Bucket",
-      "Effect": "Allow",
-      "Action": [
-        "s3:CreateBucket",
-        "s3:DeleteBucket",
-        "s3:DeleteBucketPolicy",
-        "s3:GetAccelerateConfiguration",
-        "s3:GetBucket*",
-        "s3:GetEncryptionConfiguration",
-        "s3:GetLifecycleConfiguration",
-        "s3:GetReplicationConfiguration",
-        "s3:ListBucket",
-        "s3:PutBucketAcl",
-        "s3:PutBucketPolicy",
-        "s3:PutBucketPublicAccessBlock",
-        "s3:PutBucketTagging",
-        "s3:PutEncryptionConfiguration",
-        "s3:PutLifecycleConfiguration"
-      ],
-      "Resource": "arn:${partition}:s3:::rw-*-${account_id}-${region}-*"
-    },
-    {
       "Sid": "SvcLnkRl",
       "Effect": "Allow",
       "Action": "iam:CreateServiceLinkedRole",
