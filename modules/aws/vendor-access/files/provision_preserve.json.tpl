@@ -33,6 +33,8 @@
         "kms:ListResourceTags",
         "logs:Describe*",
         "logs:List*",
+        "rds:Describe*",
+        "rds:ListTagsForResource",
         "route53:Get*",
         "route53:List*",
         "s3:ListAllMyBuckets",

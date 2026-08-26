@@ -32,7 +32,7 @@ This module creates the following resources within your AWS account:
   - Authorized to fully manage StreamNative owned EKS cluster, worker nodes, and load balancers
 
 - `role/StreamNativeCloudBootstrapRole` & `policy/StreamNativeCloudBootstrapPolicy`: These IAM resources are used for provisioning, deprovisioning, and regular or emergency maintenance. This role and policy have the following characteristics:
-  - Have the ability to create, delete, manage, and read (within the limits of the permission boundary) EC2, EKS, IAM, DynamoDB, Route53, and KMS resources
+  - Have the ability to create, delete, manage, and read (within the limits of the permission boundary) EC2, EKS, IAM, DynamoDB, Route53, S3, RDS, and KMS resources
   - Cannot create or modify IAM policies (but are allowed to work with IAM policies specified by this module)
   - Can only work with resources that have specific tags associated or certain expected patterns in the resource's friendly name.
 

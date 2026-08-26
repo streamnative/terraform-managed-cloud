@@ -19,6 +19,7 @@
           "kms:*",
           "logs:*",
           "pricing:*",
+          "rds:*",
           "route53:*",
           "route53domains:*",
           "s3:*",

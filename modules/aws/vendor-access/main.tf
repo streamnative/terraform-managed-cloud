@@ -199,10 +199,10 @@ resource "aws_iam_policy" "provision_preserve_policy" {
   path        = "/StreamNative/"
   policy = templatefile("${path.module}/files/provision_preserve.json.tpl",
     {
-      account_id      = local.account_id
-      bucket_pattern  = var.s3_bucket_pattern
-      partition       = local.aws_partition
-      r53_zone_arns   = local.r53_zone_arns
+      account_id     = local.account_id
+      bucket_pattern = var.s3_bucket_pattern
+      partition      = local.aws_partition
+      r53_zone_arns  = local.r53_zone_arns
   })
   tags = local.tag_set
 }
@@ -214,7 +214,7 @@ resource "aws_iam_policy" "provision_1_policy" {
   path        = "/StreamNative/"
   policy = templatefile("${path.module}/files/provision1.json.tpl",
     {
-      vpc_ids         = local.arn_like_vpcs_str
+      vpc_ids = local.arn_like_vpcs_str
   })
   tags = local.tag_set
 }
