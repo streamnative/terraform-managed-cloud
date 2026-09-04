@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.25.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.25.0...v3.25.1) (2026-08-26)
+
+
+### Bug Fixes
+
+* grant AWS SQLWorkspace RDS vendor permissions ([#153](https://github.com/streamnative/terraform-managed-cloud/issues/153)) ([eb8c80d](https://github.com/streamnative/terraform-managed-cloud/commit/eb8c80d9b94b3e143711af53bce41d43b731450a))
+
 ## [3.25.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.24.1...v3.25.0) (2026-04-07)
 
 
