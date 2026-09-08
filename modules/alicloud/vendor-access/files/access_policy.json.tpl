@@ -142,6 +142,7 @@
         "cs:UpdateTemplate",
         "cs:UpdateUserPermissions",
         "cs:UpgradeCluster",
+        "cs:UpgradeClusterNodepool",
         "cs:UpgradeK8sComponents"
       ],
       "Resource": [
