@@ -30,51 +30,6 @@ After [authenticating to your AliCloud international account](https://registry.t
 2. Run `terraform plan`
 3. Run `terraform apply`
 
-## Upgrade existing deployments for ACK cluster tag updates
-
-The vendor-access policy includes `cs:ModifyClusterTags` in the existing ACK
-allow statement with `Resource: "*"`, matching the other ACK management actions.
-This allows tags to be added or backfilled on existing clusters.
-
-Existing customers must apply the updated vendor-access module before retrying
-provisioning; upgrading the provisioning workflow alone does not update RAM:
-
-1. In the Terraform configuration and state that manage vendor access, update the
-   module source `ref` to a release or commit containing this fix. If following
-   `main`, refresh the cached module with `terraform init -upgrade` as well.
-2. Run `terraform init -upgrade`, then `terraform plan -out=vendor-access.tfplan`
-   using the customer's RAM administration credentials. Review the plan for
-   in-place policy document updates to `streamnative-bootstrap` and
-   `streamnative-support`, which share this template. Role and attachment
-   replacement is not required by this change.
-3. Apply the reviewed plan with `terraform apply vendor-access.tfplan`.
-4. Retry provisioning with a fresh assumed-role session after RAM propagation.
-
-The pinned Alibaba Cloud provider updates each policy by creating a new default
-RAM policy version. The existing
-`DeleteOldestNonDefaultVersionWhenLimitExceeded` rotation strategy removes the
-oldest non-default version if the version limit is reached. Policy names and
-attachments stay the same; the JSON policy language `Version` remains `"1"`.
-There is no separate module policy-version input to bump. The fix is distributed
-through the repository's normal release process.
-
-### Regression verification
-
-For an end-to-end check in an approved test environment:
-
-1. Use an existing ACK cluster managed by `alicloud_cs_managed_kubernetes.ack`
-   and the updated CloudConnection assumed role. Record the cluster ID and tags.
-2. Add `Project=PULSAR` and `Type=INFRA` through `additional_tags`, preserving
-   existing tags. Confirm the plan shows an in-place `ack.tags` update with no
-   cluster replacement.
-3. Apply and verify the same cluster ID has the new tags, with no
-   `403 StatusForbidden` for `cs:ModifyClusterTags`.
-4. Run the full, untargeted `provision2` plan/apply and verify credential reads
-   and remaining resources complete. If a targeted cluster update was needed
-   for recovery, it is not a substitute for this full verification.
-5. Restore the original tags through Terraform and verify the in-place update
-   succeeds again.
-
 ## Execute following commands to import existing roles and policies if you lost the tfstate
 ```bash
 terraform import module.vendor_access.alicloud_ram_policy.cloud_manager_access streamnative-bootstrap
