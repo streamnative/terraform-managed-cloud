@@ -32,12 +32,9 @@ After [authenticating to your AliCloud international account](https://registry.t
 
 ## Upgrade existing deployments for ACK cluster tag updates
 
-The vendor-access policy allows `cs:ModifyClusterTags` on
-`acs:cs:${region}:${account_id}:cluster/*`, where `account_id` is the customer
-account and `region` is this module's input (all regions by default). ACK cluster
-IDs are assigned during provisioning, so this covers all ACK clusters in that
-account and region. The permission has no tag condition, allowing tags to be
-backfilled on existing clusters. See the [ACK RAM authorization reference](https://www.alibabacloud.com/help/en/ram/api-alibaba-cloud-container-service-for-kubernetes).
+The vendor-access policy includes `cs:ModifyClusterTags` in the existing ACK
+allow statement with `Resource: "*"`, matching the other ACK management actions.
+This allows tags to be added or backfilled on existing clusters.
 
 Existing customers must apply the updated vendor-access module before retrying
 provisioning; upgrading the provisioning workflow alone does not update RAM:
@@ -63,14 +60,6 @@ through the repository's normal release process.
 
 ### Regression verification
 
-Run the offline permission and resource-scope checks from the repository root:
-
-```bash
-python3 scripts/test_alicloud_vendor_access.py -v
-```
-
-These checks render the policy with Terraform and verify the permission used by
-an existing cluster's tag update. They do not call ACK or verify STS enforcement.
 For an end-to-end check in an approved test environment:
 
 1. Use an existing ACK cluster managed by `alicloud_cs_managed_kubernetes.ack`

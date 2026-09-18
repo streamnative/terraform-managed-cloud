@@ -126,6 +126,7 @@
         "cs:ModifyClusterAddon",
         "cs:ModifyClusterConfiguration",
         "cs:ModifyClusterNodePool",
+        "cs:ModifyClusterTags",
         "cs:ModifyPolicyInstance",
         "cs:PauseClusterUpgrade",
         "cs:PauseComponentUpgrade",
@@ -146,15 +147,6 @@
       ],
       "Resource": [
         "*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "cs:ModifyClusterTags"
-      ],
-      "Resource": [
-        "acs:cs:${region}:${account_id}:cluster/*"
       ]
     },
     {
