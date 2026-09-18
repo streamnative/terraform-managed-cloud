@@ -151,6 +151,15 @@
     {
       "Effect": "Allow",
       "Action": [
+        "cs:ModifyClusterTags"
+      ],
+      "Resource": [
+        "acs:cs:${region}:${account_id}:cluster/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "nlb:*",
         "slb:*"
       ],
