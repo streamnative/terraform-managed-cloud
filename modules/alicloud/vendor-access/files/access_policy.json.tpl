@@ -126,6 +126,7 @@
         "cs:ModifyClusterAddon",
         "cs:ModifyClusterConfiguration",
         "cs:ModifyClusterNodePool",
+        "cs:ModifyClusterTags",
         "cs:ModifyPolicyInstance",
         "cs:PauseClusterUpgrade",
         "cs:PauseComponentUpgrade",

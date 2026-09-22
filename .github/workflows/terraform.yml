@@ -41,6 +41,10 @@ jobs:
       - name: Terraform Validate Root
         run: cd "${GITHUB_WORKSPACE}" && terraform init -backend=false && AWS_REGION=us-east-1 terraform validate -no-color
 
+      - name: Terraform AliCloud Vendor Access Validate
+        working-directory: modules/alicloud/vendor-access
+        run: terraform init -backend=false && terraform validate -no-color
+
       - name: Terraform AWS Validate Modules
         run: for module in modules/aws/; do cd "${GITHUB_WORKSPACE}/${module}" && terraform init -backend=false && AWS_REGION=us-east-1 terraform validate -no-color ; done
      
