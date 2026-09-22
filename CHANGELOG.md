@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.25.2](https://github.com/streamnative/terraform-managed-cloud/compare/v3.25.1...v3.25.2) (2026-09-22)
+
+
+### Bug Fixes
+
+* **alicloud:** allow existing ACK cluster tag updates ([#158](https://github.com/streamnative/terraform-managed-cloud/issues/158)) ([286a4ef](https://github.com/streamnative/terraform-managed-cloud/commit/286a4efa0b7e5898cd6f7024958724802135f8f2)), closes [#157](https://github.com/streamnative/terraform-managed-cloud/issues/157)
+
 ## [3.25.1](https://github.com/streamnative/terraform-managed-cloud/compare/v3.25.0...v3.25.1) (2026-08-26)
 
 
