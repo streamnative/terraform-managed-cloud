@@ -110,3 +110,27 @@ resource "azurerm_role_assignment" "user_access_administrator" {
   condition            = templatefile("${path.module}/role-assignment-condition.tpl", { role_definition_id = azurerm_role_definition.velero_backup_role.role_definition_id })
   depends_on           = [azurerm_role_definition.velero_backup_role]
 }
+
+# The AKS node resource group is created by AKS when the cluster is provisioned, so it does not exist on the first apply.
+# Once it exists, its name can be passed via `node_resource_group_names` to grant read-only access for troubleshooting
+# (VM scale set instance views, VM and disk metrics, NICs, load balancers).
+data "azurerm_resource_group" "node" {
+  for_each = toset(var.node_resource_group_names)
+  name     = each.value
+}
+
+# Grant the sn automation service principal the Reader role to the AKS node resource groups
+resource "azurerm_role_assignment" "sn_automation_node_reader" {
+  for_each             = data.azurerm_resource_group.node
+  scope                = each.value.id
+  role_definition_name = "Reader"
+  principal_id         = data.azurerm_user_assigned_identity.automation.principal_id
+}
+
+# Grant the sn support service principal the Reader role to the AKS node resource groups
+resource "azurerm_role_assignment" "sn_support_node_reader" {
+  for_each             = data.azurerm_resource_group.node
+  scope                = each.value.id
+  role_definition_name = "Reader"
+  principal_id         = data.azurerm_user_assigned_identity.support.principal_id
+}

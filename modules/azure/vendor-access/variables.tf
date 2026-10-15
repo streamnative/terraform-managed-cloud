@@ -60,3 +60,9 @@ variable "identity_resource_group" {
   description = "The resource group name which contains the automation and support managed identities"
   default     = ""
 }
+
+variable "node_resource_group_names" {
+  type        = list(string)
+  description = "The names of the AKS node resource groups (by default `MC_<resource_group_name>_<cluster_name>_<location>`) to grant StreamNative read-only access to. AKS creates the node resource group when the cluster is provisioned, so leave this empty on the first apply, then add the name(s) and re-apply once the cluster exists."
+  default     = []
+}

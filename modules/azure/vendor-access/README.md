@@ -31,6 +31,24 @@ This module creates the following resources:
 
 To use this module you must have [Terraform installed](https://learn.hashicorp.com/tutorials/terraform/install-cli) and be [familiar](https://developer.hashicorp.com/terraform/tutorials/azure-get-started) with its usage for Azure. It is recommended to securely store the Terraform configuration you create in source control, as well as use [Terraform's Remote State](https://www.terraform.io/language/state/remote) for storing the `*.tfstate` file.
 
+### Read access to the AKS node resource group
+
+AKS places the cluster's VM scale sets, managed disks, NICs and load balancers in a separate node resource group (by default `MC_<resource_group_name>_<cluster_name>_<location>`). The role assignments above are scoped to the AKS resource group only, so without access to the node resource group StreamNative cannot inspect VM instance health or VM and disk metrics when troubleshooting node-level issues.
+
+The node resource group is created by AKS when the cluster is provisioned, so it does not exist on the first apply of this module. Once the cluster exists, add its name to `node_resource_group_names` and re-apply:
+
+```hcl
+node_resource_group_names = ["MC_<resource_group_name>_<cluster_name>_<location>"]
+```
+
+This grants the built-in, read-only `Reader` role on the node resource group to the StreamNative automation and support service principals. To grant the same access without Terraform, run for each service principal:
+
+```shell
+az role assignment create --role Reader \
+  --assignee-object-id <principal-id> --assignee-principal-type ServicePrincipal \
+  --scope /subscriptions/<subscription-id>/resourceGroups/<node-resource-group>
+```
+
 ## Requirements
 
 | Name | Version |
@@ -56,9 +74,12 @@ No modules.
 | [azurerm_resource_group.aks](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
 | [azurerm_role_assignment.sn_automation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.sn_automation_cluster_admin](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
+| [azurerm_role_assignment.sn_automation_node_reader](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.sn_support](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
+| [azurerm_role_assignment.sn_support_node_reader](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.user_access_administrator](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_role_definition.velero_backup_role](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_definition) | resource |
+| [azurerm_resource_group.node](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) | data source |
 | [azurerm_subscription.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/subscription) | data source |
 
 ## Inputs
@@ -66,6 +87,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_tags"></a> [additional\_tags](#input\_additional\_tags) | Additional tags to be added to the resources created by this module. | `map(any)` | `{}` | no |
+| <a name="input_node_resource_group_names"></a> [node\_resource\_group\_names](#input\_node\_resource\_group\_names) | The names of the AKS node resource groups (by default `MC_<resource_group_name>_<cluster_name>_<location>`) to grant StreamNative read-only access to. AKS creates the node resource group when the cluster is provisioned, so leave this empty on the first apply, then add the name(s) and re-apply once the cluster exists. | `list(string)` | `[]` | no |
 | <a name="input_resource_group_location"></a> [resource\_group\_location](#input\_resource\_group\_location) | The location of the resource group where the AKS cluster will be created | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of the resource group where the AKS cluster will be created | `string` | n/a | yes |
 | <a name="input_sn_automation_client_id"></a> [sn\_automation\_client\_id](#input\_sn\_automation\_client\_id) | The client ID of the sn automation service principal for StreamNative Cloud automation | `string` | n/a | yes |
