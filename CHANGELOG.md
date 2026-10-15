@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.26.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.25.2...v3.26.0) (2026-10-15)
+
+
+### Features
+
+* **azure:** grant Reader on AKS node resource group ([#161](https://github.com/streamnative/terraform-managed-cloud/issues/161)) ([d219feb](https://github.com/streamnative/terraform-managed-cloud/commit/d219febc6efe68f26768a4a72725c056d2ef2f54))
+
 ## [3.25.2](https://github.com/streamnative/terraform-managed-cloud/compare/v3.25.1...v3.25.2) (2026-09-22)
 
 
