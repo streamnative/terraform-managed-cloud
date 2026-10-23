@@ -14,6 +14,7 @@
           "ecr:*",
           "eks:*",
           "elasticloadbalancing:*",
+          "health:Describe*",
           "iam:Get*",
           "iam:List*",
           "kms:*",
