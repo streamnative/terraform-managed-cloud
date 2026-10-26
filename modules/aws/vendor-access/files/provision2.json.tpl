@@ -11,6 +11,7 @@
         "eks:Describe*",
         "eks:List*",
         "elasticloadbalancing:Describe*",
+        "health:Describe*",
         "iam:GetInstanceProfile",
         "iam:GetOpenIDConnectProvider",
         "iam:GetPolicy",

@@ -16,6 +16,7 @@
         "eks:Describe*",
         "eks:List*",
         "elasticloadbalancing:Describe*",
+        "health:Describe*",
         "logs:Describe*",
         "logs:List*",
         "logs:Filter*",
