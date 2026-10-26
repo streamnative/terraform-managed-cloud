@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.26.0](https://github.com/streamnative/terraform-managed-cloud/compare/v3.25.2...v3.26.0) (2026-10-26)
+
+
+### Features
+
+* **aws:** allow AWS Health read actions in vendor-access policies ([#165](https://github.com/streamnative/terraform-managed-cloud/issues/165)) ([2a0997a](https://github.com/streamnative/terraform-managed-cloud/commit/2a0997a2f9033945543d0c6221a8764314137af8))
+* **azure:** grant Reader on AKS node resource group ([#161](https://github.com/streamnative/terraform-managed-cloud/issues/161)) ([d219feb](https://github.com/streamnative/terraform-managed-cloud/commit/d219febc6efe68f26768a4a72725c056d2ef2f54))
+
 ## [3.25.2](https://github.com/streamnative/terraform-managed-cloud/compare/v3.25.1...v3.25.2) (2026-09-22)
 
 
