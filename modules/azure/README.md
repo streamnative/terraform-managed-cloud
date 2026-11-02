@@ -18,10 +18,11 @@
 
 This repository contains Terraform modules for the management of StreamNative's vendor access to Azure.
 
-There are two modules in this repository:
+The Azure vendor-access modules include the following packages.
 
 - [modules/azure/sn-cloud-manager](modules/azure/sn-cloud-manager): This module creates Microsoft Entra Application Registrations and related service principals within your Azure subscription & Microsoft Entra ID. These resources give StreamNative access only for the provisioning and management of StreamNative's Managed Cloud offering.
 - [modules/azure/vendor-access](modules/azure/vendor-access): This module creates an Azure Resource Group within your Azure subscription. The module also helps to configure the role assignments for the StreamNative Managed Cloud service principals created by `sn-cloud-manager` module.
+- [Azure vendor access onboarding preview](vendor-access-onboarding/README.md) creates discoverable managed identities and supports a two-CE workload permission experiment.
 
 ## Quickstart
 

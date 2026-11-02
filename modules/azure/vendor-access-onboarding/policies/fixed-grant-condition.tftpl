@@ -1,0 +1,11 @@
+(
+  (!(ActionMatches{'Microsoft.Authorization/roleAssignments/write'}))
+  OR
+  (
+    @Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {${role_id}}
+    AND
+    @Request[Microsoft.Authorization/roleAssignments:PrincipalId] ForAnyOfAnyValues:GuidEquals {${principal_id}}
+    AND
+    @Request[Microsoft.Authorization/roleAssignments:PrincipalType] StringEqualsIgnoreCase 'ServicePrincipal'
+  )
+)
