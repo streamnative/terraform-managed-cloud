@@ -139,6 +139,7 @@ resource "azurerm_role_definition" "policy_executor" {
 
 resource "azurerm_policy_definition" "grant" {
   for_each     = local.grants
+  depends_on   = [terraform_data.namespace_claim]
   name         = "sn-${local.namespace_key}-${each.key}"
   policy_type  = "Custom"
   mode         = "All"

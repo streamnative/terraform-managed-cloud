@@ -44,7 +44,7 @@ run "one_input" {
   command = plan
   variables { organization_name = "o-poc" }
   assert {
-    condition     = length(azurerm_role_assignment.identity_inspector) == 2 && length(azurerm_role_assignment.policy_executor) == 0 && length(azurerm_role_definition.policy_executor) == 0 && length(azurerm_policy_definition.grant) == 0 && length(terraform_data.discovery_registration) == 0
+    condition     = length(azurerm_role_assignment.identity_inspector) == 2 && length(azurerm_role_assignment.policy_executor) == 0 && length(azurerm_role_definition.policy_executor) == 0 && length(azurerm_policy_definition.grant) == 0 && length(terraform_data.discovery_registration) == 0 && length(azurerm_subscription_policy_assignment.disposable_rg_guard) == 0 && length(azurerm_role_assignment.disposable_rg_creator) == 0 && length(azurerm_role_assignment.caller_read_comparator) == 0
     error_message = "Default installation should create the two identity-scoped grants and no policy executors or receiver."
   }
   assert {
@@ -198,4 +198,30 @@ run "reject_non_test_future_profile" {
     disposable_subscription_id = "11111111-1111-4111-8111-111111111111"
   }
   expect_failures = [var.disposable_subscription_id]
+}
+
+run "future_policy_expression_boundaries" {
+  command = plan
+  variables {
+    organization_name               = "o-poc"
+    environment                     = "test"
+    disposable_subscription_id      = "11111111-1111-4111-8111-111111111111"
+    enable_node_reader_verification = true
+  }
+  assert {
+    condition     = !strcontains(azurerm_policy_definition.disposable_rg_guard[0].policy_rule, "resourceGroup()") && !strcontains(jsonencode(local.workload_match), "resourceGroup()") && jsondecode(azurerm_policy_definition.disposable_rg_guard[0].policy_rule).if.allOf[0].field == "type" && jsondecode(azurerm_policy_definition.disposable_rg_guard[0].policy_rule).if.allOf[0].equals == "Microsoft.Resources/subscriptions/resourceGroups"
+    error_message = "The subscription RG guard must not evaluate resourceGroup() for non-RG resources."
+  }
+  assert {
+    condition     = alltrue([for c in local.node_match.allOf : startswith(c.value, "[if(${local.node_target_check},") if try(strcontains(c.value, "resourceGroup()"), false)]) && strcontains(local.node_target_check, "equals(toLower(string(field('type'))), 'microsoft.containerservice/managedclusters')") && strcontains(local.node_target_check, "startsWith(toLower(string(field('id')))")
+    error_message = "Every node parent lookup must be inside a lazy if guarded by the AKS type and reserved ID prefix."
+  }
+  assert {
+    condition     = alltrue([for c in local.workload_match.allOf : strcontains(c.value, "coalesce(field('tags[sn-ce]'), '')") if try(strcontains(c.value, "replace("), false)]) && length([for c in local.workload_match.allOf : c if try(c.field == "tags[sn-ce]" && c.exists == "true", false)]) == 1 && length([for c in local.workload_match.allOf : c if try(c.field == "tags[sn-ce]" && c.notEquals == "", false)]) == 1
+    error_message = "Missing CE tags must be handled safely and cannot satisfy the workload selector."
+  }
+  assert {
+    condition     = jsondecode(azurerm_policy_definition.grant["node-auto-reader"].policy_rule).then.details.resourceGroupName == "[field('Microsoft.ContainerService/managedClusters/nodeResourceGroup')]" && jsondecode(azurerm_policy_definition.grant["workload-contributor"].policy_rule).if == local.workload_match
+    error_message = "Rendered DINE rules must use the checked selector and actual node output."
+  }
 }

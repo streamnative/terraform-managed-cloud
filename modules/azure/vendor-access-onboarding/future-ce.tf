@@ -10,8 +10,8 @@ locals {
       { field = "location", equals = "eastus" },
       ], slice(local.fixed_workload_match.allOf, 2, length(local.fixed_workload_match.allOf)), [
       { field = "tags[sn-ce]", match = "........-....-....-....-............" },
-      { value = "[length(replace(string(field('tags[sn-ce]')), '-', ''))]", equals = 32 },
-      { value = "[replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(string(field('tags[sn-ce]')), '-', ''), '0', ''), '1', ''), '2', ''), '3', ''), '4', ''), '5', ''), '6', ''), '7', ''), '8', ''), '9', ''), 'a', ''), 'b', ''), 'c', ''), 'd', ''), 'e', ''), 'f', '')]", equals = "" },
+      { value = "[length(replace(string(coalesce(field('tags[sn-ce]'), '')), '-', ''))]", equals = 32 },
+      { value = "[replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(string(coalesce(field('tags[sn-ce]'), '')), '-', ''), '0', ''), '1', ''), '2', ''), '3', ''), '4', ''), '5', ''), '6', ''), '7', ''), '8', ''), '9', ''), 'a', ''), 'b', ''), 'c', ''), 'd', ''), 'e', ''), 'f', '')]", equals = "" },
     ])
   }
   future_node_target_check = "and(equals(toLower(string(field('type'))), 'microsoft.containerservice/managedclusters'), startsWith(toLower(string(field('id'))), toLower(concat(subscription().id, '/resourceGroups/', parameters('workloadPrefix')))))"
@@ -33,6 +33,7 @@ locals {
 
 resource "azurerm_policy_definition" "disposable_rg_guard" {
   count        = local.future_ce ? 1 : 0
+  depends_on   = [terraform_data.namespace_claim]
   name         = "sn-${local.namespace_key}-disposable-rg-guard"
   policy_type  = "Custom"
   mode         = "All"
@@ -72,6 +73,7 @@ resource "azurerm_subscription_policy_assignment" "disposable_rg_guard" {
 
 resource "azurerm_role_definition" "disposable_rg_creator" {
   count             = local.future_ce ? 1 : 0
+  depends_on        = [terraform_data.namespace_claim]
   name              = "sn-${local.namespace_key}-disposable-rg-creator"
   scope             = local.subscription_scope
   assignable_scopes = [local.subscription_scope]
@@ -95,6 +97,7 @@ resource "azurerm_role_assignment" "disposable_rg_creator" {
 
 resource "azurerm_role_definition" "caller_read_comparator" {
   count             = var.enable_caller_role_assignment_read_comparator ? 1 : 0
+  depends_on        = [terraform_data.namespace_claim]
   name              = "sn-${local.namespace_key}-caller-read-comparator"
   scope             = local.subscription_scope
   assignable_scopes = [local.subscription_scope]
