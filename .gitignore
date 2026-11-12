@@ -53,3 +53,5 @@ terraform.rc
 .vscode/
 .idea/
 tests
+!modules/azure/vendor-access-onboarding/tests/
+!modules/azure/vendor-access-onboarding/tests/**

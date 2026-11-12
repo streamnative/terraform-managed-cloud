@@ -26,8 +26,8 @@ locals {
     "${local.group_ids[key]}/providers/Microsoft.ContainerService/managedClusters/${target.aks_name}"
   }
   # Keep resourceGroup() out of the evaluation path for every unrelated Azure resource.
-  node_target_check = "contains(createArray(${join(", ", [for id in values(local.aks_ids) : "'${lower(id)}'"])}), toLower(string(field('id'))))"
-  grants = merge(length(var.verification_targets) > 0 ? {
+  fixed_node_target_check = "contains(createArray(${join(", ", [for id in values(local.aks_ids) : "'${lower(id)}'"])}), toLower(string(field('id'))))"
+  grants = merge(local.enable_policies ? {
     workload-contributor = { identity = "automation", role = "contributor", target = "workload" }
     workload-aks-admin   = { identity = "automation", role = "aks_admin", target = "workload" }
     workload-aks-user    = { identity = "support", role = "aks_user", target = "workload" }
@@ -40,7 +40,7 @@ locals {
     environment    = { type = "String" }
     workloadPrefix = { type = "String" }
   }
-  workload_match = {
+  fixed_workload_match = {
     allOf = [
       { field = "type", equals = "Microsoft.Resources/subscriptions/resourceGroups" },
       { field = "id", in = values(local.group_ids) },
@@ -55,7 +55,7 @@ locals {
   }
   # resourceGroup() refers to the AKS parent, not its node RG. nodeResourceGroup
   # is read from the AKS result after provisioning, never guessed as MC_*.
-  node_match = {
+  fixed_node_match = {
     allOf = [
       { field = "type", equals = "Microsoft.ContainerService/managedClusters" },
       { anyOf = [for key, target in var.verification_targets : { allOf = [
@@ -118,7 +118,7 @@ locals {
 }
 
 resource "azurerm_role_definition" "policy_executor" {
-  count             = length(var.verification_targets) > 0 ? 1 : 0
+  count             = local.enable_policies ? 1 : 0
   depends_on        = [terraform_data.namespace_claim]
   name              = "sn-${local.namespace_key}-policy-executor"
   scope             = local.subscription_scope
@@ -142,7 +142,7 @@ resource "azurerm_policy_definition" "grant" {
   name         = "sn-${local.namespace_key}-${each.key}"
   policy_type  = "Custom"
   mode         = "All"
-  display_name = "SNIP-187 fixed ${each.key} grant"
+  display_name = "SNIP-187 ${each.key} verification grant"
   parameters = jsonencode(merge(local.shared_parameters, {
     principalId      = { type = "String" }
     roleDefinitionId = { type = "String" }

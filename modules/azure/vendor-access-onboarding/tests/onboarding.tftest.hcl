@@ -122,3 +122,80 @@ run "uid_workload_contract" {
     error_message = "The group ID and sn-ce tag must use the CE UID used by the control plane."
   }
 }
+
+run "future_ce_without_predeclared_ids" {
+  command = plan
+  variables {
+    organization_name          = "o-poc"
+    environment                = "test"
+    disposable_subscription_id = "11111111-1111-4111-8111-111111111111"
+  }
+  assert {
+    condition     = length(azurerm_subscription_policy_assignment.grant) == 3 && length(local.group_ids) == 0 && length(terraform_data.fresh_target) == 0 && output.workload_contract.profile == "disposable-future-ce"
+    error_message = "Future CE policies must not need an installer-supplied CE UID or per-target provisioner."
+  }
+  assert {
+    condition     = length(azurerm_subscription_policy_assignment.disposable_rg_guard) == 1 && jsondecode(azurerm_policy_definition.disposable_rg_guard[0].policy_rule).then.effect == "Deny" && toset(one(azurerm_role_definition.disposable_rg_creator[0].permissions).actions) == toset(["Microsoft.Resources/subscriptions/resourceGroups/read", "Microsoft.Resources/subscriptions/resourceGroups/write"]) && length(azurerm_role_assignment.caller_read_comparator) == 0
+    error_message = "RG write requires the guard and must not silently include IAM reads, delete or wider privileges."
+  }
+  assert {
+    condition     = length([for c in local.workload_match.allOf : c if try(c.field == "id", false)]) == 0 && local.workload_match.allOf[1].equals == "eastus"
+    error_message = "The future workload matcher must be region-bound and independent of a predeclared resource ID."
+  }
+}
+run "future_ce_node_caller_read_comparator" {
+  command = plan
+  variables {
+    organization_name                             = "o-poc"
+    environment                                   = "test"
+    disposable_subscription_id                    = "11111111-1111-4111-8111-111111111111"
+    enable_node_reader_verification               = true
+    enable_caller_role_assignment_read_comparator = true
+  }
+  assert {
+    condition     = length(azurerm_subscription_policy_assignment.grant) == 5 && toset(one(azurerm_role_definition.caller_read_comparator[0].permissions).actions) == toset(["Microsoft.Authorization/roleAssignments/read"]) && azurerm_role_assignment.caller_read_comparator[0].principal_id == azurerm_user_assigned_identity.operational["automation"].principal_id
+    error_message = "The comparator must grant only role-assignment metadata reads to automation."
+  }
+  assert {
+    condition     = strcontains(local.node_match.allOf[2].value, "field('Microsoft.ContainerService/managedClusters/nodeResourceGroup')") && strcontains(local.node_match.allOf[2].value, "concat('MC_', resourceGroup().name, '_')")
+    error_message = "Node policies must use AKS's actual output and reject node RGs outside the current parent namespace."
+  }
+}
+run "reject_wrong_disposable_subscription" {
+  command = plan
+  variables {
+    organization_name          = "o-poc"
+    environment                = "test"
+    disposable_subscription_id = "12345678-1234-1234-1234-123456789abc"
+  }
+  expect_failures = [terraform_data.namespace_claim]
+}
+run "reject_mixed_verification_profiles" {
+  command = plan
+  variables {
+    organization_name          = "o-poc"
+    environment                = "test"
+    disposable_subscription_id = "11111111-1111-4111-8111-111111111111"
+    verification_targets       = { ce1 = { location = "eastus", aks_name = "aks-ce1", node_resource_group = "nodes-ce1" } }
+  }
+  expect_failures = [var.disposable_subscription_id]
+}
+run "reject_shared_subscription_comparator" {
+  command = plan
+  variables {
+    organization_name                             = "o-poc"
+    environment                                   = "test"
+    verification_targets                          = { ce1 = { location = "eastus", aks_name = "aks-ce1", node_resource_group = "nodes-ce1" } }
+    enable_node_reader_verification               = true
+    enable_caller_role_assignment_read_comparator = true
+  }
+  expect_failures = [var.enable_caller_role_assignment_read_comparator]
+}
+run "reject_non_test_future_profile" {
+  command = plan
+  variables {
+    organization_name          = "o-poc"
+    disposable_subscription_id = "11111111-1111-4111-8111-111111111111"
+  }
+  expect_failures = [var.disposable_subscription_id]
+}

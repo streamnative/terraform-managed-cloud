@@ -32,14 +32,21 @@ locals {
 # First apply only: do not adopt reserved groups by name/tag. This is a read-only
 # CLI check, not an atomic namespace lock; the installation race is a release gate.
 resource "terraform_data" "namespace_claim" {
-  triggers_replace = [local.subscription_scope, var.organization_name, var.environment]
+  triggers_replace = [local.subscription_scope, var.organization_name, var.environment, var.disposable_subscription_id]
+  lifecycle {
+    precondition {
+      condition     = var.disposable_subscription_id == null ? true : var.disposable_subscription_id == data.azurerm_client_config.current.subscription_id
+      error_message = "The acknowledged disposable subscription must equal the authenticated provider subscription."
+    }
+  }
   provisioner "local-exec" {
     interpreter = ["python3"]
     command     = "${path.module}/scripts/check_namespace.py"
     environment = {
-      AZURE_SUBSCRIPTION_ID = data.azurerm_client_config.current.subscription_id
-      WORKLOAD_RG_PREFIX    = local.workload_rg_prefix
-      RESERVED_GROUP_NAMES  = jsonencode([local.bootstrap_rg_name])
+      AZURE_SUBSCRIPTION_ID      = data.azurerm_client_config.current.subscription_id
+      WORKLOAD_RG_PREFIX         = local.workload_rg_prefix
+      RESERVED_GROUP_NAMES       = jsonencode([local.bootstrap_rg_name])
+      REQUIRE_EMPTY_SUBSCRIPTION = tostring(var.disposable_subscription_id != null)
     }
   }
 }

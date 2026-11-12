@@ -8,11 +8,11 @@ import sys
 import uuid
 
 
-def collisions(groups, prefix, names):
+def collisions(groups, prefix, names, require_empty=False):
     names = {name.lower() for name in names}
     return sorted(
         group["name"] for group in groups
-        if (prefix and group["name"].lower().startswith(prefix.lower()))
+        if require_empty or (prefix and group["name"].lower().startswith(prefix.lower()))
         or group["name"].lower() in names
     )
 
@@ -29,7 +29,10 @@ def main():
              "--query", "[].{name:name}", "--output", "json", "--only-show-errors"],
             capture_output=True, text=True, check=True, timeout=60,
         )
-        conflicts = collisions(json.loads(result.stdout), prefix, names)
+        empty_flag = os.environ.get("REQUIRE_EMPTY_SUBSCRIPTION", "false")
+        if empty_flag not in ("true", "false"):
+            raise ValueError("unexpected empty-subscription flag")
+        conflicts = collisions(json.loads(result.stdout), prefix, names, empty_flag == "true")
         if conflicts:
             print("Reserved Azure namespace is already occupied; refusing adoption: " + ", ".join(conflicts), file=sys.stderr)
             return 1

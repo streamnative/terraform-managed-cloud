@@ -33,11 +33,15 @@ output "identity_metadata" {
 }
 
 output "workload_contract" {
-  description = "Canonical installer-created workload groups and required tags for the verification targets."
+  description = "Canonical workload namespace and required tags for fixed targets or future CE verification."
   value = {
-    prefix             = local.workload_rg_prefix
-    tags               = { "sn-organization" = var.organization_name, "sn-managed-by" = "streamnative", "sn-environment" = var.environment }
-    ce_key_tag         = "sn-ce"
-    workload_group_ids = local.group_ids
+    prefix                 = local.workload_rg_prefix
+    tags                   = { "sn-organization" = var.organization_name, "sn-managed-by" = "streamnative", "sn-environment" = var.environment }
+    ce_key_tag             = "sn-ce"
+    workload_group_ids     = local.group_ids
+    profile                = local.future_ce ? "disposable-future-ce" : "fixed-targets"
+    allowed_locations      = local.future_ce ? ["eastus"] : distinct([for target in var.verification_targets : target.location])
+    node_group_prefix      = local.future_ce ? "MC_${local.workload_rg_prefix}eastus-" : null
+    caller_read_comparator = var.enable_caller_role_assignment_read_comparator
   }
 }

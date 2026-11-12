@@ -79,7 +79,31 @@ variable "enable_node_reader_verification" {
   default     = false
   nullable    = false
   validation {
-    condition     = !var.enable_node_reader_verification || length(var.verification_targets) > 0
-    error_message = "Node Reader verification needs at least one explicitly declared test target."
+    condition     = !var.enable_node_reader_verification || length(var.verification_targets) > 0 || var.disposable_subscription_id != null
+    error_message = "Node Reader verification needs explicit fixed targets or the disposable subscription profile."
+  }
+}
+
+variable "disposable_subscription_id" {
+  description = "Explicit acknowledgement of an EMPTY dedicated subscription for the future-CE experiment. Installs a subscription-wide RG deny guard and grants automation RG read/write. Never use a shared subscription."
+  type        = string
+  default     = null
+  validation {
+    condition = var.disposable_subscription_id == null ? true : (
+      can(regex("^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$", var.disposable_subscription_id)) &&
+      var.environment == "test" && var.bootstrap_location == "eastus" && length(var.verification_targets) == 0
+    )
+    error_message = "The disposable profile requires a canonical subscription UUID, test/eastus, and an empty fixed-target map."
+  }
+}
+
+variable "enable_caller_role_assignment_read_comparator" {
+  description = "Experimental automation-only subscription roleAssignments/read grant to compare the observed DINE caller failure. Default false preserves that negative test. No other IAM read/write permissions."
+  type        = bool
+  default     = false
+  nullable    = false
+  validation {
+    condition     = !var.enable_caller_role_assignment_read_comparator || (var.disposable_subscription_id != null && var.enable_node_reader_verification)
+    error_message = "The caller-read comparator is restricted to disposable subscription node Reader verification."
   }
 }

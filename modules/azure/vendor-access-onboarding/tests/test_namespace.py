@@ -12,3 +12,7 @@ class NamespaceTests(unittest.TestCase):
         self.assertEqual(collisions(groups, "snce-abc-", ["manager-rg"]), ["Manager-RG", "snce-abc-eastus-ce1"])
         self.assertEqual(collisions(groups, "", ["snce-abc-eastus-ce2", "nodes-ce2"]), ["Nodes-CE2"])
         self.assertEqual(collisions(groups, "", ["snce-abc-eastus-ce3", "nodes-ce3"]), [])
+
+    def test_disposable_profile_rejects_every_existing_group(self):
+        self.assertEqual(collisions([{"name": "customer-unrelated"}], "snce-abc-", ["manager-rg"], True), ["customer-unrelated"])
+        self.assertEqual(collisions([], "snce-abc-", ["manager-rg"], True), [])
