@@ -1,0 +1,17 @@
+{
+  "if": ${match_json},
+  "then": {
+    "effect": "[parameters('effect')]",
+    "details": {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "name": ${assignment_name_json},
+      "resourceGroupName": ${target_resource_group_json},
+      "existenceScope": "ResourceGroup",
+      "evaluationDelay": "AfterProvisioningSuccess",
+      "existenceCondition": ${existence_condition_json},
+      "roleDefinitionIds": ${role_definition_ids_json},
+      "deploymentScope": "ResourceGroup",
+      "deployment": ${deployment_json}
+    }
+  }
+}
