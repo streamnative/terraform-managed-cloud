@@ -51,6 +51,10 @@ run "one_input" {
     condition     = toset(keys(output.discovery_hint)) == toset(["organization", "tenantId", "subscriptionId", "automationClientId"]) && output.discovery_hint.organization == "o-poc"
     error_message = "The discovery contract must contain exactly the four nonsecret hints."
   }
+  assert {
+    condition     = length(azurerm_role_definition.workload_rbac_manager) == 0 && length(azurerm_role_definition.full_ce_metadata_reader) == 0 && length(azurerm_role_definition.support_provider_metadata_reader) == 0 && output.workload_rbac_contract == null
+    error_message = "The single-input default must not grant workload RBAC delegation or full-CE metadata access."
+  }
 }
 run "known_workload_targets" {
   command = plan
@@ -224,4 +228,109 @@ run "future_policy_expression_boundaries" {
     condition     = jsondecode(azurerm_policy_definition.grant["node-auto-reader"].policy_rule).then.details.resourceGroupName == "[field('Microsoft.ContainerService/managedClusters/nodeResourceGroup')]" && jsondecode(azurerm_policy_definition.grant["workload-contributor"].policy_rule).if == local.workload_match
     error_message = "Rendered DINE rules must use the checked selector and actual node output."
   }
+}
+
+run "full_ce_scoped_workload_rbac" {
+  command = plan
+  variables {
+    organization_name                             = "o-poc"
+    environment                                   = "test"
+    disposable_subscription_id                    = "11111111-1111-4111-8111-111111111111"
+    enable_node_reader_verification               = true
+    enable_caller_role_assignment_read_comparator = true
+    enable_full_ce_workload_rbac                  = true
+  }
+  assert {
+    condition     = length(azurerm_subscription_policy_assignment.grant) == 6 && length(azurerm_role_definition.workload_rbac_manager) == 1 && length(local.group_ids) == 0 && output.workload_contract.full_ce_workload_rbac
+    error_message = "Full CE needs four workload grants and two node grants without any predeclared CE UID."
+  }
+  assert {
+    condition = toset(one(azurerm_role_definition.workload_rbac_manager[0].permissions).actions) == toset([
+      "Microsoft.Authorization/roleAssignments/read", "Microsoft.Authorization/roleAssignments/write",
+      "Microsoft.Authorization/roleAssignments/delete", "Microsoft.Authorization/roleDefinitions/read",
+    ]) && length(coalesce(one(azurerm_role_definition.workload_rbac_manager[0].permissions).data_actions, [])) == 0
+    error_message = "The delegated role must contain assignment lifecycle actions only, with no role definition write or data-plane actions."
+  }
+  assert {
+    condition = toset(values(local.service_role_ids)) == toset([
+      "4d97b98b-1d4f-4787-a291-c67834d212e7", "befefa01-2a29-4197-83a8-272ff33ce314",
+      "acdd72a7-3385-48ef-bd42-f606fba81ae7",
+    ]) && !contains(values(local.service_role_ids), local.workload_manager_role_id) && !contains(values(local.service_role_ids), local.role_ids.contributor)
+    error_message = "Only the three reviewed service roles can be delegated; never Contributor or the assignment manager itself."
+  }
+  assert {
+    condition = alltrue([for pair in [{ action = "write", attribute = "Request" }, { action = "delete", attribute = "Resource" }] :
+      strcontains(local.workload_rbac_condition, "!(ActionMatches{'Microsoft.Authorization/roleAssignments/${pair.action}'})") &&
+      strcontains(local.workload_rbac_condition, "@${pair.attribute}[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {${join(", ", sort(values(local.service_role_ids)))}}") &&
+      strcontains(local.workload_rbac_condition, "AND @${pair.attribute}[Microsoft.Authorization/roleAssignments:PrincipalType] StringEqualsIgnoreCase 'ServicePrincipal'") &&
+      strcontains(local.workload_rbac_condition, "AND !(@${pair.attribute}[Microsoft.Authorization/roleAssignments:PrincipalId] ForAnyOfAnyValues:GuidEquals {88888888-8888-4888-8888-888888888888, aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa})")
+    ]) && strcontains(local.workload_rbac_condition, ")) AND ((")
+    error_message = "Both writes and deletes must require the role allowlist and ServicePrincipal, and exclude automation/support with negated any-of equality."
+  }
+  assert {
+    condition = (
+      jsondecode(azurerm_policy_definition.grant["workload-rbac-manager"].policy_rule).if == local.workload_match &&
+      jsondecode(azurerm_policy_definition.grant["workload-rbac-manager"].policy_rule).then.details.resourceGroupName == "[field('name')]" &&
+      jsondecode(azurerm_policy_definition.grant["workload-rbac-manager"].policy_rule).then.details.deploymentScope == "ResourceGroup" &&
+      jsondecode(azurerm_policy_definition.grant["workload-rbac-manager"].policy_rule).then.details.deployment.properties.template.resources[0].properties.condition == local.workload_rbac_condition &&
+      jsondecode(azurerm_policy_definition.grant["workload-rbac-manager"].policy_rule).then.details.deployment.properties.template.resources[0].properties.conditionVersion == "2.0"
+    )
+    error_message = "DINE must install the conditioned manager at the matched workload RG, never at subscription scope."
+  }
+  assert {
+    condition = alltrue([for attribute in ["condition", "conditionVersion"] :
+      length([for c in jsondecode(azurerm_policy_definition.grant["workload-rbac-manager"].policy_rule).then.details.existenceCondition.allOf : c if c.field == "Microsoft.Authorization/roleAssignments/${attribute}" && c.equals == (attribute == "condition" ? local.workload_rbac_condition : "2.0")]) == 1
+    ])
+    error_message = "An existing assignment with missing or changed conditions must not satisfy policy compliance."
+  }
+  assert {
+    condition = (
+      strcontains(azurerm_role_assignment.policy_executor["workload-rbac-manager"].condition, local.workload_manager_role_id) &&
+      strcontains(azurerm_role_assignment.policy_executor["workload-rbac-manager"].condition, "88888888-8888-4888-8888-888888888888") &&
+      !strcontains(azurerm_role_assignment.policy_executor["workload-rbac-manager"].condition, "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa") &&
+      !contains(one(azurerm_role_definition.policy_executor[0].permissions).actions, "Microsoft.Authorization/roleAssignments/delete")
+    )
+    error_message = "The separate policy executor can grant only the manager role to automation and has no role-assignment delete action."
+  }
+  assert {
+    condition = (
+      azurerm_role_definition.workload_rbac_manager[0].role_definition_id == local.workload_manager_role_id &&
+      toset(one(azurerm_role_definition.full_ce_metadata_reader[0].permissions).actions) == toset(["Microsoft.Resources/subscriptions/read", "Microsoft.Resources/subscriptions/providers/read", "Microsoft.Authorization/roleDefinitions/read"]) &&
+      toset(one(azurerm_role_definition.caller_read_comparator[0].permissions).actions) == toset(["Microsoft.Authorization/roleAssignments/read"]) &&
+      azurerm_role_assignment.full_ce_metadata_reader[0].principal_id == "88888888-8888-4888-8888-888888888888" &&
+      toset(one(azurerm_role_definition.support_provider_metadata_reader[0].permissions).actions) == toset(["Microsoft.Resources/subscriptions/providers/read"]) &&
+      azurerm_role_assignment.support_provider_metadata_reader[0].principal_id == "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+    )
+    error_message = "Role IDs must be stable, with separate minimal automation/support metadata reads and unchanged comparator permissions."
+  }
+}
+
+run "reject_full_ce_without_disposable_profile" {
+  command = plan
+  variables {
+    organization_name            = "o-poc"
+    enable_full_ce_workload_rbac = true
+  }
+  expect_failures = [var.enable_full_ce_workload_rbac]
+}
+run "reject_full_ce_without_node_reader" {
+  command = plan
+  variables {
+    organization_name            = "o-poc"
+    environment                  = "test"
+    disposable_subscription_id   = "11111111-1111-4111-8111-111111111111"
+    enable_full_ce_workload_rbac = true
+  }
+  expect_failures = [var.enable_full_ce_workload_rbac]
+}
+run "reject_full_ce_without_caller_metadata" {
+  command = plan
+  variables {
+    organization_name               = "o-poc"
+    environment                     = "test"
+    disposable_subscription_id      = "11111111-1111-4111-8111-111111111111"
+    enable_node_reader_verification = true
+    enable_full_ce_workload_rbac    = true
+  }
+  expect_failures = [var.enable_full_ce_workload_rbac]
 }

@@ -14,10 +14,11 @@
 
 locals {
   role_ids = {
-    contributor = "b24988ac-6180-42a0-ab88-20f7382dd24c"
-    reader      = "acdd72a7-3385-48ef-bd42-f606fba81ae7"
-    aks_admin   = "0ab0b1a8-8aac-4efd-b8c2-3ee1fb270be8"
-    aks_user    = "4abbcc35-e782-43d8-92c5-2d3f1bd2253f"
+    contributor           = "b24988ac-6180-42a0-ab88-20f7382dd24c"
+    reader                = "acdd72a7-3385-48ef-bd42-f606fba81ae7"
+    aks_admin             = "0ab0b1a8-8aac-4efd-b8c2-3ee1fb270be8"
+    aks_user              = "4abbcc35-e782-43d8-92c5-2d3f1bd2253f"
+    workload_rbac_manager = local.workload_manager_role_id
   }
   group_ids = { for key, target in var.verification_targets : key =>
     "${local.subscription_scope}/resourceGroups/${local.workload_rg_prefix}${target.location}-${key}"
@@ -34,6 +35,8 @@ locals {
     } : {}, var.enable_node_reader_verification ? {
     node-auto-reader    = { identity = "automation", role = "reader", target = "node" }
     node-support-reader = { identity = "support", role = "reader", target = "node" }
+    } : {}, var.enable_full_ce_workload_rbac && local.future_ce ? {
+    workload-rbac-manager = { identity = "automation", role = "workload_rbac_manager", target = "workload" }
   } : {})
   shared_parameters = {
     organization   = { type = "String" }
@@ -79,11 +82,14 @@ locals {
       "[guid(toLower(concat(subscription().id, '/resourceGroups/', field('Microsoft.ContainerService/managedClusters/nodeResourceGroup'))), parameters('principalId'), parameters('roleDefinitionId'))]"
     )
     existence_condition_json = jsonencode({
-      allOf = [
+      allOf = concat([
         { field = "Microsoft.Authorization/roleAssignments/principalId", equals = "[parameters('principalId')]" },
         { field = "Microsoft.Authorization/roleAssignments/roleDefinitionId", equals = "[parameters('roleDefinitionId')]" },
         { field = "Microsoft.Authorization/roleAssignments/principalType", equals = "ServicePrincipal" },
-      ]
+        ], key == "workload-rbac-manager" ? [
+        { field = "Microsoft.Authorization/roleAssignments/conditionVersion", equals = "2.0" },
+        { field = "Microsoft.Authorization/roleAssignments/condition", equals = local.workload_rbac_condition },
+      ] : [])
     })
     role_definition_ids_json = jsonencode([azurerm_role_definition.policy_executor[0].role_definition_resource_id])
     deployment_json = jsonencode({
@@ -100,12 +106,15 @@ locals {
             type       = "Microsoft.Authorization/roleAssignments"
             apiVersion = "2022-04-01"
             name       = "[guid(toLower(resourceGroup().id), parameters('principalId'), parameters('roleDefinitionId'))]"
-            properties = {
+            properties = merge({
               principalId      = "[parameters('principalId')]"
               principalType    = "ServicePrincipal"
               roleDefinitionId = "[parameters('roleDefinitionId')]"
               description      = "Managed by the StreamNative onboarding verification policy."
-            }
+              }, key == "workload-rbac-manager" ? {
+              conditionVersion = "2.0"
+              condition        = local.workload_rbac_condition
+            } : {})
           }]
         }
         parameters = {
@@ -172,7 +181,7 @@ resource "azurerm_subscription_policy_assignment" "grant" {
     roleDefinitionId = { value = "${local.subscription_scope}/providers/Microsoft.Authorization/roleDefinitions/${local.role_ids[each.value.role]}" }
     effect           = { value = "DeployIfNotExists" }
   })
-  depends_on = [terraform_data.fresh_target]
+  depends_on = [terraform_data.fresh_target, azurerm_role_definition.workload_rbac_manager]
 }
 
 resource "azurerm_role_assignment" "policy_executor" {

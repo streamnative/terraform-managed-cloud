@@ -43,5 +43,17 @@ output "workload_contract" {
     allowed_locations      = local.future_ce ? ["eastus"] : distinct([for target in var.verification_targets : target.location])
     node_group_prefix      = local.future_ce ? "MC_${local.workload_rg_prefix}eastus-" : null
     caller_read_comparator = var.enable_caller_role_assignment_read_comparator
+    full_ce_workload_rbac  = var.enable_full_ce_workload_rbac
   }
+}
+
+output "workload_rbac_contract" {
+  description = "Nonsecret installer-to-workflow contract. The workflow independently derives and verifies the same role IDs and exact delegation condition before provisioning."
+  value = var.enable_full_ce_workload_rbac ? {
+    manager_role_id       = local.workload_manager_role_id
+    manager_role_scope_id = "${local.subscription_scope}/providers/Microsoft.Authorization/roleDefinitions/${local.workload_manager_role_id}"
+    service_role_ids      = local.service_role_ids
+    condition_version     = "2.0"
+    condition             = local.workload_rbac_condition
+  } : null
 }

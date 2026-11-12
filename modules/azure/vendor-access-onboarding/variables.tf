@@ -107,3 +107,16 @@ variable "enable_caller_role_assignment_read_comparator" {
     error_message = "The caller-read comparator is restricted to disposable subscription node Reader verification."
   }
 }
+
+variable "enable_full_ce_workload_rbac" {
+  description = "Explicit full-CE manual-verification profile. Adds a conditioned workload RG assignment manager for Network Contributor, DNS Zone Contributor and Reader. Requires the disposable profile, node policies and caller metadata reads before the installer baseline."
+  type        = bool
+  default     = false
+  nullable    = false
+  validation {
+    condition = !var.enable_full_ce_workload_rbac || (
+      var.disposable_subscription_id != null && var.enable_node_reader_verification && var.enable_caller_role_assignment_read_comparator
+    )
+    error_message = "Full CE verification requires the empty disposable subscription profile, node Reader policies and caller role-assignment reads."
+  }
+}
