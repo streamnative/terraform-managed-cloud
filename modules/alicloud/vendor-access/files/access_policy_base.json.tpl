@@ -80,35 +80,6 @@
     {
       "Effect": "Allow",
       "Action": [
-        "ram:Get*",
-        "ram:List*",
-        "ram:AttachPolicyToRole",
-        "ram:CreateAccessKey",
-        "ram:CreatePolicy",
-        "ram:CreatePolicyVersion",
-        "ram:CreateRole",
-        "ram:CreateServiceLinkedRole",
-        "ram:DeleteAccessKey",
-        "ram:DeletePolicy",
-        "ram:DeletePolicyVersion",
-        "ram:DeleteRole",
-        "ram:DeleteServiceLinkedRole",
-        "ram:DetachPolicyFromRole",
-        "ram:UpdateAccessKey",
-        "ram:UpdateRole",
-        "ram:CreateUser",
-        "ram:DeleteUser",
-        "ram:AttachPolicyToUser",
-        "ram:DetachPolicyFromUser",
-        "sts:AssumeRole"
-      ],
-      "Resource": [
-        "*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
         "cs:Get*",
         "cs:List*",
         "cs:Cancel*",
