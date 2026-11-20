@@ -40,6 +40,17 @@ terraform import module.vendor_access.alicloud_ram_role_policy_attachment.cloud_
 terraform import module.vendor_access.alicloud_ram_role_policy_attachment.support_access role:streamnative-support:Custom:streamnative-support
 ```
 
+## Permissions model
+
+Both roles share the same non-RAM permissions (ECS, VPC, ACK, SLB, AliDNS, OSS). Their RAM permissions differ and are deliberately narrow:
+
+| Role | RAM permissions |
+| ---- | --------------- |
+| `streamnative-bootstrap` | `ram:Get*`/`ram:List*` on `*`; service-linked role create/delete; create/delete users, manage access keys and attach/detach policies **only** on `user/alidns-webhook-*` and `user/external-dns-*`, and only the system policy `AliyunDNSFullAccess` |
+| `streamnative-support` | `ram:Get*`/`ram:List*` only (no RAM writes) |
+
+Both roles carry an explicit `Deny` for attaching `AdministratorAccess`, `AliyunRAMFullAccess` and `AliyunSTSAssumeRoleAccess`, and for creating or modifying roles and policies named `streamnative-*` (the roles cannot edit their own trust or permissions).
+
 # Terraform Docs
 
 ## Requirements
