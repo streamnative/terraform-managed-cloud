@@ -20,8 +20,8 @@ output "bootstrap_role_arn" {
 }
 
 output "management_role_arn" {
-  value       = aws_iam_role.management_role.arn
-  description = "The ARN of the Management Role"
+  value       = join("", aws_iam_role.management_role[*].arn)
+  description = "The ARN of the Management Role, if enabled"
 }
 
 output "runtime_policy_arn" {

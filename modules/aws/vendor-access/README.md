@@ -89,6 +89,36 @@ module "sn_managed_cloud" {
 }
 ```
 
+### Private cloud (no StreamNative access)
+
+For a private cloud deployment, the customer runs the deployment Terraform. StreamNative needs no role in the account. Turn off the bootstrap, support and cloud-manager access:
+
+```hcl
+
+provider "aws" {
+  region = <YOUR_REGION>
+}
+
+module "sn_managed_cloud" {
+  source = "github.com/streamnative/terraform-managed-cloud//modules/aws/vendor-access?ref=<LATEST_GIT_TAG>"
+
+  external_id                 = "<YOUR_SNCLOUD_ORG_ID>"
+  create_bootstrap_role       = false
+  enable_support_access       = false
+  enable_cloud_manager_access = false
+}
+```
+
+With these inputs, the module creates no IAM role that StreamNative can assume. It still creates the permission boundary, the runtime policy and the load balancer controller policy, because the cluster components use them.
+
+| Input | Default | When `false` |
+|-------|---------|--------------|
+| `create_bootstrap_role` | `true` | No `StreamNativeCloudBootstrapRole` and no provision policies. |
+| `enable_support_access` | `true` | The bootstrap role does not trust `streamnative_support_access_role_arns`. |
+| `enable_cloud_manager_access` | `true` | The bootstrap role does not trust `streamnative_vendor_access_role_arns` or the StreamNative Google accounts. No `StreamNativeCloudManagementRole` and no management policy. |
+
+If `create_bootstrap_role` is `true`, set `enable_support_access` or `enable_cloud_manager_access` to `true`, because a role needs at least one trust statement.
+
 After [authenticating to your AWS account](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#authentication-and-configuration) execute the following sequence of commands from the directory containing the `main.tf` configuration file:
 
 1. Run `terraform init`
@@ -101,7 +131,7 @@ After [authenticating to your AWS account](https://registry.terraform.io/provide
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=1.0.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=1.2.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.32.0 |
 
 ## Providers
@@ -156,6 +186,8 @@ No modules.
 | <a name="input_create_bootstrap_role"></a> [create\_bootstrap\_role](#input\_create\_bootstrap\_role) | Whether or not to create the bootstrap role, which is used by StreamNative for the initial deployment of the StreamNative Cloud | `string` | `true` | no |
 | <a name="input_ebs_kms_key_arns"></a> [ebs\_kms\_key\_arns](#input\_ebs\_kms\_key\_arns) | Sets the list of allowed kms key arns, if not set, uses the default ebs kms key | `list(any)` | `[]` | no |
 | <a name="input_eks_cluster_pattern"></a> [eks\_cluster\_pattern](#input\_eks\_cluster\_pattern) | Defines the eks clsuter prefix for streamnative clusters. This should normally remain the default value. | `string` | `"*snc*"` | no |
+| <a name="input_enable_cloud_manager_access"></a> [enable\_cloud\_manager\_access](#input\_enable\_cloud\_manager\_access) | Whether StreamNative control plane automation (streamnative\_vendor\_access\_role\_arns and streamnative\_google\_account\_ids) can assume the vendor access roles. When false, the management role and its policy are not created. Set to false for private cloud. | `bool` | `true` | no |
+| <a name="input_enable_support_access"></a> [enable\_support\_access](#input\_enable\_support\_access) | Whether StreamNative support engineers (streamnative\_support\_access\_role\_arns) can assume the bootstrap role. Set to false for private cloud. | `bool` | `true` | no |
 | <a name="input_enforce_vendor_federation"></a> [enforce\_vendor\_federation](#input\_enforce\_vendor\_federation) | Do not enable this unless explicitly told to do so by StreamNative. Restrict access for the streamnative\_vendor\_access\_role\_arns to only federated Google accounts. Intended to be true by default in the future. | `bool` | `false` | no |
 | <a name="input_external_id"></a> [external\_id](#input\_external\_id) | A external ID that correspond to your Organization within StreamNative Cloud, used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. "o-xhopj". | `string` | `""` | no |
 | <a name="input_external_ids"></a> [external\_ids](#input\_external\_ids) | A list of external IDs that correspond to your Organization within StreamNative Cloud, used for all STS assume role calls to the IAM roles created by the module. This will be the organization ID in the StreamNative console, e.g. "o-xhopj". | `list(string)` | `[]` | no |
@@ -182,7 +214,7 @@ No modules.
 |------|-------------|
 | <a name="output_aws_lbc_policy_arn"></a> [aws\_lbc\_policy\_arn](#output\_aws\_lbc\_policy\_arn) | The ARN of the AWS Load Balancer Controller Policy, if enabled |
 | <a name="output_bootstrap_role_arn"></a> [bootstrap\_role\_arn](#output\_bootstrap\_role\_arn) | The ARN of the Bootstrap role, if enabled |
-| <a name="output_management_role_arn"></a> [management\_role\_arn](#output\_management\_role\_arn) | The ARN of the Management Role |
+| <a name="output_management_role_arn"></a> [management\_role\_arn](#output\_management\_role\_arn) | The ARN of the Management Role, if enabled |
 | <a name="output_permission_boundary_policy_arn"></a> [permission\_boundary\_policy\_arn](#output\_permission\_boundary\_policy\_arn) | The ARN of the Permssion Boundary Policy |
 | <a name="output_runtime_policy_arn"></a> [runtime\_policy\_arn](#output\_runtime\_policy\_arn) | The ARN of the Runtime Policy, if enabled |
 <!-- END_TF_DOCS -->

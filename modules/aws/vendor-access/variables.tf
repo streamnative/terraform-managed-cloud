@@ -39,6 +39,18 @@ variable "create_bootstrap_role" {
 
 }
 
+variable "enable_cloud_manager_access" {
+  default     = true
+  description = "Whether StreamNative control plane automation (streamnative_vendor_access_role_arns and streamnative_google_account_ids) can assume the vendor access roles. When false, the management role and its policy are not created. Set to false for private cloud."
+  type        = bool
+}
+
+variable "enable_support_access" {
+  default     = true
+  description = "Whether StreamNative support engineers (streamnative_support_access_role_arns) can assume the bootstrap role. Set to false for private cloud."
+  type        = bool
+}
+
 variable "ebs_kms_key_arns" {
   default     = []
   description = "Sets the list of allowed kms key arns, if not set, uses the default ebs kms key"
