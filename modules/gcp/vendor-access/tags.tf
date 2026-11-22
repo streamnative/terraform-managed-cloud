@@ -65,8 +65,9 @@ locals {
   ]
 
   # roles/editor cannot have a condition. iam.serviceAccountAdmin and
-  # iam.workloadIdentityPoolAdmin are dropped: their resources do not support
-  # tags, so a tag condition cannot limit them to the data plane.
+  # iam.workloadIdentityPoolAdmin are dropped: a create call is checked against
+  # the project's tags, so a tag condition refuses SA and pool creation, and
+  # serviceAccountAdmin on a tagged SA can grant token creation on that SA.
   tag_mode_default_roles = [
     "roles/cloudkms.admin",
     "roles/compute.admin",
@@ -80,8 +81,8 @@ locals {
 
   roles = var.roles != null ? var.roles : (local.tag_mode ? local.tag_mode_default_roles : local.default_roles)
 
-  # Roles that a tag condition cannot limit, or that let the GSA attach the tag
-  # to control plane resources.
+  # Roles that do not accept conditions, that can grant impersonation, or that
+  # let the GSA attach the tag to control plane resources.
   tag_mode_forbidden_roles = [
     for r in local.roles : r
     if contains(["roles/owner", "roles/editor", "roles/viewer"], r) || can(regex("(?i)^roles/(iam\\.|resourcemanager\\.tag)", r))
@@ -154,6 +155,6 @@ output "resource_tag" {
   }
   precondition {
     condition     = length(local.tag_mode_forbidden_roles) == 0 || !local.tag_mode
-    error_message = "In tag mode, roles must not contain basic roles (they do not accept conditions), iam.* roles (tags cannot limit them) or tag roles (the GSA could tag control plane resources). Remove: ${join(", ", local.tag_mode_forbidden_roles)}."
+    error_message = "In tag mode, roles must not contain basic roles (they do not accept conditions), iam.* roles (they can grant impersonation) or tag roles (the GSA could tag control plane resources). Remove: ${join(", ", local.tag_mode_forbidden_roles)}."
   }
 }
