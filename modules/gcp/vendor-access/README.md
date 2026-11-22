@@ -520,7 +520,7 @@ When `resource_tag_key` is set:
 
 ### Limits
 
-- IAM conditions do not apply to Kubernetes API requests. A conditional `container.admin` binding gives no access to the Kubernetes API of a data plane cluster. Give the GSA access with Kubernetes RBAC in each data plane cluster.
+- GKE applies the tag condition to Kubernetes API requests too. On a cluster that has the tag, the conditional `container.admin` binding gives Kubernetes API access; on other clusters it gives none. Conditions on `resource.name` do not work for Kubernetes API requests, so use tags.
 - A create request is checked against the tags of the parent (the project). If the project does not have the tag, create requests can be refused. Test each create type (cluster, node pool, bucket, disk, network, key ring) before you use tag mode.
 - Tags are inherited. If the project or its folder has the tag, every resource in the project matches the condition.
 - The condition applies only to resource types that support tags. See [Services that support tags](https://cloud.google.com/resource-manager/docs/tags/tags-supported-services). Test DNS managed zones and load balancer resources before you rely on them.
