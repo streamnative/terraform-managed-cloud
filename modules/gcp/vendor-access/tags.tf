@@ -155,3 +155,32 @@ output "resource_tag" {
     error_message = "The resource_tag_key requires streamnative_org_id (tag conditions apply to the bootstrap GSA only)."
   }
 }
+
+variable "tag_mode_extra_bindings" {
+  default     = []
+  type        = list(object({ role = string, title = string, expression = string }))
+  description = "In tag mode, more roles for the bootstrap GSA for work that a tag condition cannot allow, for example creating service accounts (a create call is checked against the project's tags). Set expression to \"\" for no condition; only roles/iam.serviceAccountCreator can have no condition."
+  validation {
+    condition = alltrue([
+      for b in var.tag_mode_extra_bindings :
+      !contains(["roles/owner", "roles/editor", "roles/viewer"], b.role) && !can(regex("(?i)^roles/resourcemanager\\.tag", b.role)) && (b.expression != "" || b.role == "roles/iam.serviceAccountCreator")
+    ])
+    error_message = "tag_mode_extra_bindings must not hold basic or tag roles, and every role except roles/iam.serviceAccountCreator needs a condition expression."
+  }
+}
+
+# Extra roles of the bootstrap GSA in tag mode (see tag_mode_extra_bindings).
+resource "google_project_iam_member" "sn_bootstrap_extra" {
+  count   = local.tag_mode && local.is_impersonation_enabled ? length(var.tag_mode_extra_bindings) : 0
+  project = var.project
+  role    = var.tag_mode_extra_bindings[count.index].role
+  member  = format("serviceAccount:%s", google_service_account.sn_bootstrap[0].email)
+
+  dynamic "condition" {
+    for_each = var.tag_mode_extra_bindings[count.index].expression != "" ? [var.tag_mode_extra_bindings[count.index]] : []
+    content {
+      title      = condition.value.title
+      expression = condition.value.expression
+    }
+  }
+}
