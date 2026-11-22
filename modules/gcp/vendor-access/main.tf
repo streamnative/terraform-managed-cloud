@@ -89,7 +89,7 @@ resource "google_project_iam_member" "sn_bootstrap" {
   }
 
   dynamic "condition" {
-    for_each = local.tag_mode ? [local.streamnative_bootstrap_roles[count.index]] : []
+    for_each = local.tag_mode && (contains(local.tag_conditioned_roles, local.streamnative_bootstrap_roles[count.index]) || (local.streamnative_bootstrap_roles[count.index] == local.project_iam_admin_role && local.grant_limit_project_iam_admin)) ? [local.streamnative_bootstrap_roles[count.index]] : []
     content {
       title       = condition.value == local.project_iam_admin_role ? "sn-grantable-roles-only" : "sn-resource-tag-${var.resource_tag_value}"
       description = condition.value == local.project_iam_admin_role ? "Allow grants of the data plane roles only" : "Allow resources tagged ${var.resource_tag_key}=${var.resource_tag_value} only"

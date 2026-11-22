@@ -84,9 +84,24 @@ locals {
   # Roles that do not accept conditions, that can grant impersonation, or that
   # let the GSA attach the tag to control plane resources. Custom roles are
   # refused because the module cannot check their permissions.
+  # projectIamAdmin gets the grant limit when every role is limited, or when it
+  # is listed in tag_condition_roles.
+  grant_limit_project_iam_admin = var.tag_condition_roles == null || contains(coalesce(var.tag_condition_roles, []), local.project_iam_admin_role)
+
+  # Roles that get the tag condition. Other roles (when tag_condition_roles is
+  # set) are bound with no condition.
+  tag_conditioned_roles = [
+    for r in local.roles : r
+    if r != local.project_iam_admin_role && (var.tag_condition_roles == null || contains(coalesce(var.tag_condition_roles, []), r))
+  ]
+
+  # Basic roles carry container.* and cannot take a condition, and tag roles let
+  # the GSA tag control plane resources: refused in tag mode. iam.* and custom
+  # roles are refused only when they get the tag condition (tags cannot limit
+  # iam.* roles, and the module cannot check custom roles).
   tag_mode_forbidden_roles = [
     for r in local.roles : r
-    if contains(["roles/owner", "roles/editor", "roles/viewer"], r) || can(regex("(?i)^roles/(iam\\.|resourcemanager\\.tag)", r)) || !can(regex("^roles/", r))
+    if contains(["roles/owner", "roles/editor", "roles/viewer"], r) || can(regex("(?i)^roles/resourcemanager\\.tag", r)) || (contains(local.tag_conditioned_roles, r) && (can(regex("(?i)^roles/iam\\.", r)) || !can(regex("^roles/", r))))
   ]
 
   resource_tag_condition    = "resource.matchTag('${var.resource_tag_key}', '${var.resource_tag_value}')"
@@ -154,6 +169,12 @@ output "resource_tag" {
     condition     = !local.tag_mode || local.is_impersonation_enabled
     error_message = "The resource_tag_key requires streamnative_org_id (tag conditions apply to the bootstrap GSA only)."
   }
+}
+
+variable "tag_condition_roles" {
+  default     = null
+  type        = list(string)
+  description = "In tag mode, the roles that get the tag condition. null = every role (projectIamAdmin gets the grant limit instead). For example [\"roles/container.admin\"] limits only direct GKE access to tagged clusters and keeps the other roles, projectIamAdmin included, with no condition. Roles with no condition can still give indirect access (projectIamAdmin, iam.serviceAccountAdmin)."
 }
 
 variable "tag_mode_extra_bindings" {
