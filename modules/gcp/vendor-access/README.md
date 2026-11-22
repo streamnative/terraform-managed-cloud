@@ -510,10 +510,11 @@ module "sn_managed_cloud" {
 When `resource_tag_key` is set:
 
 - Each role of the bootstrap GSA gets the condition `resource.matchTag('<key>', '<value>')`.
-- `roles/resourcemanager.projectIamAdmin` gets the condition `api.getAttribute('iam.googleapis.com/modifiedGrantsByRole', []).hasOnly([...])` with `tag_mode_grantable_roles`. The GSA can grant these roles to any member, itself included. Thus the module refuses admin, IAM, tag and basic roles in this list.
+- `roles/resourcemanager.projectIamAdmin` gets the condition `api.getAttribute('iam.googleapis.com/modifiedGrantsByRole', []).hasOnly([...])` with `tag_mode_grantable_roles`. The GSA can grant these roles to any member, itself, other accounts and `allUsers` included. Thus the module refuses admin, IAM, tag and basic roles in this list. Keep the list to the roles that the data plane node service accounts need.
 - If `roles` is null, the module uses the tag mode role list: `cloudkms.admin`, `compute.admin`, `compute.loadBalancerAdmin`, `compute.networkAdmin`, `container.admin`, `dns.admin`, `storage.admin` and `resourcemanager.projectIamAdmin`.
 - The plan fails if `roles` holds a basic role (`owner`, `editor`, `viewer`), because basic roles do not accept conditions.
 - The plan fails if `roles` holds an `iam.*` role. A create call is checked against the tags of the project, so a tag condition refuses the creation of service accounts and workload identity pools. Also, `iam.serviceAccountAdmin` on a tagged service account can grant token creation on that account. Create the data plane service accounts and pools with a different principal.
+- The plan fails if `roles` holds a custom role (`projects/*/roles/*` or `organizations/*/roles/*`), because the module cannot check its permissions.
 - The plan fails if `roles` holds a `resourcemanager.tag*` role. With such a role at project level, the GSA could attach the tag to other resources. If `grant_tag_user_on_value` is true, the module grants `roles/resourcemanager.tagUser` on the tag value only.
 - The impersonation bindings on the bootstrap GSA do not change.
 

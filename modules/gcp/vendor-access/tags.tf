@@ -82,10 +82,11 @@ locals {
   roles = var.roles != null ? var.roles : (local.tag_mode ? local.tag_mode_default_roles : local.default_roles)
 
   # Roles that do not accept conditions, that can grant impersonation, or that
-  # let the GSA attach the tag to control plane resources.
+  # let the GSA attach the tag to control plane resources. Custom roles are
+  # refused because the module cannot check their permissions.
   tag_mode_forbidden_roles = [
     for r in local.roles : r
-    if contains(["roles/owner", "roles/editor", "roles/viewer"], r) || can(regex("(?i)^roles/(iam\\.|resourcemanager\\.tag)", r))
+    if contains(["roles/owner", "roles/editor", "roles/viewer"], r) || can(regex("(?i)^roles/(iam\\.|resourcemanager\\.tag)", r)) || !can(regex("^roles/", r))
   ]
 
   resource_tag_condition    = "resource.matchTag('${var.resource_tag_key}', '${var.resource_tag_value}')"
@@ -152,9 +153,5 @@ output "resource_tag" {
   precondition {
     condition     = !local.tag_mode || local.is_impersonation_enabled
     error_message = "The resource_tag_key requires streamnative_org_id (tag conditions apply to the bootstrap GSA only)."
-  }
-  precondition {
-    condition     = length(local.tag_mode_forbidden_roles) == 0 || !local.tag_mode
-    error_message = "In tag mode, roles must not contain basic roles (they do not accept conditions), iam.* roles (they can grant impersonation) or tag roles (the GSA could tag control plane resources). Remove: ${join(", ", local.tag_mode_forbidden_roles)}."
   }
 }

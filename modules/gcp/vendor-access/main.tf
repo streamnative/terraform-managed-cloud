@@ -81,6 +81,13 @@ resource "google_project_iam_member" "sn_bootstrap" {
   member     = format("serviceAccount:%s", google_service_account.sn_bootstrap[0].email)
   depends_on = [google_service_account.sn_bootstrap]
 
+  lifecycle {
+    precondition {
+      condition     = !local.tag_mode || length(local.tag_mode_forbidden_roles) == 0
+      error_message = "In tag mode, roles must not contain basic roles (they do not accept conditions), iam.* roles (they can grant impersonation), tag roles (the GSA could tag control plane resources) or custom roles (the module cannot check them). Remove: ${join(", ", local.tag_mode_forbidden_roles)}."
+    }
+  }
+
   dynamic "condition" {
     for_each = local.tag_mode ? [local.streamnative_bootstrap_roles[count.index]] : []
     content {
