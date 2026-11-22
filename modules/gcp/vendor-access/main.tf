@@ -30,7 +30,7 @@ locals {
 # Grant permissions directly to the StreamNative Cloud service account
 locals {
   iam_bindings = local.is_impersonation_enabled ? [] : flatten([
-    for role in var.roles : [
+    for role in local.roles : [
       for gsa in local.streamnative_gsa : {
         role : role,
         member : format("serviceAccount:%s", gsa),
@@ -40,7 +40,7 @@ locals {
 }
 
 resource "google_project_iam_member" "sn_access" {
-  count = length(local.iam_bindings)
+  count      = length(local.iam_bindings)
   project    = var.project
   role       = local.iam_bindings[count.index].role
   member     = local.iam_bindings[count.index].member
@@ -50,7 +50,7 @@ resource "google_project_iam_member" "sn_access" {
 # Grant permissions to the project service account that will be impersonated by StreamNative Cloud service account
 locals {
   streamnative_bootstrap_gsa_name = format("snbootstrap-%s", var.streamnative_org_id)
-  streamnative_bootstrap_roles    = local.is_impersonation_enabled ? var.roles : []
+  streamnative_bootstrap_roles    = local.is_impersonation_enabled ? local.roles : []
   impersonation_roles = [
     "roles/iam.serviceAccountUser",
     "roles/iam.serviceAccountAdmin",
@@ -80,6 +80,15 @@ resource "google_project_iam_member" "sn_bootstrap" {
   role       = local.streamnative_bootstrap_roles[count.index]
   member     = format("serviceAccount:%s", google_service_account.sn_bootstrap[0].email)
   depends_on = [google_service_account.sn_bootstrap]
+
+  dynamic "condition" {
+    for_each = local.tag_mode ? [local.streamnative_bootstrap_roles[count.index]] : []
+    content {
+      title       = condition.value == local.project_iam_admin_role ? "sn-grantable-roles-only" : "sn-resource-tag-${var.resource_tag_value}"
+      description = condition.value == local.project_iam_admin_role ? "Allow grants of the data plane roles only" : "Allow resources tagged ${var.resource_tag_key}=${var.resource_tag_value} only"
+      expression  = condition.value == local.project_iam_admin_role ? local.grantable_roles_condition : local.resource_tag_condition
+    }
+  }
 }
 
 resource "google_service_account_iam_member" "sn_bootstrap_impersonation" {

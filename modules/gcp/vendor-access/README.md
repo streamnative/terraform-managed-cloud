@@ -492,6 +492,39 @@ After [authenticating to your GCP account](https://registry.terraform.io/provide
    
    </p></details>
 
+## Tag mode (optional)
+
+Tag mode limits the bootstrap GSA (`snbootstrap-<org>`) to the resources that have one tag. Use it when the project also holds resources that StreamNative must not change. Tag mode is off by default. When it is off, the module makes the same bindings as before.
+
+```hcl
+module "sn_managed_cloud" {
+  source              = "github.com/streamnative/terraform-managed-cloud//modules/gcp/vendor-access?ref=<version>"
+  project             = "<YOUR_PROJECT>"
+  streamnative_org_id = "<YOUR_ORG_ID>"
+  resource_tag_key    = "<YOUR_PROJECT>/plane"
+  resource_tag_value  = "dp"
+  create_resource_tag = true
+}
+```
+
+When `resource_tag_key` is set:
+
+- Each role of the bootstrap GSA gets the condition `resource.matchTag('<key>', '<value>')`.
+- `roles/resourcemanager.projectIamAdmin` gets the condition `api.getAttribute('iam.googleapis.com/modifiedGrantsByRole', []).hasOnly([...])` with `tag_mode_grantable_roles`. The GSA can grant these roles to any member, itself included. Thus the module refuses admin, IAM, tag and basic roles in this list.
+- If `roles` is null, the module uses the tag mode role list: `cloudkms.admin`, `compute.admin`, `compute.loadBalancerAdmin`, `compute.networkAdmin`, `container.admin`, `dns.admin`, `storage.admin` and `resourcemanager.projectIamAdmin`.
+- The plan fails if `roles` holds a basic role (`owner`, `editor`, `viewer`), because basic roles do not accept conditions.
+- The plan fails if `roles` holds an `iam.*` role. Service accounts and workload identity pools do not support tags, so a tag condition cannot limit `iam.serviceAccountAdmin` or `iam.workloadIdentityPoolAdmin`. Create the data plane service accounts and pools with a different principal.
+- The plan fails if `roles` holds a `resourcemanager.tag*` role. With such a role at project level, the GSA could attach the tag to other resources. If `grant_tag_user_on_value` is true, the module grants `roles/resourcemanager.tagUser` on the tag value only.
+- The impersonation bindings on the bootstrap GSA do not change.
+
+### Limits
+
+- IAM conditions do not apply to Kubernetes API requests. A conditional `container.admin` binding gives no access to the Kubernetes API of a data plane cluster. Give the GSA access with Kubernetes RBAC in each data plane cluster.
+- A create request is checked against the tags of the parent (the project). If the project does not have the tag, create requests can be refused. Test each create type (cluster, node pool, bucket, disk, network, key ring) before you use tag mode.
+- Tags are inherited. If the project or its folder has the tag, every resource in the project matches the condition.
+- The condition applies only to resource types that support tags. See [Services that support tags](https://cloud.google.com/resource-manager/docs/tags/tags-supported-services). Test DNS managed zones and load balancer resources before you rely on them.
+- Other bindings of the same principals are not changed. A principal that can impersonate the GSA, or that has its own project roles, keeps those rights.
+
 ## Terraform Docs
 ### Requirements
 
@@ -516,18 +549,31 @@ No modules.
 |------|------|
 | [google_project_iam_member.sn_access](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_iam#google_project_iam_member) | resource |
 | [google_project_service.gcp_apis](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_service) | resource |
+| [google_project_iam_member.sn_bootstrap](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_iam#google_project_iam_member) | resource |
+| [google_service_account.sn_bootstrap](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account) | resource |
+| [google_service_account_iam_member.sn_bootstrap_impersonation](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account_iam#google_service_account_iam_member) | resource |
+| [google_tags_tag_key.plane](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/tags_tag_key) | resource |
+| [google_tags_tag_value.plane](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/tags_tag_value) | resource |
+| [google_tags_tag_value_iam_member.sn_bootstrap_tag_user](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/tags_tag_value_iam#google_tags_tag_value_iam_member) | resource |
+| [google_tags_tag_key.plane](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/tags_tag_key) | data source |
+| [google_tags_tag_value.plane](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/tags_tag_value) | data source |
 |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_create_resource_tag"></a> [create\_resource\_tag](#input\_create\_resource\_tag) | If true, create the tag key and the tag value in the project. The namespace of resource\_tag\_key must then be the project ID. | `bool` | `false` | no |
 | <a name="input_extra_google_services"></a> [extra\_google\_services](#input\_extra\_google\_services) | Extra google API services need to be enabled. | `list(string)` | `[]` | no |
+| <a name="input_grant_tag_user_on_value"></a> [grant\_tag\_user\_on\_value](#input\_grant\_tag\_user\_on\_value) | If true, grant roles/resourcemanager.tagUser to the bootstrap GSA on the tag value only (not on the key or the project), so that the GSA can attach the tag at create time. | `bool` | `false` | no |
 | <a name="input_project"></a> [project](#input\_project) | The project id of the target project | `string` | n/a | yes |
-| <a name="input_roles"></a> [roles](#input\_roles) | The role list will be associated with StreamNative GSA. | `list(string)` | <pre>[<br>  "roles/editor",<br>  "roles/cloudkms.admin",<br>  "roles/compute.admin",<br>  "roles/compute.loadBalancerAdmin",<br>  "roles/compute.networkAdmin",<br>  "roles/container.admin",<br>  "roles/dns.admin",<br>  "roles/storage.admin",<br>  "roles/iam.serviceAccountAdmin",<br>  "roles/iam.workloadIdentityPoolAdmin",<br>  "roles/resourcemanager.projectIamAdmin"<br>]</pre> | no |
+| <a name="input_resource_tag_key"></a> [resource\_tag\_key](#input\_resource\_tag\_key) | Namespaced tag key (<project-id>/<short-name>, for example "my-project/plane"). If set, every role of the bootstrap GSA gets an IAM condition, and the GSA can change only resources that have this tag. Requires streamnative\_org\_id. | `string` | `""` | no |
+| <a name="input_resource_tag_value"></a> [resource\_tag\_value](#input\_resource\_tag\_value) | Short name of the tag value that marks the resources that the bootstrap GSA can change. Used only when resource\_tag\_key is set. | `string` | `"dp"` | no |
+| <a name="input_roles"></a> [roles](#input\_roles) | The role list will be associated with StreamNative GSA. If null, the module uses local.default\_roles, or local.tag\_mode\_default\_roles when resource\_tag\_key is set. | `list(string)` | `null` | no |
 | <a name="input_streamnative_org_id"></a> [streamnative\_org\_id](#input\_streamnative\_org\_id) | Your Organization ID within StreamNative Cloud, used as name of impersonation GSA in your project. This will be the organization ID in the StreamNative console, e.g. "o-xhopj". | `string` | `""` | no |
 | <a name="input_streamnative_support_access_gsa"></a> [streamnative\_support\_access\_gsa](#input\_streamnative\_support\_access\_gsa) | The GSA will be used by StreamnNative support team. | `list(string)` | <pre>[<br>  "cloud-support-general@sncloud-production.iam.gserviceaccount.com"<br>]</pre> | no |
 | <a name="input_streamnative_vendor_access_gsa"></a> [streamnative\_vendor\_access\_gsa](#input\_streamnative\_vendor\_access\_gsa) | The GSA will be used by StreamnNative cloud. | `list(string)` | <pre>[<br>  "cloud-manager@sncloud-production.iam.gserviceaccount.com",<br>  "pool-automation@sncloud-production.iam.gserviceaccount.com"<br>]</pre> | no |
+| <a name="input_tag_mode_grantable_roles"></a> [tag\_mode\_grantable\_roles](#input\_tag\_mode\_grantable\_roles) | In tag mode, the only roles that the bootstrap GSA can grant with roles/resourcemanager.projectIamAdmin. The GSA can grant these roles to any member, itself included, so the list must not hold admin, IAM, tag or basic roles. | `list(string)` | <pre>[<br>  "roles/artifactregistry.reader",<br>  "roles/autoscaling.metricsWriter",<br>  "roles/logging.logWriter",<br>  "roles/monitoring.metricWriter",<br>  "roles/monitoring.viewer",<br>  "roles/stackdriver.resourceMetadata.writer"<br>]</pre> | no |
 
 ### Outputs
 
@@ -536,3 +582,4 @@ No modules.
 | <a name="output_google_services"></a> [google\_services](#output\_google\_services) | Enabled google services. |
 | <a name="output_iam_bindings"></a> [iam\_bindings](#output\_iam\_bindings) | Configured iam policies. |
 | <a name="output_impersonation_iam_bindings"></a> [impersonation\_iam\_bindings](#output\_impersonation\_iam\_bindings) | Configured iam policies for impersonation. |
+| <a name="output_resource_tag"></a> [resource\_tag](#output\_resource\_tag) | Tag mode settings of the bootstrap GSA (null when tag mode is off). |

@@ -4,21 +4,9 @@ variable "project" {
 }
 
 variable "roles" {
-  default = [
-    "roles/editor",
-    "roles/cloudkms.admin",
-    "roles/compute.admin",
-    "roles/compute.loadBalancerAdmin",
-    "roles/compute.networkAdmin",
-    "roles/container.admin",
-    "roles/dns.admin",
-    "roles/storage.admin",
-    "roles/iam.serviceAccountAdmin",
-    "roles/iam.workloadIdentityPoolAdmin",
-    "roles/resourcemanager.projectIamAdmin"
-  ]
+  default     = null
   type        = list(string)
-  description = "The role list will be associated with StreamNative GSA."
+  description = "The role list will be associated with StreamNative GSA. If null, the module uses local.default_roles, or local.tag_mode_default_roles when resource_tag_key is set."
 }
 
 
@@ -36,7 +24,7 @@ variable "streamnative_org_id" {
   type        = string
   description = "Your Organization ID within StreamNative Cloud, used as name of impersonation GSA in your project. This will be the organization ID in the StreamNative console, e.g. \"o-xhopj\"."
   validation {
-    condition = length(var.streamnative_org_id) <= 18
+    condition     = length(var.streamnative_org_id) <= 18
     error_message = "The organization ID must not exceed 18 characters. If you reach this limit, please contact StreamNative support."
   }
 }
