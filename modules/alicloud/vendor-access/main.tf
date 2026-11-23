@@ -1,8 +1,8 @@
 locals {
   account_id = data.alicloud_caller_identity.current.account_id
 
-  # Non-RAM permissions (ECS/VPC/ACK/SLB/DNS/OSS...) are shared by both roles.
-  base_statements = jsondecode(file("${path.module}/files/access_policy_base.json.tpl")).Statement
+  # Non-RAM permissions (ECS/VPC/ACK/SLB/DNS/OSS...) for the bootstrap role only.
+  base_statements = jsondecode(file("${path.module}/files/access_policy_bootstrap_base.json.tpl")).Statement
 
   # RAM users created for the DNS integrations (cert-manager / external-dns).
   dns_user_arns = [
@@ -65,17 +65,40 @@ locals {
     },
   ]
 
-  bootstrap_policy_document = jsonencode({
+  bootstrap_policy_document = var.read_only_mode ? jsonencode({
+    Version   = "1"
+    Statement = concat(local.readonly_statements, local.deny_statements)
+    }) : jsonencode({
     Version   = "1"
     Statement = concat(local.base_statements, local.bootstrap_ram_statements, local.deny_statements)
   })
 
-  # Support: no RAM writes at all; read-only RAM.
+  # Strictly read-only across all services. No create/modify/delete actions
+  # anywhere. Object-level OSS reads are deliberately excluded. Always used for
+  # the support role, and for the bootstrap role when var.read_only_mode is true.
+  readonly_statements = [
+    {
+      Effect = "Allow"
+      Action = [
+        "ecs:Describe*", "ecs:List*",
+        "vpc:Describe*", "vpc:Get*", "vpc:List*",
+        "cs:Describe*", "cs:Get*", "cs:List*", "cs:Queryk8sComponentsUpdateVersion",
+        "slb:Describe*",
+        "nlb:Get*", "nlb:List*",
+        "privatelink:Get*", "privatelink:List*",
+        "alidns:Describe*", "alidns:Get*", "alidns:List*",
+        "pvtz:Describe*",
+        "oss:ListBuckets", "oss:GetBucket*",
+        "ram:Get*", "ram:List*",
+      ]
+      Resource = ["*"]
+    },
+  ]
+
+  # Support is always strictly read-only, regardless of read_only_mode.
   support_policy_document = jsonencode({
-    Version = "1"
-    Statement = concat(local.base_statements, [
-      { Effect = "Allow", Action = ["ram:Get*", "ram:List*"], Resource = ["*"] }
-    ], local.deny_statements)
+    Version   = "1"
+    Statement = concat(local.readonly_statements, local.deny_statements)
   })
 }
 

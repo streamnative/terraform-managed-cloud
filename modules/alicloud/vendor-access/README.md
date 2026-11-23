@@ -47,9 +47,11 @@ Both roles share the same non-RAM permissions (ECS, VPC, ACK, SLB, AliDNS, OSS).
 | Role | RAM permissions |
 | ---- | --------------- |
 | `streamnative-bootstrap` | `ram:Get*`/`ram:List*` on `*`; service-linked role create/delete; create/delete users, manage access keys and attach/detach policies **only** on `user/alidns-webhook-*` and `user/external-dns-*`, and only the system policy `AliyunDNSFullAccess` |
-| `streamnative-support` | `ram:Get*`/`ram:List*` only (no RAM writes) |
+| `streamnative-support` | Always read-only (`Describe*`/`Get*`/`List*`) across ECS, VPC, ACK, SLB, DNS, OSS (bucket level) and RAM; no write actions |
 
-Both roles carry an explicit `Deny` for attaching `AdministratorAccess`, `AliyunRAMFullAccess` and `AliyunSTSAssumeRoleAccess`, and for creating or modifying roles and policies named `streamnative-*` (the roles cannot edit their own trust or permissions).
+### Read-only mode
+
+By default (`read_only_mode = false`) `streamnative-bootstrap` can provision and manage environments. Once an environment is provisioned and no lifecycle changes are planned, set `read_only_mode = true` to restrict `streamnative-bootstrap` to read-only access as well (`Describe*`/`Get*`/`List*` across ECS, VPC, ACK, SLB, DNS, OSS at bucket level, and RAM). Set it back to `false` before creating, upgrading, scaling or deleting an environment, since those operations need write permissions. `streamnative-support` is read-only in both modes.
 
 # Terraform Docs
 
