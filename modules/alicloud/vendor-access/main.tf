@@ -65,17 +65,13 @@ locals {
     },
   ]
 
-  bootstrap_policy_document = var.read_only_mode ? jsonencode({
-    Version   = "1"
-    Statement = concat(local.readonly_statements, local.deny_statements)
-    }) : jsonencode({
+  bootstrap_policy_document = jsonencode({
     Version   = "1"
     Statement = concat(local.base_statements, local.bootstrap_ram_statements, local.deny_statements)
   })
 
-  # Strictly read-only across all services. No create/modify/delete actions
-  # anywhere. Object-level OSS reads are deliberately excluded. Always used for
-  # the support role, and for the bootstrap role when var.read_only_mode is true.
+  # Support: strictly read-only across all services. No create/modify/delete
+  # actions anywhere. Object-level OSS reads are deliberately excluded.
   readonly_statements = [
     {
       Effect = "Allow"
@@ -95,7 +91,6 @@ locals {
     },
   ]
 
-  # Support is always strictly read-only, regardless of read_only_mode.
   support_policy_document = jsonencode({
     Version   = "1"
     Statement = concat(local.readonly_statements, local.deny_statements)
