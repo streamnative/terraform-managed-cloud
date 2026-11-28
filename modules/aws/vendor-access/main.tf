@@ -265,6 +265,7 @@ resource "aws_iam_role_policy_attachment" "provision2_policy" {
 #-- of the managed deployment.
 ######
 resource "aws_iam_policy" "management_role" {
+  count       = var.create_management_role ? 1 : 0
   name        = "StreamNativeCloudManagementPolicy${var.test_suffix}"
   description = "This policy sets the limits for the management role needed for StreamNative's vendor access."
   path        = "/StreamNative/"
@@ -278,6 +279,7 @@ resource "aws_iam_policy" "management_role" {
 }
 
 resource "aws_iam_role" "management_role" {
+  count                = var.create_management_role ? 1 : 0
   name                 = "StreamNativeCloudManagementRole${var.test_suffix}"
   description          = "This role is used by StreamNative for the day to day management of the StreamNative Cloud deployment."
   assume_role_policy   = data.aws_iam_policy_document.streamnative_management_access.json
@@ -288,13 +290,36 @@ resource "aws_iam_role" "management_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "management_role" {
-  policy_arn = aws_iam_policy.management_role.arn
-  role       = aws_iam_role.management_role.name
+  count      = var.create_management_role ? 1 : 0
+  policy_arn = aws_iam_policy.management_role[0].arn
+  role       = aws_iam_role.management_role[0].name
 }
 
 resource "aws_iam_role_policy_attachment" "management_readonly" {
+  count      = var.create_management_role ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
-  role       = aws_iam_role.management_role.name
+  role       = aws_iam_role.management_role[0].name
+}
+
+# Keeps the existing management role and policy in state when the module adds count.
+moved {
+  from = aws_iam_policy.management_role
+  to   = aws_iam_policy.management_role[0]
+}
+
+moved {
+  from = aws_iam_role.management_role
+  to   = aws_iam_role.management_role[0]
+}
+
+moved {
+  from = aws_iam_role_policy_attachment.management_role
+  to   = aws_iam_role_policy_attachment.management_role[0]
+}
+
+moved {
+  from = aws_iam_role_policy_attachment.management_readonly
+  to   = aws_iam_role_policy_attachment.management_readonly[0]
 }
 
 ######

@@ -101,7 +101,7 @@ After [authenticating to your AWS account](https://registry.terraform.io/provide
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=1.0.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=1.1.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.32.0 |
 
 ## Providers
@@ -154,6 +154,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_iam_policy_arns"></a> [additional\_iam\_policy\_arns](#input\_additional\_iam\_policy\_arns) | Provide a list of additional IAM policy arns allowed for use with iam:AttachRolePolicy, defined in the StreamNativePermissionBoundary. | `list(string)` | `[]` | no |
 | <a name="input_create_bootstrap_role"></a> [create\_bootstrap\_role](#input\_create\_bootstrap\_role) | Whether or not to create the bootstrap role, which is used by StreamNative for the initial deployment of the StreamNative Cloud | `string` | `true` | no |
+| <a name="input_create_management_role"></a> [create\_management\_role](#input\_create\_management\_role) | Whether or not to create the management role, which is used by StreamNative for the day to day management of the StreamNative Cloud. Set to false for a deployment that StreamNative does not manage. | `bool` | `true` | no |
 | <a name="input_ebs_kms_key_arns"></a> [ebs\_kms\_key\_arns](#input\_ebs\_kms\_key\_arns) | Sets the list of allowed kms key arns, if not set, uses the default ebs kms key | `list(any)` | `[]` | no |
 | <a name="input_eks_cluster_pattern"></a> [eks\_cluster\_pattern](#input\_eks\_cluster\_pattern) | Defines the eks clsuter prefix for streamnative clusters. This should normally remain the default value. | `string` | `"*snc*"` | no |
 | <a name="input_enforce_vendor_federation"></a> [enforce\_vendor\_federation](#input\_enforce\_vendor\_federation) | Do not enable this unless explicitly told to do so by StreamNative. Restrict access for the streamnative\_vendor\_access\_role\_arns to only federated Google accounts. Intended to be true by default in the future. | `bool` | `false` | no |
@@ -182,7 +183,7 @@ No modules.
 |------|-------------|
 | <a name="output_aws_lbc_policy_arn"></a> [aws\_lbc\_policy\_arn](#output\_aws\_lbc\_policy\_arn) | The ARN of the AWS Load Balancer Controller Policy, if enabled |
 | <a name="output_bootstrap_role_arn"></a> [bootstrap\_role\_arn](#output\_bootstrap\_role\_arn) | The ARN of the Bootstrap role, if enabled |
-| <a name="output_management_role_arn"></a> [management\_role\_arn](#output\_management\_role\_arn) | The ARN of the Management Role |
+| <a name="output_management_role_arn"></a> [management\_role\_arn](#output\_management\_role\_arn) | The ARN of the Management Role, if enabled |
 | <a name="output_permission_boundary_policy_arn"></a> [permission\_boundary\_policy\_arn](#output\_permission\_boundary\_policy\_arn) | The ARN of the Permssion Boundary Policy |
 | <a name="output_runtime_policy_arn"></a> [runtime\_policy\_arn](#output\_runtime\_policy\_arn) | The ARN of the Runtime Policy, if enabled |
 <!-- END_TF_DOCS -->

@@ -39,6 +39,12 @@ variable "create_bootstrap_role" {
 
 }
 
+variable "create_management_role" {
+  default     = true
+  description = "Whether or not to create the management role, which is used by StreamNative for the day to day management of the StreamNative Cloud. Set to false for a deployment that StreamNative does not manage."
+  type        = bool
+}
+
 variable "ebs_kms_key_arns" {
   default     = []
   description = "Sets the list of allowed kms key arns, if not set, uses the default ebs kms key"
